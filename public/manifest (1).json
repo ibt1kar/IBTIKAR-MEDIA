@@ -1,0 +1,37 @@
+{
+  "background_color": "#141144",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "منصة ابتكار",
+  "orientation": "portrait",
+  "scope": "/",
+  "short_name": "ابتكار",
+  "start_url": "/",
+  "theme_color": "#eb4e37",
+  "icons": [
+    {
+      "src": "https://ibt1kar.com/logo.png",
+      "type": "image/png",
+      "sizes": "2658x984",
+      "isSquare": false,
+      "isPng": true,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 2658,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": false
+    }
+  ],
+  "id": "ibtikar",
+  "description": "منصة ابتكار - شريكك الإبداعي الأول لبناء حضور رقمي استثنائي، الهويات المرئية، والتسويق الرقمي.",
+  "lang": "ar",
+  "categories": [
+    "business",
+    "graphics",
+    "graphics &amp; design",
+    "multimedia design",
+    "productivity",
+    "social"
+  ]
+}
