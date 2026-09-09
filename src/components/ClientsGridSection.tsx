@@ -6,14 +6,19 @@ interface ClientsGridSectionProps {
 }
 
 export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOrderModal }) => {
-  // 27 client logos numbered from 1 to 27
-  const allLogos = Array.from({ length: 27 }, (_, i) => ({
-    id: i + 1,
-    src: `/${i + 1}.png`,
-    alt: `شريك نجاح منصة ابتكار #${i + 1}`,
+  // 25 client logos (excluding original #16 and #20, reordered sequentially 1 to 25)
+  const sourceImageNumbers = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+    17, 18, 19, 21, 22, 23, 24, 25, 26, 27
+  ];
+
+  const allLogos = sourceImageNumbers.map((imgNum, index) => ({
+    id: index + 1,
+    src: `/${imgNum}.png`,
+    alt: `شريك نجاح منصة ابتكار #${index + 1}`,
   }));
 
-  const [selectedLogo, setSelectedLogo] = useState<number | null>(null);
+  const [selectedLogo, setSelectedLogo] = useState<typeof allLogos[0] | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredLogos = searchTerm.trim()
@@ -41,14 +46,14 @@ export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOr
           </h2>
 
           <p className="text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed">
-            فخورون بالتعاون والشراكة مع أكثر من 27 جهة وعلامة تجارية رائدة ومشاريع نوعية، حيث شاركناهم رحلة صناعة وتطوير الهوية وإدارة الحضور الرقمي وتحقيق أرقام قياسية.
+            فخورون بالتعاون والشراكة مع أكثر من 25 جهة وعلامة تجارية رائدة ومشاريع نوعية، حيث شاركناهم رحلة صناعة وتطوير الهوية وإدارة الحضور الرقمي وتحقيق أرقام قياسية.
           </p>
 
           {/* Quick Metrics Bar */}
           <div className="pt-3 flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-xs sm:text-sm font-bold text-gray-200">
             <div className="flex items-center gap-2 glass-panel px-4 py-2 rounded-full border border-white/10 shadow-sm">
               <CheckCircle2 className="w-4 h-4 text-[#e85432]" />
-              <span>27 شريك نجاح وعلامة تجارية</span>
+              <span>25 شريك نجاح وعلامة تجارية</span>
             </div>
             <div className="flex items-center gap-2 glass-panel px-4 py-2 rounded-full border border-white/10 shadow-sm">
               <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
@@ -77,7 +82,7 @@ export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOr
           <div className="relative w-full sm:w-64">
             <input
               type="text"
-              placeholder="بحث برقم الشريك (1 - 27)..."
+              placeholder="بحث برقم الشريك (1 - 25)..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-white/5 border border-white/15 rounded-2xl px-4 py-2.5 pl-10 text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:border-[#e85432] transition-colors"
@@ -86,12 +91,12 @@ export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOr
           </div>
         </div>
 
-        {/* The Grid of 27 Logos (1 to 27) - Enlarged Display */}
+        {/* The Grid of 25 Logos (1 to 25) - Enlarged Display */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-7">
           {filteredLogos.map((client) => (
             <div
               key={client.id}
-              onClick={() => setSelectedLogo(client.id)}
+              onClick={() => setSelectedLogo(client)}
               className="group relative glass-panel rounded-3xl p-5 sm:p-7 flex flex-col items-center justify-between border border-white/12 hover:border-[#e85432] hover:bg-white/[0.14] transition-all duration-300 hover:shadow-[0_16px_36px_rgba(232,84,50,0.28)] hover:-translate-y-2 min-h-[200px] sm:min-h-[240px] md:min-h-[260px] cursor-pointer"
             >
               {/* Subtle background glow on hover */}
@@ -145,15 +150,15 @@ export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOr
               <div className="space-y-1">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-panel-orange text-[#ff7a59] font-bold text-xs">
                   <Award className="w-3.5 h-3.5" />
-                  <span>شريك نجاح #{selectedLogo.toString().padStart(2, '0')}</span>
+                  <span>شريك نجاح #{selectedLogo.id.toString().padStart(2, '0')}</span>
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-white">شريك نجاح منصة ابتكار</h3>
               </div>
 
               <div className="w-full h-56 sm:h-64 rounded-2xl bg-white/[0.08] border border-white/10 p-6 flex items-center justify-center shadow-inner">
                 <img
-                  src={`/${selectedLogo}.png`}
-                  alt={`شريك نجاح ${selectedLogo}`}
+                  src={selectedLogo.src}
+                  alt={selectedLogo.alt}
                   className="max-h-full max-w-full object-contain filter contrast-105 brightness-105 drop-shadow-xl"
                   referrerPolicy="no-referrer"
                 />
