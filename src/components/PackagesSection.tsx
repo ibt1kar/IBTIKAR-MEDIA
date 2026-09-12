@@ -33,6 +33,10 @@ export const PackagesSection: React.FC<PackagesSectionProps> = ({ onOpenOrderMod
 
   return (
     <section id="packages" className="py-20 relative overflow-hidden">
+      {/* Background Glow */}
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#e85432]/15 rounded-full blur-[140px] pointer-events-none"></div>
+      <div className="absolute bottom-10 left-1/4 w-96 h-96 bg-[#2b1055]/30 rounded-full blur-[140px] pointer-events-none"></div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Title */}
         <div className="text-center space-y-4 mb-12 max-w-3xl mx-auto">

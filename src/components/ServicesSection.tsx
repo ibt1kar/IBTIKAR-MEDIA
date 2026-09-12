@@ -51,6 +51,9 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
 
   return (
     <section id="services" className="py-20 relative overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute top-1/2 left-0 w-80 h-80 rounded-full bg-[#e85432]/15 blur-[100px] pointer-events-none"></div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Title */}
         <div className="text-center space-y-4 mb-16 max-w-3xl mx-auto">

@@ -27,6 +27,11 @@ export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOr
 
   return (
     <section id="clients" className="py-20 md:py-28 relative overflow-hidden">
+      {/* Ambient background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[550px] bg-[#e85432]/10 blur-[180px] pointer-events-none -z-10"></div>
+      <div className="absolute top-1/3 right-10 w-96 h-96 bg-[#270f6d]/45 blur-[150px] pointer-events-none -z-10"></div>
+      <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#e85432]/15 blur-[140px] pointer-events-none -z-10"></div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -181,7 +186,7 @@ export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOr
         )}
 
         {/* Bottom CTA Card */}
-        <div className="mt-14 glass-panel p-6 sm:p-8 rounded-3xl border border-white/15 text-center flex flex-col sm:flex-row items-center justify-between gap-6 max-w-4xl mx-auto bg-white/[0.04] backdrop-blur-xl">
+        <div className="mt-14 glass-panel p-6 sm:p-8 rounded-3xl border border-white/15 text-center flex flex-col sm:flex-row items-center justify-between gap-6 max-w-4xl mx-auto bg-gradient-to-r from-[#140844]/90 via-[#270f6d]/60 to-[#140844]/90">
           <div className="text-right space-y-1">
             <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-[#e85432]" />

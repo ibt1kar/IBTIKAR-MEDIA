@@ -39,8 +39,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen text-white font-['Thmanyah_Sans',sans-serif] selection:bg-[#F15230] selection:text-white relative overflow-x-hidden">
-      {/* Unified Watercolor Dual-Color Gradient Background (Navy & Orange) */}
-      <div className="bg-watercolor" aria-hidden="true" />
+      {/* Ambient background glow orbs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute -top-40 -right-40 w-96 h-96 sm:w-[500px] sm:h-[500px] bg-[#e85432]/20 rounded-full blur-[140px]"></div>
+        <div className="absolute top-1/3 -left-40 w-96 h-96 sm:w-[500px] sm:h-[500px] bg-[#270f6d]/40 rounded-full blur-[140px]"></div>
+        <div className="absolute -bottom-40 right-1/3 w-96 h-96 sm:w-[500px] sm:h-[500px] bg-[#e85432]/15 rounded-full blur-[150px]"></div>
+        <div className="absolute top-2/3 right-10 w-80 h-80 bg-[#140844]/60 rounded-full blur-[120px]"></div>
+      </div>
 
       {/* Navigation Bar */}
       <Navbar
@@ -155,7 +160,7 @@ export default function App() {
               </div>
 
               {/* Direct Instant Order Trigger Box */}
-              <div className="glass-panel p-8 rounded-3xl border border-[#e85432]/40 bg-[#141144]/60 backdrop-blur-xl space-y-6">
+              <div className="glass-panel p-8 rounded-3xl border border-[#e85432]/40 bg-[#140844]/90 space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="p-3 rounded-2xl bg-[#e85432]/20 text-[#e85432]">
                     <Sparkles className="w-6 h-6" />

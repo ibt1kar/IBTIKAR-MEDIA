@@ -48,7 +48,10 @@ export const TargetClientsSection: React.FC<TargetClientsSectionProps> = ({ onOp
   };
 
   return (
-    <section id="targets" className="py-20 relative overflow-hidden border-y border-white/10">
+    <section id="targets" className="py-20 relative overflow-hidden bg-[#100538]/60 backdrop-blur-3xl border-y border-white/5">
+      {/* Glow Orbs */}
+      <div className="absolute top-1/3 right-0 w-96 h-96 bg-[#e85432]/10 rounded-full blur-[120px] pointer-events-none"></div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Title */}
         <div className="text-center space-y-4 mb-16 max-w-3xl mx-auto">
