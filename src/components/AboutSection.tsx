@@ -14,7 +14,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenOrderModal }) 
           
           {/* Visual Glass Showcase Card */}
           <div className="lg:col-span-5 relative">
-            <div className="glass-panel p-8 rounded-3xl border border-white/15 bg-[#140844]/90 shadow-2xl relative space-y-6">
+            <div className="glass-panel p-8 rounded-3xl border border-white/15 bg-[#141144]/60 backdrop-blur-2xl shadow-2xl relative space-y-6">
               <div className="flex items-center justify-center py-4 bg-white/5 rounded-2xl border border-white/10">
                 <Logo size="lg" />
               </div>

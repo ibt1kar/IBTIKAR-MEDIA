@@ -38,13 +38,9 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#141144] text-white font-['Thmanyah_Sans',sans-serif] selection:bg-[#F15230] selection:text-white relative overflow-x-hidden">
-      {/* Background Animated Gradient & Drifting Glowing Blobs Stage */}
-      <div className="bg-stage pointer-events-none z-0" aria-hidden="true">
-        <div className="blob blob--orange-1"></div>
-        <div className="blob blob--orange-2"></div>
-        <div className="blob blob--navy-glow"></div>
-      </div>
+    <div className="min-h-screen text-white font-['Thmanyah_Sans',sans-serif] selection:bg-[#F15230] selection:text-white relative overflow-x-hidden">
+      {/* Unified Watercolor Dual-Color Gradient Background (Navy & Orange) */}
+      <div className="bg-watercolor" aria-hidden="true" />
 
       {/* Navigation Bar */}
       <Navbar
@@ -159,7 +155,7 @@ export default function App() {
               </div>
 
               {/* Direct Instant Order Trigger Box */}
-              <div className="glass-panel p-8 rounded-3xl border border-[#e85432]/40 bg-[#140844]/90 space-y-6">
+              <div className="glass-panel p-8 rounded-3xl border border-[#e85432]/40 bg-[#141144]/60 backdrop-blur-xl space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="p-3 rounded-2xl bg-[#e85432]/20 text-[#e85432]">
                     <Sparkles className="w-6 h-6" />

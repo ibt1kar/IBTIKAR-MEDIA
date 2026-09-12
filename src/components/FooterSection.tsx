@@ -18,10 +18,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ setActiveTab, onOp
   };
 
   return (
-    <footer className="relative bg-[#0d042d] border-t border-white/10 pt-16 pb-12 overflow-hidden text-right">
-      {/* Ambient background glow */}
-      <div className="absolute bottom-0 right-1/2 translate-x-1/2 w-[600px] h-[300px] bg-[#e85432]/10 rounded-full blur-[150px] pointer-events-none"></div>
-
+    <footer className="relative bg-black/30 backdrop-blur-md border-t border-white/10 pt-16 pb-12 overflow-hidden text-right">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Top Footer Grid */}
