@@ -66,7 +66,7 @@
   }
 }
 
-/* Fluid Watercolor Dual-Color Gradient (Navy & Orange) */
+/* Fluid Moving Watercolor Dual-Color Gradient (Navy & Orange) */
 .bg-watercolor {
   position: fixed;
   inset: 0;
@@ -75,11 +75,47 @@
   z-index: 0;
   pointer-events: none;
   background: 
-    radial-gradient(ellipse 95% 75% at 90% 10%, rgba(241, 82, 48, 0.35) 0%, rgba(205, 66, 42, 0.2) 35%, rgba(70, 22, 68, 0.1) 60%, transparent 75%),
-    radial-gradient(ellipse 85% 65% at 10% 90%, rgba(241, 82, 48, 0.24) 0%, rgba(160, 48, 45, 0.14) 35%, transparent 70%),
-    linear-gradient(140deg, #0d0b2e 0%, #141144 26%, #1c134e 45%, #2d1450 62%, #4b1745 76%, #711e3b 87%, #9c2a2b 94%, #cb4026 100%);
-  background-attachment: fixed;
-  background-size: cover;
+    radial-gradient(ellipse 120% 90% at 85% 15%, rgba(241, 82, 48, 0.38) 0%, rgba(185, 58, 38, 0.22) 35%, transparent 65%),
+    radial-gradient(ellipse 110% 80% at 15% 85%, rgba(232, 84, 50, 0.3) 0%, rgba(140, 40, 50, 0.18) 40%, transparent 70%),
+    linear-gradient(
+      125deg,
+      #0d0b2e 0%,
+      #141144 18%,
+      #25134e 32%,
+      #4e1747 46%,
+      #8c2635 58%,
+      #e85432 70%,
+      #c43d26 78%,
+      #3f164b 88%,
+      #141144 100%
+    );
+  background-size: 350% 350%;
+  animation: watercolorShift 16s ease-in-out infinite;
+  will-change: background-position;
+}
+
+@keyframes watercolorShift {
+  0% {
+    background-position: 0% 10%;
+  }
+  25% {
+    background-position: 70% 90%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 30% 0%;
+  }
+  100% {
+    background-position: 0% 10%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-watercolor {
+    animation: none !important;
+  }
 }
 
 /* Custom Frosted Glassmorphism Utilities */
