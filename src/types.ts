@@ -62,6 +62,8 @@ export interface PortfolioItem {
   description: string;
   tags: string[];
   results?: string;
+  isPresentationDeck?: boolean;
+  slideCount?: number;
 }
 
 export interface ServiceOrderModalProps {
