@@ -10,14 +10,15 @@ import {
   Sparkles, 
   ShieldCheck, 
   User as UserIcon,
-  RefreshCw
+  RefreshCw,
+  Bug
 } from 'lucide-react';
 import { 
   RecaptchaVerifier, 
   signInWithPhoneNumber, 
+  sendSignInLinkToEmail,
   ConfirmationResult,
-  updateProfile,
-  signInAnonymously
+  updateProfile
 } from 'firebase/auth';
 import { auth, getUserProfile, saveUserProfile } from '../services/firebase';
 import { useAuth } from '../context/AuthContext';
@@ -33,6 +34,33 @@ const COUNTRY_CODES = [
   { code: '+20', name: 'مصر', flag: '🇪🇬', digits: 10, placeholder: '10xxxxxxxx' },
   { code: '+962', name: 'الأردن', flag: '🇯🇴', digits: 9, placeholder: '7xxxxxxxx' },
 ];
+
+function getArabicFirebaseMessage(code: string, rawMessage: string): string {
+  switch (code) {
+    case 'auth/unauthorized-domain':
+      return 'هذا النطاق غير مصرح به في Firebase Console. يرجى إضافة رابط الموقع الحالي في: Authentication -> Settings -> Authorized domains.';
+    case 'auth/invalid-app-credential':
+      return 'بيانات اعتماد التطبيق غير صالحة، أو فشل التحقق من reCAPTCHA.';
+    case 'auth/operation-not-allowed':
+      return 'موفر تسجيل الدخول عبر الهاتف (Phone Provider) غير مفعل في مشروع Firebase الحالي. يرجى تفعيله من: Authentication -> Sign-in method.';
+    case 'auth/invalid-phone-number':
+      return 'صيغة رقم الجوال غير صالحة. يرجى التأكد من الرقم وكود الدولة.';
+    case 'auth/missing-phone-number':
+      return 'رقم الجوال مطلوب لإرسال رمز التحقق.';
+    case 'auth/quota-exceeded':
+      return 'تم تجاوز الحصة اليومية المتاحة لرسائل SMS في مشروع Firebase.';
+    case 'auth/too-many-requests':
+      return 'تم حظر الطلبات مؤقتاً بسبب تكرار المحاولات السريعة. يرجى الانتظار دقيقة.';
+    case 'auth/invalid-verification-code':
+      return 'رمز التحقق الذي أدخلته غير صحيح. يرجى التحقق من الرسالة النصية.';
+    case 'auth/code-expired':
+      return 'انتهت صلاحية رمز التحقق. يرجى طلب إرسال رمز جديد.';
+    case 'auth/captcha-check-failed':
+      return 'فشل التحقق الأمني من reCAPTCHA. يرجى إعادة المحاولة.';
+    default:
+      return rawMessage || 'حدث خطأ في المصادقة مع Firebase.';
+  }
+}
 
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, closeAuthModal, refreshUserProfile, updateLocalProfile } = useAuth();
@@ -55,9 +83,14 @@ export const AuthModal: React.FC = () => {
 
   // State & Loading
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [demoCodeHint, setDemoCodeHint] = useState<string | null>(null);
+
+  // Real Firebase Error state (Small red debugging box)
+  const [firebaseError, setFirebaseError] = useState<{
+    code: string;
+    message: string;
+    details?: string;
+  } | null>(null);
 
   // Verification & Countdown
   const [countdown, setCountdown] = useState(60);
@@ -80,9 +113,8 @@ export const AuthModal: React.FC = () => {
       setEmailAddress('');
       setFullName('');
       setOtpDigits(['', '', '', '', '', '']);
-      setErrorMessage(null);
+      setFirebaseError(null);
       setSuccessMessage(null);
-      setDemoCodeHint(null);
       setAttemptCount(0);
       setConfirmationResult(null);
     } else {
@@ -115,39 +147,60 @@ export const AuthModal: React.FC = () => {
     return () => clearInterval(timer);
   }, [step, countdown]);
 
-  // Initialize invisible reCAPTCHA for Phone Auth
-  const setupRecaptcha = (): RecaptchaVerifier => {
+  // Initialize invisible reCAPTCHA for Phone Auth (robustly created and rendered before sending)
+  const initRecaptchaVerifier = async (): Promise<RecaptchaVerifier> => {
+    // Clear any previous instance
     if (recaptchaVerifierRef.current) {
       try {
         recaptchaVerifierRef.current.clear();
-      } catch {
-        // ignore
+      } catch (e) {
+        console.warn('Clearing existing recaptcha verifier:', e);
       }
+      recaptchaVerifierRef.current = null;
     }
 
-    const verifier = new RecaptchaVerifier(auth, 'recaptcha-verifier-container', {
+    // Ensure DOM container element exists and is clean
+    let container = document.getElementById('recaptcha-verifier-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'recaptcha-verifier-container';
+      document.body.appendChild(container);
+    } else {
+      container.innerHTML = '';
+    }
+
+    const verifier = new RecaptchaVerifier(auth, container, {
       size: 'invisible',
       callback: () => {
-        // reCAPTCHA solved
+        console.log('[reCAPTCHA] Verified successfully');
       },
       'expired-callback': () => {
-        setErrorMessage('انتهت صلاحية التحقق الأمني، يرجى المحاولة مرة أخرى.');
+        console.warn('[reCAPTCHA] Token expired');
+        setFirebaseError({
+          code: 'auth/recaptcha-expired',
+          message: 'انتهت صلاحية التحقق الأمني reCAPTCHA، يرجى إعادة المحاولة.'
+        });
       }
     });
+
+    // Render verifier widget explicitly before triggering phone auth
+    await verifier.render();
     recaptchaVerifierRef.current = verifier;
     return verifier;
   };
 
-  // Step 1: Send OTP Code
-  const handleSendCode = async (isResend = false) => {
-    setErrorMessage(null);
+  // Step 1: Send OTP Code strictly via Firebase
+  const handleSendCode = async () => {
+    setFirebaseError(null);
     setSuccessMessage(null);
-    setDemoCodeHint(null);
 
     if (activeTab === 'phone') {
       const cleanPhone = phoneNumber.trim().replace(/\D/g, '');
       if (!cleanPhone || cleanPhone.length < 7) {
-        setErrorMessage('يرجى إدخال رقم جوال صحيح.');
+        setFirebaseError({
+          code: 'auth/invalid-phone-format',
+          message: 'يرجى إدخال رقم جوال صحيح يتطابق مع الدولة المختارة.'
+        });
         return;
       }
 
@@ -155,70 +208,66 @@ export const AuthModal: React.FC = () => {
       const fullPhone = `${selectedCountry.code}${cleanPhone.startsWith('0') ? cleanPhone.slice(1) : cleanPhone}`;
 
       try {
-        const verifier = setupRecaptcha();
+        console.log(`[Firebase Phone Auth] Creating reCAPTCHA & sending code to: ${fullPhone}`);
+        const verifier = await initRecaptchaVerifier();
         const result = await signInWithPhoneNumber(auth, fullPhone, verifier);
+        console.log('[Firebase Phone Auth] ConfirmationResult received successfully');
+        
         setConfirmationResult(result);
         setStep(2);
         setCountdown(60);
         setCanResend(false);
         setCodeSentTimestamp(Date.now());
-        setSuccessMessage(`تم إرسال رمز التحقق في رسالة نصية إلى ${fullPhone}`);
+        setSuccessMessage(`تم إرسال رمز التحقق في رسالة نصية (SMS) إلى: ${fullPhone}`);
       } catch (err: any) {
-        console.warn('Firebase Phone Auth:', err);
-        // Handle common Firebase errors gracefully
-        if (err?.code === 'auth/invalid-phone-number') {
-          setErrorMessage('صيغة رقم الجوال غير صالحة. يرجى التأكد من الرقم.');
-        } else if (err?.code === 'auth/too-many-requests') {
-          setErrorMessage('تم تجاوز الحد الأقصى للمحاولات، يرجى الانتظار قليلاً والمحاولة لاحقاً.');
-        } else if (err?.code === 'auth/operation-not-allowed') {
-          // Phone auth not toggled in Firebase console yet; enable seamless dev preview code so user can test right away!
-          const generatedMockCode = '123456';
-          setDemoCodeHint(generatedMockCode);
-          setStep(2);
-          setCountdown(60);
-          setCanResend(false);
-          setCodeSentTimestamp(Date.now());
-          setSuccessMessage('تنبيه: يتطلب تفعيل موفر الهاتف في Firebase Console. تم تفعيل الرمز التجريبي 123456 للاختبار.');
-        } else {
-          // Default fallback with helpful message and simulated code for instant preview
-          const generatedMockCode = '123456';
-          setDemoCodeHint(generatedMockCode);
-          setStep(2);
-          setCountdown(60);
-          setCanResend(false);
-          setCodeSentTimestamp(Date.now());
-          setSuccessMessage('تم إرسال رمز التحقق بنجاح.');
+        console.error('[Firebase Phone Auth Error]', err);
+        // Clear verifier on failure so subsequent attempts can create a fresh one
+        if (recaptchaVerifierRef.current) {
+          try {
+            recaptchaVerifierRef.current.clear();
+          } catch {}
+          recaptchaVerifierRef.current = null;
         }
+        const errCode = err?.code || 'auth/unknown-error';
+        const errMsg = err?.message || String(err);
+        setFirebaseError({
+          code: errCode,
+          message: getArabicFirebaseMessage(errCode, errMsg),
+          details: errMsg
+        });
       } finally {
         setLoading(false);
       }
     } else {
-      // Email Tab
+      // Email Tab: strictly via Firebase sendSignInLinkToEmail
       const cleanEmail = emailAddress.trim().toLowerCase();
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(cleanEmail)) {
-        setErrorMessage('يرجى إدخال عنوان بريد إلكتروني صالح (مثال: user@example.com).');
+        setFirebaseError({
+          code: 'auth/invalid-email',
+          message: 'يرجى إدخال عنوان بريد إلكتروني صالح (مثال: user@example.com).'
+        });
         return;
       }
 
       setLoading(true);
       try {
-        // Generate secure 6-digit OTP code for email verification
-        const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
-        // In local/preview environment, store temporary verification session and show code toast
-        sessionStorage.setItem(`ibtikar_email_otp_${cleanEmail}`, JSON.stringify({
-          code: randomCode,
-          timestamp: Date.now()
-        }));
-
-        setDemoCodeHint(randomCode);
-        setStep(2);
-        setCountdown(60);
-        setCanResend(false);
-        setCodeSentTimestamp(Date.now());
-        setSuccessMessage(`تم إرسال رمز التحقق إلى بريدك الإلكتروني: ${cleanEmail}`);
+        const actionCodeSettings = {
+          url: window.location.href,
+          handleCodeInApp: true,
+        };
+        await sendSignInLinkToEmail(auth, cleanEmail, actionCodeSettings);
+        window.localStorage.setItem('emailForSignIn', cleanEmail);
+        setSuccessMessage(`تم إرسال رابط تسجيل الدخول الآمن إلى بريدك الإلكتروني: ${cleanEmail}`);
       } catch (err: any) {
-        setErrorMessage('حدث خطأ أثناء إرسال الرمز، يرجى المحاولة مجدداً.');
+        console.error('[Firebase Email Link Error]', err);
+        const errCode = err?.code || 'auth/email-send-error';
+        const errMsg = err?.message || String(err);
+        setFirebaseError({
+          code: errCode,
+          message: getArabicFirebaseMessage(errCode, errMsg),
+          details: errMsg
+        });
       } finally {
         setLoading(false);
       }
@@ -247,7 +296,7 @@ export const AuthModal: React.FC = () => {
     const newDigits = [...otpDigits];
     newDigits[index] = char;
     setOtpDigits(newDigits);
-    setErrorMessage(null);
+    setFirebaseError(null);
 
     // Auto-advance to next box if digit entered
     if (char && index < 5) {
@@ -285,88 +334,59 @@ export const AuthModal: React.FC = () => {
     }
   };
 
-  // Step 2: Verify 6-digit OTP Code
+  // Step 2: Verify 6-digit OTP Code ONLY via confirmationResult.confirm(code)
   const handleVerifyCode = async (codeToVerify?: string) => {
     const code = codeToVerify || otpDigits.join('');
-    setErrorMessage(null);
+    setFirebaseError(null);
 
     if (code.length !== 6) {
-      setErrorMessage('يرجى إدخال رمز التحقق كاملاً المكون من 6 أرقام.');
+      setFirebaseError({
+        code: 'auth/incomplete-code',
+        message: 'يرجى إدخال رمز التحقق كاملاً المكون من 6 أرقام.'
+      });
+      return;
+    }
+
+    if (!confirmationResult) {
+      setFirebaseError({
+        code: 'auth/no-confirmation-result',
+        message: 'لم يتم العثور على جلسة إرسال نشطة من Firebase. يرجى الرجوع وإعادة إرسال الرمز.'
+      });
       return;
     }
 
     // Check expiration (5 minutes = 300,000 ms)
     if (codeSentTimestamp > 0 && Date.now() - codeSentTimestamp > 5 * 60 * 1000) {
-      setErrorMessage('انتهت صلاحية رمز التحقق (5 دقائق)، يرجى طلب رمز جديد.');
+      setFirebaseError({
+        code: 'auth/code-expired',
+        message: 'انتهت صلاحية رمز التحقق (5 دقائق)، يرجى طلب رمز جديد.'
+      });
       return;
     }
 
     // Rate-limit check (max 5 attempts)
     if (attemptCount >= 5) {
-      setErrorMessage('تم تجاوز الحد الأقصى للمحاولات الخاطئة. يرجى طلب رمز جديد.');
+      setFirebaseError({
+        code: 'auth/too-many-attempts',
+        message: 'تم تجاوز الحد الأقصى للمحاولات الخاطئة. يرجى طلب رمز جديد.'
+      });
       return;
     }
 
     setLoading(true);
 
     try {
-      let loggedInUser = auth.currentUser;
+      console.log(`[Firebase Phone Auth] Confirming code with Firebase...`);
+      // MUST go ONLY through Firebase confirmationResult.confirm(code)
+      const userCredential = await confirmationResult.confirm(code);
+      const loggedInUser = userCredential.user;
+      console.log('[Firebase Phone Auth] Verification succeeded! UID:', loggedInUser.uid);
 
-      if (activeTab === 'phone') {
-        if (confirmationResult) {
-          // Native Firebase Phone Confirmation
-          const userCredential = await confirmationResult.confirm(code);
-          loggedInUser = userCredential.user;
-        } else if (demoCodeHint && code === demoCodeHint) {
-          // Demo fallback: anonymous auth or existing user
-          if (!loggedInUser) {
-            const cred = await signInAnonymously(auth);
-            loggedInUser = cred.user;
-          }
-        } else {
-          setAttemptCount((prev) => prev + 1);
-          setErrorMessage('رمز التحقق غير صحيح، يرجى التأكد والمحاولة مرة أخرى.');
-          setLoading(false);
-          return;
-        }
-      } else {
-        // Email verification check
-        const cleanEmail = emailAddress.trim().toLowerCase();
-        const savedSession = sessionStorage.getItem(`ibtikar_email_otp_${cleanEmail}`);
-        let expectedCode = demoCodeHint;
-        
-        if (savedSession) {
-          try {
-            const parsed = JSON.parse(savedSession);
-            expectedCode = parsed.code;
-          } catch {
-            // ignore
-          }
-        }
-
-        if (code !== expectedCode && code !== '123456') {
-          setAttemptCount((prev) => prev + 1);
-          setErrorMessage('رمز التحقق غير صحيح، يرجى مراجعة بريدك الإلكتروني.');
-          setLoading(false);
-          return;
-        }
-
-        // Authenticate user via Firebase Auth
-        if (!loggedInUser) {
-          const cred = await signInAnonymously(auth);
-          loggedInUser = cred.user;
-        }
-      }
-
-      if (!loggedInUser) {
-        throw new Error('فشل تسجيل الدخول، يرجى المحاولة مجدداً.');
-      }
-
-      // Check if user profile already exists in Firestore users/{uid}
+      // Check if user profile exists in Firestore users/{uid}
       const existingProfile = await getUserProfile(loggedInUser.uid);
 
       if (existingProfile && existingProfile.name && existingProfile.name !== 'عميل ابتكار') {
-        // Existing user with a completed name -> Log in directly
+        // Existing user with completed name -> Log in directly
         setSuccessMessage(`أهلاً بك مجدداً، ${existingProfile.name}!`);
         await refreshUserProfile();
         setTimeout(() => {
@@ -377,15 +397,15 @@ export const AuthModal: React.FC = () => {
         setStep(3);
       }
     } catch (err: any) {
-      console.error('OTP Verification Error:', err);
+      console.error('[Firebase Code Verification Error]', err);
       setAttemptCount((prev) => prev + 1);
-      if (err?.code === 'auth/invalid-verification-code') {
-        setErrorMessage('رمز التحقق غير صحيح، يرجى التحقق من الرسالة النصية.');
-      } else if (err?.code === 'auth/code-expired') {
-        setErrorMessage('انتهت صلاحية رمز التحقق، يرجى طلب رمز جديد.');
-      } else {
-        setErrorMessage('تعذر التحقق من الرمز، يرجى المحاولة مرة أخرى.');
-      }
+      const errCode = err?.code || 'auth/invalid-verification-code';
+      const errMsg = err?.message || String(err);
+      setFirebaseError({
+        code: errCode,
+        message: getArabicFirebaseMessage(errCode, errMsg),
+        details: errMsg
+      });
     } finally {
       setLoading(false);
     }
@@ -396,18 +416,24 @@ export const AuthModal: React.FC = () => {
     e.preventDefault();
     const cleanName = fullName.trim();
     if (cleanName.length < 2) {
-      setErrorMessage('يرجى كتابة اسمك الكامل (حرفين على الأقل).');
+      setFirebaseError({
+        code: 'validation/short-name',
+        message: 'يرجى كتابة اسمك الكامل (حرفين على الأقل).'
+      });
       return;
     }
 
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      setErrorMessage('الجلسة غير صالحة، يرجى إعادة المحاولة.');
+      setFirebaseError({
+        code: 'auth/no-current-user',
+        message: 'الجلسة غير صالحة، يرجى إعادة تسجيل الدخول.'
+      });
       return;
     }
 
     setLoading(true);
-    setErrorMessage(null);
+    setFirebaseError(null);
 
     try {
       // 1. Update Firebase Auth displayName
@@ -439,7 +465,13 @@ export const AuthModal: React.FC = () => {
       }, 1400);
     } catch (err: any) {
       console.error('Registration Error:', err);
-      setErrorMessage('تعذر حفظ بيانات الحساب في قاعدة البيانات، يرجى المحاولة مجدداً.');
+      const errCode = err?.code || 'firestore/save-error';
+      const errMsg = err?.message || String(err);
+      setFirebaseError({
+        code: errCode,
+        message: 'تعذر حفظ بيانات الحساب في قاعدة البيانات، يرجى المحاولة مجدداً.',
+        details: errMsg
+      });
     } finally {
       setLoading(false);
     }
@@ -488,9 +520,9 @@ export const AuthModal: React.FC = () => {
           </h2>
           <p className="text-xs text-gray-300">
             {step === 1 
-              ? 'سجل دخولك بدون كلمة مرور عبر رمز تحقق سريع وآمن.' 
+              ? 'المصادقة الرسمية المباشرة عبر Firebase' 
               : step === 2 
-              ? `أدخل الرمز المكون من 6 أرقام المرسل إلى ${activeTab === 'phone' ? 'جوالك' : 'بريدك'}` 
+              ? `أدخل رمز SMS المكون من 6 أرقام المرسل إلى جوالك` 
               : 'خطوة واحدة متبقية لبدء تجربة استثنائية مع ابتكار'}
           </p>
         </div>
@@ -503,31 +535,21 @@ export const AuthModal: React.FC = () => {
           </div>
         )}
 
-        {/* Demo Hint Banner (if running preview) */}
-        {demoCodeHint && step === 2 && (
-          <div className="mb-4 p-3 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-200 text-xs flex items-center justify-between animate-fade-in">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>رمز التحقق للاختبار السريع: <strong>{demoCodeHint}</strong></span>
+        {/* Real Firebase Error Box (Item 3 in debug requirements) */}
+        {firebaseError && (
+          <div className="mb-4 p-3.5 rounded-2xl bg-red-950/90 border-2 border-red-500/80 text-red-200 text-xs animate-fade-in shadow-lg">
+            <div className="flex items-center gap-2 font-bold text-red-400 mb-1" dir="ltr">
+              <Bug className="w-4 h-4 shrink-0 text-red-400" />
+              <span className="font-mono text-xs">Firebase Error: [{firebaseError.code}]</span>
             </div>
-            <button
-              onClick={() => {
-                const digits = demoCodeHint.split('');
-                setOtpDigits(digits);
-                handleVerifyCode(demoCodeHint);
-              }}
-              className="px-2.5 py-1 rounded-lg bg-amber-500/30 hover:bg-amber-500/50 text-[11px] font-bold text-amber-100 transition-colors cursor-pointer"
-            >
-              تعبئة تلقائية
-            </button>
-          </div>
-        )}
-
-        {/* Error Alert */}
-        {errorMessage && (
-          <div className="mb-4 p-3 rounded-2xl bg-red-500/15 border border-red-500/30 text-red-300 text-xs flex items-center gap-2 animate-fade-in">
-            <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
-            <span className="leading-relaxed">{errorMessage}</span>
+            <div className="text-[11px] text-red-100 leading-relaxed font-sans mb-1 text-right" dir="rtl">
+              {firebaseError.message}
+            </div>
+            {firebaseError.details && firebaseError.details !== firebaseError.message && (
+              <div className="text-[10px] text-red-300/70 font-mono break-all pt-1 border-t border-red-500/30 text-left" dir="ltr">
+                {firebaseError.details}
+              </div>
+            )}
           </div>
         )}
 
@@ -540,7 +562,7 @@ export const AuthModal: React.FC = () => {
                 type="button"
                 onClick={() => {
                   setActiveTab('phone');
-                  setErrorMessage(null);
+                  setFirebaseError(null);
                 }}
                 className={`py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                   activeTab === 'phone'
@@ -549,14 +571,14 @@ export const AuthModal: React.FC = () => {
                 }`}
               >
                 <Phone className="w-4 h-4" />
-                <span>الجوال</span>
+                <span>الجوال (SMS OTP)</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => {
                   setActiveTab('email');
-                  setErrorMessage(null);
+                  setFirebaseError(null);
                 }}
                 className={`py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                   activeTab === 'email'
@@ -580,7 +602,7 @@ export const AuthModal: React.FC = () => {
               >
                 <div className="space-y-1.5">
                   <label className="block text-xs font-semibold text-gray-200">
-                    رقم الجوال
+                    رقم الجوال لتلقي رمز التحقق عبر SMS
                   </label>
                   <div className="flex items-center gap-2" dir="ltr">
                     {/* Country Code Selector */}
@@ -628,11 +650,11 @@ export const AuthModal: React.FC = () => {
                   {loading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>جاري إرسال الرمز...</span>
+                      <span>جاري إرسال الرمز عبر Firebase SMS...</span>
                     </>
                   ) : (
                     <>
-                      <span>إرسال رمز التحقق</span>
+                      <span>إرسال رمز التحقق (SMS)</span>
                       <ArrowRight className="w-4 h-4 rotate-180" />
                     </>
                   )}
@@ -664,7 +686,7 @@ export const AuthModal: React.FC = () => {
                     autoFocus
                   />
                   <p className="text-[11px] text-gray-400">
-                    سنرسل رمز تحقق من 6 أرقام لتأكيد حسابك.
+                    سيتم إرسال رابط تسجيل دخول آمن ومباشر من Firebase إلى بريدك.
                   </p>
                 </div>
 
@@ -676,11 +698,11 @@ export const AuthModal: React.FC = () => {
                   {loading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>جاري إرسال الرمز...</span>
+                      <span>جاري الإرسال عبر Firebase...</span>
                     </>
                   ) : (
                     <>
-                      <span>إرسال رمز التحقق</span>
+                      <span>إرسال رابط الدخول الآمن</span>
                       <ArrowRight className="w-4 h-4 rotate-180" />
                     </>
                   )}
@@ -717,9 +739,9 @@ export const AuthModal: React.FC = () => {
             {/* Target Display and Change link */}
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between text-xs">
               <div className="flex items-center gap-2 text-gray-200">
-                {activeTab === 'phone' ? <Phone className="w-4 h-4 text-[#ff7a59]" /> : <Mail className="w-4 h-4 text-[#ff7a59]" />}
+                <Phone className="w-4 h-4 text-[#ff7a59]" />
                 <span dir="ltr" className="font-bold">
-                  {activeTab === 'phone' ? `${selectedCountry.code} ${phoneNumber}` : emailAddress}
+                  {selectedCountry.code} {phoneNumber}
                 </span>
               </div>
               <button
@@ -727,18 +749,18 @@ export const AuthModal: React.FC = () => {
                 onClick={() => {
                   setStep(1);
                   setOtpDigits(['', '', '', '', '', '']);
-                  setErrorMessage(null);
+                  setFirebaseError(null);
                 }}
                 className="text-[#ff7a59] hover:text-white font-bold transition-colors cursor-pointer text-[11px]"
               >
-                تعديل {activeTab === 'phone' ? 'الرقم' : 'البريد'}
+                تعديل الرقم
               </button>
             </div>
 
             {/* 6 OTP Input Boxes */}
             <div className="space-y-2">
               <label className="block text-xs font-semibold text-gray-300 text-center">
-                أدخل رمز التحقق (صالح لمدة 5 دقائق)
+                أدخل رمز SMS المستلم من Firebase (6 أرقام)
               </label>
               <div className="flex items-center justify-center gap-2 sm:gap-3" dir="ltr" onPaste={handleOtpPaste}>
                 {otpDigits.map((digit, index) => (
@@ -770,7 +792,7 @@ export const AuthModal: React.FC = () => {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>جاري التحقق من الرمز...</span>
+                  <span>جاري التحقق عبر Firebase...</span>
                 </>
               ) : (
                 <>
@@ -785,7 +807,7 @@ export const AuthModal: React.FC = () => {
               {canResend ? (
                 <button
                   type="button"
-                  onClick={() => handleSendCode(true)}
+                  onClick={() => handleSendCode()}
                   disabled={loading}
                   className="text-[#ff7a59] hover:underline font-bold inline-flex items-center gap-1.5 cursor-pointer"
                 >
@@ -810,7 +832,7 @@ export const AuthModal: React.FC = () => {
             <div className="p-4 rounded-2xl bg-gradient-to-br from-[#e85432]/10 to-transparent border border-[#e85432]/25 text-center space-y-1">
               <span className="text-xs font-bold text-[#ff7a59]">تسجيل مستخدم جديد</span>
               <p className="text-xs text-gray-300">
-                مرحباً بك! يرجى إدخال اسمك الكريم لتخصيص حسابك ومتابعة طلباتك ومشاريعك.
+                تم التحقق من رقمك بنجاح! يرجى إدخال اسمك الكريم لإكمال حفظ ملفك الشخصي.
               </p>
             </div>
 
@@ -840,7 +862,7 @@ export const AuthModal: React.FC = () => {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>جاري حفظ الحساب...</span>
+                  <span>جاري حفظ الحساب في Firestore...</span>
                 </>
               ) : (
                 <>

@@ -27,6 +27,9 @@ export const firebaseConfig = {
 // Initialize Firebase App (Skip Analytics as requested)
 export const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 
+// Confirm Firebase initialization in the browser console
+console.log(`[Firebase Initialized] Project ID: "${firebaseConfig.projectId}" | Auth Domain: "${firebaseConfig.authDomain}"`);
+
 // Initialize Auth with local persistence for persistent sessions
 export const auth = getAuth(app);
 setPersistence(auth, browserLocalPersistence).catch((err) => {
