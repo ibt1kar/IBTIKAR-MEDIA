@@ -116,6 +116,8 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
                             ? 'سلسلة تصاميم كاروسيل تفاعلية'
                             : item.category === 'تصاميم سوشال ميديا' 
                             ? 'ألبوم تصاميم سوشال ميديا' 
+                            : item.category === 'هوية بصرية وتصوير'
+                            ? 'ملف هوية بصرية ودليل متكامل'
                             : 'مجلد عرض تقديمي متكامل'}
                         </span>
                       </div>
@@ -127,6 +129,8 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
                             ? 'شرائح كاروسيل' 
                             : item.category === 'تصاميم سوشال ميديا' 
                             ? 'تصاميم' 
+                            : item.category === 'هوية بصرية وتصوير'
+                            ? 'صفحة ونموذج'
                             : 'شريحة'}
                         </span>
                       </span>
@@ -160,6 +164,8 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
                               ? 'الكاروسيل' 
                               : item.category === 'تصاميم سوشال ميديا' 
                               ? 'التصاميم' 
+                              : item.category === 'هوية بصرية وتصوير'
+                              ? 'الهوية البصرية'
                               : 'العرض'}{' '}
                             كاملاً
                           </span>
@@ -201,7 +207,21 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
                       <div className="pt-2">
                         <div className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#e85432] via-[#f15030] to-[#ff7a59] text-white font-bold text-xs shadow-lg shadow-[#e85432]/35 flex items-center justify-center gap-2 group-hover:shadow-orange-500/50 transition-all">
                           <FolderOpen className="w-4 h-4" />
-                          <span>تصفح {item.category === 'تصاميم سوشال ميديا' ? 'ألبوم التصاميم' : 'العرض التقديمي'} بالتمرير ({item.slideCount || item.images?.length || 6} {item.category === 'تصاميم سوشال ميديا' ? 'تصاميم' : 'شريحة'})</span>
+                          <span>
+                            تصفح {
+                              item.category === 'تصاميم سوشال ميديا' 
+                                ? 'ألبوم التصاميم' 
+                                : item.category === 'هوية بصرية وتصوير'
+                                ? 'ملف الهوية البصرية'
+                                : 'العرض التقديمي'
+                            } بالتمرير ({item.slideCount || item.images?.length || 6} {
+                              item.category === 'تصاميم سوشال ميديا' 
+                                ? 'تصاميم' 
+                                : item.category === 'هوية بصرية وتصوير'
+                                ? 'صفحة ونموذج'
+                                : 'شريحة'
+                            })
+                          </span>
                           <ChevronDown className="w-4 h-4 animate-bounce" />
                         </div>
                       </div>
