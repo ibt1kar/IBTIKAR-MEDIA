@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Visitor profile details stored upon registration or login",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The Firebase Authentication user UID"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Full name of the visitor/user"
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 30,
+          "description": "Phone number formatted with international country code"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 150,
+          "description": "Email address of the visitor"
+        },
+        "authProvider": {
+          "type": "string",
+          "enum": ["phone", "email"],
+          "description": "Authentication method used by the visitor"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp in ISO string format"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update timestamp in ISO string format"
+        }
+      },
+      "required": ["name"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile documents accessible only by the owner user ID"
+    }
+  }
+}

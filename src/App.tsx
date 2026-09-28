@@ -10,6 +10,9 @@ import { AboutSection } from './components/AboutSection';
 import { ClientsGridSection } from './components/ClientsGridSection';
 import { FooterSection } from './components/FooterSection';
 import { ServiceOrderModal } from './components/ServiceOrderModal';
+import { AuthModal } from './components/AuthModal';
+import { AccountModal } from './components/AccountModal';
+import { AuthProvider } from './context/AuthContext';
 import { Sparkles, Send, Mail, CreditCard } from 'lucide-react';
 import { AGENCY_SOCIALS } from './data/mockData';
 
@@ -38,21 +41,22 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen text-white font-['Thmanyah_Sans',sans-serif] selection:bg-[#F15230] selection:text-white relative overflow-x-hidden">
-      {/* Ambient background glow orbs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute -top-40 -right-40 w-96 h-96 sm:w-[500px] sm:h-[500px] bg-[#e85432]/20 rounded-full blur-[140px]"></div>
-        <div className="absolute top-1/3 -left-40 w-96 h-96 sm:w-[500px] sm:h-[500px] bg-[#270f6d]/40 rounded-full blur-[140px]"></div>
-        <div className="absolute -bottom-40 right-1/3 w-96 h-96 sm:w-[500px] sm:h-[500px] bg-[#e85432]/15 rounded-full blur-[150px]"></div>
-        <div className="absolute top-2/3 right-10 w-80 h-80 bg-[#140844]/60 rounded-full blur-[120px]"></div>
-      </div>
+    <AuthProvider>
+      <div className="min-h-screen text-white font-['Thmanyah_Sans',sans-serif] selection:bg-[#F15230] selection:text-white relative overflow-x-hidden">
+        {/* Ambient background glow orbs */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute -top-40 -right-40 w-96 h-96 sm:w-[500px] sm:h-[500px] bg-[#e85432]/20 rounded-full blur-[140px]"></div>
+          <div className="absolute top-1/3 -left-40 w-96 h-96 sm:w-[500px] sm:h-[500px] bg-[#270f6d]/40 rounded-full blur-[140px]"></div>
+          <div className="absolute -bottom-40 right-1/3 w-96 h-96 sm:w-[500px] sm:h-[500px] bg-[#e85432]/15 rounded-full blur-[150px]"></div>
+          <div className="absolute top-2/3 right-10 w-80 h-80 bg-[#140844]/60 rounded-full blur-[120px]"></div>
+        </div>
 
-      {/* Navigation Bar */}
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onOpenOrderModal={handleOpenOrderModal}
-      />
+        {/* Navigation Bar */}
+        <Navbar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          onOpenOrderModal={handleOpenOrderModal}
+        />
 
       {/* Main Content Areas */}
       <main className="relative z-10">
@@ -226,6 +230,13 @@ export default function App() {
         initialPackageId={orderModal.packageId}
         initialPackageGroupId={orderModal.packageGroupId}
       />
+
+      {/* Visitor Authentication Modal (Phone / Email OTP) */}
+      <AuthModal />
+
+      {/* User Account / Profile Modal (Protected) */}
+      <AccountModal />
     </div>
-  );
+  </AuthProvider>
+);
 }
