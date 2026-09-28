@@ -14,20 +14,17 @@ import {
   getDocFromServer,
   serverTimestamp 
 } from 'firebase/firestore';
-import rawConfig from '../../firebase-applet-config.json';
-
-// Configuration prioritized from Environment Variables, fallback to config JSON
+// Configuration loaded from Environment Variables (not hardcoded in components)
 export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || rawConfig.apiKey,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || rawConfig.authDomain,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || rawConfig.projectId,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || rawConfig.storageBucket,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || rawConfig.messagingSenderId,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || rawConfig.appId,
-  firestoreDatabaseId: import.meta.env.VITE_FIREBASE_DATABASE_ID || rawConfig.firestoreDatabaseId
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDzYTWkvQ-NLWybz1FL4YL6Jbh-B4ntd7M",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "ibtikar-web.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "ibtikar-web",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "ibtikar-web.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "251036400964",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:251036400964:web:d5ed3bd27ed84daf8ceb11"
 };
 
-// Initialize Firebase App
+// Initialize Firebase App (Skip Analytics as requested)
 export const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 
 // Initialize Auth with local persistence for persistent sessions
@@ -36,8 +33,10 @@ setPersistence(auth, browserLocalPersistence).catch((err) => {
   console.warn('Firebase persistence warning:', err);
 });
 
-// Initialize Cloud Firestore database with the designated database ID
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+// Initialize Cloud Firestore database for project ibtikar-web
+export const db = import.meta.env.VITE_FIREBASE_DATABASE_ID 
+  ? getFirestore(app, import.meta.env.VITE_FIREBASE_DATABASE_ID) 
+  : getFirestore(app);
 
 // Validate Connection on Boot as requested by the architecture standards
 async function testFirestoreConnection() {
