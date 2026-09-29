@@ -188,15 +188,11 @@ export const AccountModal: React.FC = () => {
           {/* Contact Identifier */}
           <div className="flex items-center justify-between pb-3 border-b border-white/10 text-xs">
             <div className="flex items-center gap-2 text-gray-400">
-              {userProfile?.authProvider === 'email' || user.email ? (
-                <Mail className="w-4 h-4 text-[#ff7a59]" />
-              ) : (
-                <Phone className="w-4 h-4 text-[#ff7a59]" />
-              )}
-              <span>وسيلة التواصل:</span>
+              <Mail className="w-4 h-4 text-[#ff7a59]" />
+              <span>البريد الإلكتروني:</span>
             </div>
             <span className="font-bold text-white font-mono" dir="ltr">
-              {userProfile?.phone || user.phoneNumber || userProfile?.email || user.email || 'غير محدد'}
+              {userProfile?.email || user.email || 'غير محدد'}
             </span>
           </div>
 
@@ -207,7 +203,7 @@ export const AccountModal: React.FC = () => {
               <span>نوع المصادقة:</span>
             </div>
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[11px] border border-emerald-500/30">
-              {userProfile?.authProvider === 'email' ? 'رمز بريد إلكتروني (OTP)' : 'رمز رسائل SMS (OTP)'}
+              رابط بريد إلكتروني آمن (Email Link)
             </span>
           </div>
 

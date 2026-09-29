@@ -152,7 +152,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         <span className="truncate">{userProfile?.name || user.displayName || 'عميل ابتكار'}</span>
                       </div>
                       <div className="text-[11px] text-gray-400 truncate mt-0.5" dir="ltr">
-                        {userProfile?.phone || user.phoneNumber || userProfile?.email || user.email || 'حساب مفعل'}
+                        {userProfile?.email || user.email || 'حساب مفعل'}
                       </div>
                     </div>
 
@@ -250,7 +250,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       {userProfile?.name || user.displayName || 'عميل ابتكار'}
                     </div>
                     <div className="text-xs text-gray-400 font-mono truncate" dir="ltr">
-                      {userProfile?.phone || user.phoneNumber || userProfile?.email || user.email || 'حساب مفعل'}
+                      {userProfile?.email || user.email || 'حساب مفعل'}
                     </div>
                   </div>
                 </div>
