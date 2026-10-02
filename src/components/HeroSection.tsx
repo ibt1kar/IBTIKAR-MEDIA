@@ -104,9 +104,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </div>
 
                 {/* Logo Showcase */}
-                <div className="py-6 flex flex-col items-center justify-center bg-white/5 rounded-2xl border border-white/10 relative overflow-hidden group">
+                <div className="py-6 px-4 flex flex-col items-center justify-center bg-white/5 rounded-2xl border border-white/10 relative overflow-hidden group">
                   <div className="absolute inset-0 bg-gradient-to-tr from-[#e85432]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <Logo size="xl" className="transform group-hover:scale-105 transition-transform duration-500" />
+                  <Logo size="xl" className="transform group-hover:scale-105 transition-transform duration-500 justify-center flex-wrap sm:flex-nowrap" />
                   <span className="text-xs text-gray-300 font-bold mt-4 tracking-wider">
                     وكالة إعلامية وإبداعية متكاملة
                   </span>

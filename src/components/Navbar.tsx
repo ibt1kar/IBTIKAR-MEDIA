@@ -90,9 +90,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Brand Logo */}
           <button
             onClick={() => handleNavClick('home')}
-            className="flex items-center gap-2 group text-right focus:outline-none"
+            className="flex items-center group text-right focus:outline-none"
+            title="منصة ابتكار - الصفحة الرئيسية"
           >
-            <Logo size="md" />
+            <Logo
+              size="md"
+              imgClassName="h-11 sm:h-14 max-w-[140px]"
+              secondPartClassName="h-11 sm:h-14 max-w-[220px]"
+            />
           </button>
 
           {/* Desktop Links */}

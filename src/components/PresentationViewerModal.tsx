@@ -34,11 +34,12 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
   const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
 
   const slides = project.images && project.images.length > 0 ? project.images : [project.image];
+  const isInfographic = project.category === 'إنفوجرافيك' || project.category === 'تصاميم إنفوجرافيك' || project.title.includes('إنفوجرافيك') || project.title.includes('انفوجرافيك') || project.tags?.includes('إنفوجرافيك') || project.id === 'p-infographics-deck';
   const isSocialMedia = project.category === 'تصاميم سوشال ميديا';
   const isCarousel = project.category === 'تصاميم كاروسيل' || project.title.includes('كاروسيل') || project.tags?.includes('تصاميم كاروسيل');
-  const isBrandIdentity = project.category === 'هوية بصرية وتصوير';
-  const itemTypeSingular = isCarousel ? 'شريحة كاروسيل' : isSocialMedia ? 'تصميم' : isBrandIdentity ? 'صفحة هوية' : 'شريحة';
-  const itemTypePlural = isCarousel ? 'شرائح كاروسيل' : isSocialMedia ? 'تصاميم' : isBrandIdentity ? 'صفحات هوية' : 'شرائح';
+  const isBrandIdentity = project.category === 'هوية بصرية وتصوير' || project.category === 'هوية بصرية';
+  const itemTypeSingular = isInfographic ? 'تصميم إنفوجرافيك' : isCarousel ? 'شريحة كاروسيل' : isSocialMedia ? 'تصميم' : isBrandIdentity ? 'صفحة هوية' : 'شريحة';
+  const itemTypePlural = isInfographic ? 'تصاميم إنفوجرافيك' : isCarousel ? 'شرائح كاروسيل' : isSocialMedia ? 'تصاميم' : isBrandIdentity ? 'صفحات هوية' : 'شرائح';
 
   // Reset state when project changes or modal opens
   useEffect(() => {
@@ -132,7 +133,9 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
             <div className="truncate">
               <div className="flex items-center gap-2">
                 <span className="text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-[#e85432]/20 text-[#ff7a59] border border-[#e85432]/30">
-                  {isSocialMedia 
+                  {isInfographic
+                    ? 'ألبوم تصاميم إنفوجرافيك'
+                    : isSocialMedia 
                     ? 'ألبوم تصاميم سوشال ميديا' 
                     : isBrandIdentity 
                     ? 'ملف هوية بصرية ودليل متكامل' 
@@ -153,7 +156,7 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
             {/* Slide tracker badge */}
             <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-gray-300">
               <Layers className="w-3.5 h-3.5 text-[#ff7a59]" />
-              <span>{isSocialMedia ? 'التصميم' : isBrandIdentity ? 'الصفحة' : 'الشريحة'} {currentSlideIndex} من {slides.length}</span>
+              <span>{isInfographic ? 'التصميم' : isSocialMedia ? 'التصميم' : isBrandIdentity ? 'الصفحة' : 'الشريحة'} {currentSlideIndex} من {slides.length}</span>
             </div>
 
             {/* Order CTA Button */}
@@ -166,14 +169,18 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">
-                {isSocialMedia 
+                {isInfographic
+                  ? 'اطلب تصاميم إنفوجرافيك'
+                  : isSocialMedia 
                   ? 'اطلب تصاميمك المخصصة' 
                   : isBrandIdentity 
                   ? 'اطلب هويتك البصرية المتكاملة' 
                   : 'اطلب عرضك التقديمي'}
               </span>
               <span className="sm:hidden">
-                {isSocialMedia 
+                {isInfographic
+                  ? 'طلب إنفوجرافيك'
+                  : isSocialMedia 
                   ? 'طلب تصاميم' 
                   : isBrandIdentity 
                   ? 'طلب هوية' 
@@ -206,7 +213,7 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
         <div className="bg-[#140844]/60 border-b border-white/5 px-4 py-2 flex items-center justify-between text-[11px] sm:text-xs text-gray-300 shrink-0">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>تصفح {isSocialMedia ? 'معرض التصاميم' : isBrandIdentity ? 'ملف الهوية البصرية' : 'العرض التقديمي'} بالتمرير الرأسي المستمر من الأعلى إلى الأسفل</span>
+            <span>تصفح {isInfographic ? 'ألبوم تصاميم الإنفوجرافيك والبيانات' : isSocialMedia ? 'معرض التصاميم' : isBrandIdentity ? 'ملف الهوية البصرية' : 'العرض التقديمي'} بالتمرير الرأسي المستمر من الأعلى إلى الأسفل</span>
           </div>
           <div className="flex items-center gap-1 text-[#ff7a59] font-bold">
             <span>مرر لأسفل</span>
@@ -233,7 +240,7 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
                 {/* Slide Number Tag */}
                 <div className="absolute top-3 right-3 z-10 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-white font-mono text-xs font-bold flex items-center gap-1.5 pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#e85432]"></span>
-                  <span>{isCarousel ? 'شريحة كاروسيل' : isSocialMedia ? 'تصميم' : isBrandIdentity ? 'صفحة هوية' : 'الشريحة'} {slideNumber} / {slides.length}</span>
+                  <span>{isInfographic ? 'تصميم إنفوجرافيك' : isCarousel ? 'شريحة كاروسيل' : isSocialMedia ? 'تصميم' : isBrandIdentity ? 'صفحة هوية' : 'الشريحة'} {slideNumber} / {slides.length}</span>
                 </div>
 
                 {/* Loading skeleton placeholder */}
@@ -241,7 +248,7 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
                   <div className="w-full aspect-[16/10] bg-white/5 animate-pulse flex items-center justify-center">
                     <div className="text-center space-y-2 text-gray-400 text-xs">
                       <div className="w-8 h-8 rounded-full border-2 border-[#e85432] border-t-transparent animate-spin mx-auto"></div>
-                      <span>جاري تحميل {isCarousel ? 'شريحة الكاروسيل' : isSocialMedia ? 'التصميم' : isBrandIdentity ? 'صفحة الهوية' : 'الشريحة'} {slideNumber}...</span>
+                      <span>جاري تحميل {isInfographic ? 'تصميم الإنفوجرافيك' : isCarousel ? 'شريحة الكاروسيل' : isSocialMedia ? 'التصميم' : isBrandIdentity ? 'صفحة الهوية' : 'الشريحة'} {slideNumber}...</span>
                     </div>
                   </div>
                 )}
@@ -277,7 +284,9 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
             <div className="space-y-2 max-w-xl mx-auto">
               <span className="text-xs font-bold text-[#ff7a59] uppercase tracking-wider">
                 نهاية {
-                  isCarousel 
+                  isInfographic
+                    ? 'ألبوم تصاميم الإنفوجرافيك'
+                    : isCarousel 
                     ? 'سلسلة تصاميم الكاروسيل التفاعلية' 
                     : isSocialMedia 
                     ? 'معرض تصاميم السوشال ميديا' 
@@ -287,7 +296,9 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
                 }
               </span>
               <h3 className="text-xl sm:text-3xl font-black text-white leading-tight">
-                {isCarousel
+                {isInfographic
+                  ? 'هل ترغب بتصاميم إنفوجرافيك وبيانات مرئية تبسط رسالتك وتزيد تفاعل جمهورك؟'
+                  : isCarousel
                   ? 'هل ترغب بتصاميم كاروسيل تفاعلية تضاعف تفاعل وحفظ منشوراتك؟'
                   : isSocialMedia 
                   ? 'هل ترغب بتصاميم سوشال ميديا مبتكرة تضاعف تفاعلك ومبيعاتك؟'
@@ -297,7 +308,9 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
                 }
               </h3>
               <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-                {isCarousel
+                {isInfographic
+                  ? 'في منصة ابتكار، نبتكر ونصمم تصاميم إنفوجرافيك ورسوم بيانية إبداعية متناسقة تبسط المفاهيم والأرقام المعقدة بأسلوب بصري ساحر واحترافي يرفع نسبة الحفظ والتداول.'
+                  : isCarousel
                   ? 'في منصة ابتكار، نصمم منشورات كاروسيل متسلسلة وجذابة بصرياً لمنصات (LinkedIn و Instagram) تعزز السرد القصصي التعليمي والتسويقي وتزيد معدل الحفظ والمشاركة.'
                   : isSocialMedia
                   ? 'في منصة ابتكار، نبتكر ونصمم بوستات، بنرات إعلانية، ستوريات، وهوية رقمية متناسقة للمنصات (إنستغرام، سناب شات، إكس، تيك توك) لتحقيق أعلى تفاعل وجذب لعلامتك التجارية.'
@@ -318,7 +331,9 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
               >
                 <Sparkles className="w-4 h-4" />
                 <span>
-                  {isSocialMedia 
+                  {isInfographic
+                    ? 'اطلب باقة تصاميم الإنفوجرافيك'
+                    : isSocialMedia 
                     ? 'اطلب باقة تصاميم السوشال ميديا' 
                     : isBrandIdentity 
                     ? 'اطلب باقة الهوية البصرية المتكاملة' 
@@ -328,7 +343,9 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
 
               <a
                 href={`${AGENCY_SOCIALS.whatsapp}${encodeURIComponent(
-                  isSocialMedia
+                  isInfographic
+                    ? `مرحباً منصة ابتكار، اطلعت على ألبوم تصاميم الإنفوجرافيك (${project.title}) في معرض الأعمال وأرغب في طلب تصاميم إنفوجرافيك مخصصة لمشروعي.`
+                    : isSocialMedia
                     ? 'مرحباً منصة ابتكار، اطلعت على نماذج تصاميم السوشال ميديا في معرض الأعمال وأرغب في طلب تصاميم مخصصة لعلامتي التجارية.'
                     : isBrandIdentity
                     ? `مرحباً منصة ابتكار، اطلعت على ملف الهوية البصرية (${project.title}) في معرض الأعمال وأرغب في طلب تصميم هوية بصرية متكاملة لمشروعي.`
@@ -377,7 +394,7 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
 
             <span className="text-gray-400 hidden sm:inline">|</span>
             <span className="font-bold text-white hidden sm:inline">
-              {isSocialMedia ? 'معرض التصاميم:' : isBrandIdentity ? 'ملف الهوية البصرية:' : 'العرض التقديمي:'}
+              {isInfographic ? 'ألبوم الإنفوجرافيك:' : isSocialMedia ? 'معرض التصاميم:' : isBrandIdentity ? 'ملف الهوية البصرية:' : 'العرض التقديمي:'}
             </span>
             <span className="text-[#ff7a59] font-bold">{slides.length} {itemTypePlural}</span>
             <span className="text-gray-400 hidden md:inline">|</span>

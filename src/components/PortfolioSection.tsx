@@ -28,9 +28,10 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
     'الكل', 
     'العروض التقديمية', 
     'تصاميم سوشال ميديا', 
+    'إنفوجرافيك',
     'دعوات إلكترونية', 
     'شعارات ومخطوطات', 
-    'هوية بصرية وتصوير', 
+    'هوية بصرية', 
     'بروفايل وموشن جرافيك'
   ];
 
@@ -42,6 +43,28 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
             return (
               item.category === 'العروض التقديمية' ||
               item.category === 'بروفايل وعروض تقديمية'
+            );
+          }
+          if (selectedFilter === 'هوية بصرية') {
+            return (
+              item.category === 'هوية بصرية' ||
+              item.category === 'هوية بصرية وتصوير'
+            );
+          }
+          if (selectedFilter === 'تصاميم سوشال ميديا') {
+            return (
+              item.category === 'تصاميم سوشال ميديا' ||
+              item.category === 'إنفوجرافيك' ||
+              item.tags?.includes('تصاميم سوشال ميديا')
+            );
+          }
+          if (selectedFilter === 'إنفوجرافيك') {
+            return (
+              item.id === 'p-infographics-deck' ||
+              item.category === 'إنفوجرافيك' ||
+              item.tags?.includes('إنفوجرافيك') ||
+              item.title.includes('إنفوجرافيك') ||
+              item.title.includes('انفوجرافيك')
             );
           }
           return item.category === selectedFilter;
@@ -114,9 +137,11 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
                         <span className="text-xs font-bold text-white tracking-wide">
                           {item.title.includes('كاروسيل') || item.category === 'تصاميم كاروسيل'
                             ? 'سلسلة تصاميم كاروسيل تفاعلية'
+                            : item.title.includes('إنفوجرافيك') || item.title.includes('انفوجرافيك') || item.category === 'إنفوجرافيك' || item.category === 'تصاميم إنفوجرافيك'
+                            ? 'ألبوم تصاميم إنفوجرافيك وبيانات مرئية'
                             : item.category === 'تصاميم سوشال ميديا' 
                             ? 'ألبوم تصاميم سوشال ميديا' 
-                            : item.category === 'هوية بصرية وتصوير'
+                            : item.category === 'هوية بصرية وتصوير' || item.category === 'هوية بصرية'
                             ? 'ملف هوية بصرية ودليل متكامل'
                             : 'مجلد عرض تقديمي متكامل'}
                         </span>
@@ -127,9 +152,11 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
                           {item.slideCount || item.images?.length || 6}{' '}
                           {item.title.includes('كاروسيل') || item.category === 'تصاميم كاروسيل'
                             ? 'شرائح كاروسيل' 
+                            : item.title.includes('إنفوجرافيك') || item.title.includes('انفوجرافيك') || item.category === 'إنفوجرافيك' || item.category === 'تصاميم إنفوجرافيك'
+                            ? 'تصاميم إنفوجرافيك'
                             : item.category === 'تصاميم سوشال ميديا' 
                             ? 'تصاميم' 
-                            : item.category === 'هوية بصرية وتصوير'
+                            : item.category === 'هوية بصرية وتصوير' || item.category === 'هوية بصرية'
                             ? 'صفحة ونموذج'
                             : 'شريحة'}
                         </span>
@@ -151,7 +178,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
 
                       {/* Floating Category Tag */}
                       <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-[#140844]/85 backdrop-blur-md text-[#ff7a59] text-xs font-bold border border-white/15 shadow-md z-10">
-                        {item.category}
+                        {item.title.includes('إنفوجرافيك') || item.title.includes('انفوجرافيك') ? 'إنفوجرافيك وبيانات مرئية' : item.category}
                       </span>
 
                       {/* Interactive Hover Prompt Overlay */}
@@ -162,9 +189,11 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
                             اضغط لفتح المجلد وتصفح{' '}
                             {item.title.includes('كاروسيل') || item.category === 'تصاميم كاروسيل'
                               ? 'الكاروسيل' 
+                              : item.title.includes('إنفوجرافيك') || item.title.includes('انفوجرافيك') || item.category === 'إنفوجرافيك' || item.category === 'تصاميم إنفوجرافيك'
+                              ? 'الإنفوجرافيك'
                               : item.category === 'تصاميم سوشال ميديا' 
                               ? 'التصاميم' 
-                              : item.category === 'هوية بصرية وتصوير'
+                              : item.category === 'هوية بصرية وتصوير' || item.category === 'هوية بصرية'
                               ? 'الهوية البصرية'
                               : 'العرض'}{' '}
                             كاملاً
@@ -209,15 +238,19 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
                           <FolderOpen className="w-4 h-4" />
                           <span>
                             تصفح {
-                              item.category === 'تصاميم سوشال ميديا' 
+                              item.title.includes('إنفوجرافيك') || item.title.includes('انفوجرافيك') || item.category === 'إنفوجرافيك' || item.category === 'تصاميم إنفوجرافيك'
+                                ? 'ألبوم الإنفوجرافيك'
+                                : item.category === 'تصاميم سوشال ميديا' 
                                 ? 'ألبوم التصاميم' 
-                                : item.category === 'هوية بصرية وتصوير'
+                                : item.category === 'هوية بصرية وتصوير' || item.category === 'هوية بصرية'
                                 ? 'ملف الهوية البصرية'
                                 : 'العرض التقديمي'
                             } بالتمرير ({item.slideCount || item.images?.length || 6} {
-                              item.category === 'تصاميم سوشال ميديا' 
+                              item.title.includes('إنفوجرافيك') || item.title.includes('انفوجرافيك') || item.category === 'إنفوجرافيك' || item.category === 'تصاميم إنفوجرافيك'
+                                ? 'تصاميم إنفوجرافيك'
+                                : item.category === 'تصاميم سوشال ميديا' 
                                 ? 'تصاميم' 
-                                : item.category === 'هوية بصرية وتصوير'
+                                : item.category === 'هوية بصرية وتصوير' || item.category === 'هوية بصرية'
                                 ? 'صفحة ونموذج'
                                 : 'شريحة'
                             })
