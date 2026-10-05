@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useModalEffects } from '../hooks/useModalEffects';
 import { 
   X, 
   Mail, 
@@ -69,6 +70,9 @@ export const AuthModal: React.FC = () => {
       }
     }
   }, [isAuthModalOpen]);
+
+  // Handle body scroll lock & Escape key
+  useModalEffects(isAuthModalOpen, closeAuthModal);
 
   // Resend countdown timer
   useEffect(() => {
@@ -246,12 +250,13 @@ export const AuthModal: React.FC = () => {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-fade-in text-right font-['Thmanyah_Sans',sans-serif]"
+      className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-xl animate-fade-in text-right font-['Thmanyah_Sans',sans-serif]"
       dir="rtl"
+      onClick={closeAuthModal}
     >
       {/* Modal Container */}
       <div 
-        className="relative w-full max-w-md glass-panel glass-modal rounded-3xl p-6 sm:p-8 shadow-2xl shadow-black/80 overflow-hidden"
+        className="relative w-full max-w-md glass-panel glass-modal rounded-3xl p-5 sm:p-8 shadow-2xl shadow-black/80 overflow-y-auto max-h-[calc(100dvh-24px)] overscroll-contain"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Ambient Top Glow */}
@@ -261,7 +266,7 @@ export const AuthModal: React.FC = () => {
         {/* Close Button */}
         <button
           onClick={closeAuthModal}
-          className="absolute top-5 left-5 p-2 rounded-full glass-panel text-gray-400 hover:text-white hover:bg-white/10 transition-colors focus:outline-none cursor-pointer"
+          className="absolute top-4 left-4 min-w-[44px] min-h-[44px] p-2 rounded-full glass-panel text-gray-400 hover:text-white hover:bg-white/10 transition-colors focus:outline-none cursor-pointer flex items-center justify-center"
           aria-label="إغلاق"
         >
           <X className="w-5 h-5" />

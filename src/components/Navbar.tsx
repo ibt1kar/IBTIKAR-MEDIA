@@ -50,6 +50,25 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Virtual keyboard detection on mobile devices
+  useEffect(() => {
+    const handleFocusIn = (e: FocusEvent) => {
+      const target = e.target as HTMLElement;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT')) {
+        document.body.classList.add('keyboard-open');
+      }
+    };
+    const handleFocusOut = () => {
+      document.body.classList.remove('keyboard-open');
+    };
+    window.addEventListener('focusin', handleFocusIn);
+    window.addEventListener('focusout', handleFocusOut);
+    return () => {
+      window.removeEventListener('focusin', handleFocusIn);
+      window.removeEventListener('focusout', handleFocusOut);
+    };
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 20) {
@@ -73,6 +92,18 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'contact', label: 'تواصل معنا', icon: Send },
   ];
 
+  // Helper to place second word underneath if the label consists of multiple words
+  const splitNavLabel = (label: string): { first: string; second?: string } => {
+    const parts = label.trim().split(/\s+/);
+    if (parts.length <= 1) {
+      return { first: label };
+    }
+    if (parts.length === 2) {
+      return { first: parts[0], second: parts[1] };
+    }
+    return { first: parts[0], second: parts.slice(1).join(' ') };
+  };
+
   const handleNavClick = (tab: PageTab) => {
     setActiveTab(tab);
     setMobileMenuOpen(false);
@@ -82,48 +113,67 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? 'glass-nav py-3' : 'bg-transparent py-5'
+        className={`fixed top-0 left-0 right-0 z-[var(--z-header)] transition-all duration-300 pointer-events-none lg:pointer-events-auto ${
+          scrolled ? 'lg:glass-nav lg:py-3 py-2' : 'bg-transparent lg:py-5 py-3'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        {/* Mobile top-bar glass background (independent from header to avoid trapping fixed descendants) */}
+        <div
+          className={`lg:hidden absolute inset-x-0 top-0 h-full pointer-events-none transition-all duration-300 ${
+            scrolled ? 'glass-nav' : 'bg-transparent'
+          }`}
+          aria-hidden="true"
+        />
+
+        <div className="relative max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 flex items-center justify-between min-h-[var(--header-h)] pointer-events-auto">
           {/* Brand Logo */}
           <button
             onClick={() => handleNavClick('home')}
-            className="flex items-center group text-right focus:outline-none"
+            className="flex items-center group text-right focus:outline-none shrink-0"
             title="منصة ابتكار - الصفحة الرئيسية"
           >
             <Logo
               size="md"
-              imgClassName="h-7.5 sm:h-9 max-w-[100px]"
-              secondPartClassName="h-7.5 sm:h-9 max-w-[160px]"
+              imgClassName="h-7 sm:h-8 max-w-[80px] sm:max-w-[100px]"
+              secondPartClassName="h-7 sm:h-8 max-w-[125px] sm:max-w-[160px]"
             />
           </button>
 
-          {/* Desktop Links */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 glass-panel rounded-full px-4 py-1.5 border border-[var(--card-border)]">
+          {/* Shortcuts Navigation Bar: Desktop Header Center & Mobile Fixed Bottom Bar */}
+          <nav
+            id="shortcuts-nav"
+            className="shortcuts-nav glass-panel"
+            aria-label="شريط التنقل السريع"
+          >
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
+              const { first, second } = splitNavLabel(item.label);
               return (
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                  className={`shortcuts-item flex items-center transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? 'bg-[var(--accent-coral)] text-white shadow-lg shadow-[var(--accent-coral)]/35 scale-105'
-                      : 'text-[var(--text-muted)] hover:text-white hover:bg-white/10'
+                      ? 'active text-white'
+                      : 'text-[var(--text-muted)] hover:text-white'
                   }`}
+                  title={item.label}
                 >
-                  <Icon className="w-4 h-4" />
-                  <span>{item.label}</span>
+                  <div className="shortcuts-icon-wrap flex items-center justify-center">
+                    <Icon className="shortcuts-icon" />
+                  </div>
+                  <span className="shortcuts-label">
+                    <span className="shortcuts-label-first">{first}</span>
+                    {second && <span className="shortcuts-label-second">{second}</span>}
+                  </span>
                 </button>
               );
             })}
           </nav>
 
-          {/* Top Corner Action Buttons (Login / User Menu & Order CTA) */}
-          <div className="hidden sm:flex items-center gap-3">
+          {/* Desktop Top Corner Action Buttons (1024px and above) */}
+          <div className="hidden lg:flex items-center gap-3 shrink-0">
             {/* Visitor Authentication Button or User Menu */}
             {!user ? (
               <button
@@ -200,40 +250,42 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </div>
 
-          {/* Mobile menu toggle & quick auth button */}
-          <div className="flex lg:hidden items-center gap-2">
+          {/* Mobile Header Row (max-width: 1023px): logo, "دخول", "طلب خدمة", hamburger */}
+          <div className="flex lg:hidden items-center gap-1 sm:gap-2 shrink-0">
             {!user ? (
               <button
                 onClick={openAuthModal}
-                className="px-3 py-1.5 rounded-full glass-panel text-white text-xs font-bold sm:hidden flex items-center gap-1 border border-[var(--card-border)]"
+                className="min-h-[44px] px-2.5 sm:px-3 py-1.5 rounded-full glass-panel text-white text-xs font-bold flex items-center gap-1 border border-[var(--card-border)] hover:border-[var(--accent-coral)]/60 cursor-pointer transition-all shrink-0"
               >
-                <LogIn className="w-3.5 h-3.5 text-[var(--accent-coral)]" />
+                <LogIn className="w-3.5 h-3.5 text-[var(--accent-coral)] shrink-0" />
                 <span>دخول</span>
               </button>
             ) : (
               <button
                 onClick={openAccountModal}
-                className="w-8 h-8 rounded-full bg-[var(--accent-coral)] text-white sm:hidden flex items-center justify-center text-xs font-black shadow border border-[var(--card-border)]"
+                className="min-h-[44px] min-w-[44px] p-1.5 rounded-full glass-panel flex items-center justify-center gap-1 border border-[var(--card-border)] text-white text-xs font-bold cursor-pointer shrink-0"
                 title="حسابي"
               >
-                {(userProfile?.name || user.displayName || 'ع').trim().charAt(0)}
+                <div className="w-7 h-7 rounded-full bg-[var(--accent-coral)] text-white flex items-center justify-center text-xs font-black shadow">
+                  {(userProfile?.name || user.displayName || 'ع').trim().charAt(0)}
+                </div>
               </button>
             )}
 
             <button
               onClick={() => onOpenOrderModal()}
-              className="px-3.5 py-1.5 rounded-full bg-[var(--accent-coral)] text-white text-xs font-bold sm:hidden flex items-center gap-1 shadow-md shadow-[var(--accent-coral)]/30"
+              className="min-h-[44px] px-2.5 sm:px-3.5 py-1.5 rounded-full bg-[var(--accent-coral)] text-white text-xs font-bold flex items-center gap-1 shadow-md shadow-[var(--accent-coral)]/30 hover:scale-105 transition-all cursor-pointer whitespace-nowrap shrink-0"
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5 shrink-0" />
               <span>طلب خدمة</span>
             </button>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-2xl glass-panel text-white hover:bg-white/10 transition-colors focus:outline-none"
+              className="min-h-[44px] min-w-[44px] p-2 sm:p-2.5 rounded-2xl glass-panel text-white hover:bg-white/10 transition-colors focus:outline-none flex items-center justify-center cursor-pointer shrink-0"
               aria-label="القائمة"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
             </button>
           </div>
         </div>
@@ -241,7 +293,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Navigation overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden flex flex-col justify-between glass-nav bg-[var(--card-bg)] pt-24 pb-20 px-6 backdrop-blur-2xl animate-fade-in overflow-y-auto">
+        <div className="fixed inset-0 z-[var(--z-drawer)] lg:hidden flex flex-col justify-between glass-nav bg-[var(--card-bg)] pt-24 pb-20 px-6 backdrop-blur-2xl animate-fade-in overflow-y-auto">
           <div className="space-y-4">
             {/* User Account Mobile Card */}
             {user ? (
@@ -347,53 +399,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
       )}
-
-      {/* Mobile Bottom Glass Quick Bar for fast navigation */}
-      <div className="lg:hidden fixed bottom-3 left-3 right-3 z-40 glass-panel rounded-full p-1 border border-[var(--card-border)] shadow-2xl flex items-center justify-around">
-        <button
-          onClick={() => handleNavClick('home')}
-          className={`flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-full text-[11px] font-semibold ${
-            activeTab === 'home' ? 'text-[var(--accent-coral)] bg-white/10' : 'text-[var(--text-muted)]'
-          }`}
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>الرئيسية</span>
-        </button>
-        <button
-          onClick={() => handleNavClick('services')}
-          className={`flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-full text-[11px] font-semibold ${
-            activeTab === 'services' ? 'text-[var(--accent-coral)] bg-white/10' : 'text-[var(--text-muted)]'
-          }`}
-        >
-          <Grid className="w-3.5 h-3.5" />
-          <span>الخدمات</span>
-        </button>
-        <button
-          onClick={() => handleNavClick('packages')}
-          className={`flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-full text-[11px] font-semibold ${
-            activeTab === 'packages' ? 'text-[var(--accent-coral)] bg-white/10' : 'text-[var(--text-muted)]'
-          }`}
-        >
-          <CreditCard className="w-3.5 h-3.5" />
-          <span>الباقات</span>
-        </button>
-        <button
-          onClick={() => handleNavClick('portfolio')}
-          className={`flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-full text-[11px] font-semibold ${
-            activeTab === 'portfolio' ? 'text-[var(--accent-coral)] bg-white/10' : 'text-[var(--text-muted)]'
-          }`}
-        >
-          <Briefcase className="w-3.5 h-3.5" />
-          <span>الأعمال</span>
-        </button>
-        <button
-          onClick={() => onOpenOrderModal()}
-          className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[var(--accent-coral)] text-white shadow-md shadow-[var(--accent-coral)]/30"
-        >
-          <Send className="w-3.5 h-3.5" />
-          <span>اطلب</span>
-        </button>
-      </div>
     </>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useModalEffects } from '../hooks/useModalEffects';
 import { SERVICES_DATA, SERVICE_PACKAGES_DATA, AGENCY_SOCIALS } from '../data/mockData';
 import { X, Sparkles, Send, CheckCircle2, MessageSquare, ShieldCheck, CreditCard, Layers, PenTool } from 'lucide-react';
 
@@ -41,6 +42,9 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
   const [businessType, setBusinessType] = useState('');
   const [notes, setNotes] = useState('');
   const [submitted, setSubmitted] = useState(false);
+
+  // Body scroll lock & Escape key
+  useModalEffects(isOpen, onClose);
 
   useEffect(() => {
     if (initialPackageGroupId || initialPackageId) {
@@ -116,13 +120,22 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
     }, 600);
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto">
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto glass-panel glass-modal rounded-3xl p-6 sm:p-8 shadow-2xl my-auto text-right custom-scrollbar">
+    <div 
+      className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in overflow-y-auto"
+      onClick={onClose}
+    >
+      <div 
+        className="relative w-full max-w-2xl max-h-[calc(100dvh-24px)] overflow-y-auto glass-panel glass-modal rounded-3xl p-5 sm:p-8 shadow-2xl my-auto text-right custom-scrollbar overscroll-contain"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 left-5 p-2.5 rounded-full glass-panel hover:bg-white/10 text-gray-300 hover:text-white transition-colors"
+          className="absolute top-4 left-4 min-w-[44px] min-h-[44px] p-2.5 rounded-full glass-panel hover:bg-white/10 text-gray-300 hover:text-white transition-colors flex items-center justify-center cursor-pointer"
+          aria-label="إغلاق"
         >
           <X className="w-5 h-5" />
         </button>

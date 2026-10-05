@@ -193,7 +193,7 @@ export default function App() {
         href="https://wa.me/966558875818"
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-20 sm:bottom-6 left-6 z-40 p-2 sm:p-2.5 rounded-full bg-[#25D366] text-white shadow-2xl shadow-emerald-500/40 hover:scale-110 transition-transform duration-300 flex items-center gap-2 group cursor-pointer border-2 border-white/20"
+        className="floating-whatsapp fixed left-6 z-40 p-2 sm:p-2.5 rounded-full bg-[#25D366] text-white shadow-2xl shadow-emerald-500/40 hover:scale-110 transition-transform duration-300 flex items-center gap-2 group cursor-pointer border-2 border-white/20"
         title="تواصل معنا عبر الواتساب"
       >
         <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center overflow-hidden">
