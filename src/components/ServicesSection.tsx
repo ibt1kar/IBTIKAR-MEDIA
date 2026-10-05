@@ -52,12 +52,13 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
   return (
     <section id="services" className="py-20 relative overflow-hidden">
       {/* Background glow */}
-      <div className="absolute top-1/2 left-0 w-80 h-80 rounded-full bg-[#e85432]/15 blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-1/2 left-0 w-80 h-80 rounded-full bg-[var(--accent-coral)]/15 blur-[100px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Title */}
         <div className="text-center space-y-4 mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel-orange text-[#ff7a59] font-bold text-xs">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--card-border)] bg-[rgba(22,24,69,0.7)] backdrop-blur-md text-[var(--accent-coral)] font-bold text-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-coral)]"></span>
             <Sparkles className="w-3.5 h-3.5" />
             <span>خدماتنا الإبداعية المتكاملة</span>
           </div>
@@ -65,7 +66,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
             <span className="block">حلول تسويقية وبصرية</span>
             <span className="block">تحـوّل الرؤيـــــة إلى واقع</span>
           </h2>
-          <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-[var(--text-muted)] text-sm sm:text-base leading-relaxed">
             نقدم مجموعة متكاملة من الخدمات الإعلامية والتصميمية بأعلى معايير الجودة لتنمية براندك وتثبيت حضورك الرقمي.
           </p>
         </div>
@@ -77,29 +78,30 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
             return (
               <div
                 key={service.id}
-                className="glass-panel glass-panel-hover p-6 sm:p-8 rounded-3xl border border-white/10 flex flex-col justify-between relative group"
+                className="glass-panel glass-panel-hover p-6 sm:p-8 rounded-3xl border border-[var(--card-border)] flex flex-col justify-between relative group"
               >
                 <div className="space-y-4">
                   {/* Top Row: Icon + Badge */}
                   <div className="flex items-start justify-between gap-3">
-                    <div className="w-14 h-14 rounded-2xl glass-panel-orange flex items-center justify-center text-[#e85432] group-hover:scale-110 group-hover:bg-[#e85432] group-hover:text-white transition-all duration-300 shadow-lg shadow-[#e85432]/20 shrink-0">
+                    <div className="w-14 h-14 rounded-2xl glass-panel-orange flex items-center justify-center text-[var(--accent-coral)] group-hover:scale-110 group-hover:bg-[var(--accent-coral)] group-hover:text-white transition-all duration-300 shadow-lg shadow-[var(--accent-coral)]/20 shrink-0">
                       <IconComponent className="w-7 h-7" />
                     </div>
 
                     {service.badge && (
-                      <span className="px-3 py-1.5 rounded-full bg-[#e85432]/20 border border-[#e85432]/40 text-[#ff7a59] font-bold text-[11px] text-center leading-normal">
-                        {service.badge}
+                      <span className="px-3 py-1 rounded-full bg-[rgba(22,24,69,0.7)] border border-[var(--card-border)] text-[var(--accent-coral)] font-bold text-[11px] text-center leading-normal inline-flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-coral)]"></span>
+                        <span>{service.badge}</span>
                       </span>
                     )}
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-xl font-bold text-white group-hover:text-[#ff7a59] transition-colors pt-1">
+                  <h3 className="text-xl font-bold text-white group-hover:text-[var(--accent-coral)] transition-colors pt-1">
                     {service.title}
                   </h3>
 
                   {/* Short Description */}
-                  <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
                     {service.shortDescription}
                   </p>
                 </div>
@@ -108,14 +110,14 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
                 <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between gap-3">
                   <button
                     onClick={() => setSelectedService(service)}
-                    className="text-xs font-bold text-gray-300 hover:text-white flex items-center gap-1 hover:underline cursor-pointer"
+                    className="text-xs font-bold text-[var(--text-muted)] hover:text-white flex items-center gap-1 hover:underline cursor-pointer"
                   >
                     <span>التفاصيل والمخرجات</span>
                   </button>
 
                   <button
                     onClick={() => onOpenOrderModal(service.id)}
-                    className="px-4 py-2 rounded-full bg-[#e85432] hover:bg-[#ff6b4a] text-white text-xs font-bold shadow-md shadow-[#e85432]/30 hover:scale-105 transition-all flex items-center gap-1 cursor-pointer"
+                    className="px-4 py-2 rounded-full bg-[var(--accent-coral)] hover:bg-[#f15e52] text-white text-xs font-bold shadow-md shadow-[var(--accent-coral)]/30 hover:scale-105 transition-all flex items-center gap-1 cursor-pointer"
                   >
                     <span>اطلب الخدمة</span>
                     <ArrowLeft className="w-3.5 h-3.5" />
@@ -127,21 +129,21 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
         </div>
 
         {/* Notice Banner - "إمكانية طلب تصاميم منفردة وخاصة بحسب الاحتياج" */}
-        <div className="mt-12 glass-panel p-6 rounded-3xl border border-[#e85432]/30 text-center flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#140844]/90 shadow-xl">
+        <div className="mt-12 glass-panel p-6 rounded-3xl border border-[var(--card-border)] text-center flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
           <div className="flex items-center gap-3 text-right">
-            <div className="p-3 rounded-2xl bg-[#e85432]/20 text-[#e85432]">
+            <div className="p-3 rounded-2xl bg-[var(--accent-coral)]/20 text-[var(--accent-coral)]">
               <Sparkles className="w-6 h-6" />
             </div>
             <div>
               <h4 className="text-lg font-black text-white">ترغب في تصميم منفرد أو حزمة خاصة؟</h4>
-              <p className="text-xs text-gray-300">
+              <p className="text-xs text-[var(--text-muted)]">
                 إمكانية طلب تصاميم منفردة وخاصة ومخصصة بالكامل بحسب الاحتياج الفريد لمشروعك.
               </p>
             </div>
           </div>
           <button
             onClick={() => onOpenOrderModal()}
-            className="px-6 py-3 rounded-full bg-gradient-to-r from-[#e85432] to-[#ff7a59] text-white font-bold text-xs sm:text-sm shadow-lg shadow-[#e85432]/30 shrink-0 hover:scale-105 transition-transform cursor-pointer"
+            className="px-6 py-3 rounded-full bg-[var(--accent-coral)] text-white font-bold text-xs sm:text-sm shadow-lg shadow-[var(--accent-coral)]/30 shrink-0 hover:scale-105 transition-transform cursor-pointer"
           >
             تخصيص طلبك الآن
           </button>
@@ -151,7 +153,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
       {/* Detail Modal for Selected Service */}
       {selectedService && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto">
-          <div className="relative w-full max-w-2xl glass-panel rounded-3xl p-6 sm:p-8 border border-white/20 shadow-2xl my-8 text-right bg-[#140844]/95">
+          <div className="relative w-full max-w-2xl glass-panel glass-modal rounded-3xl p-6 sm:p-8 shadow-2xl my-8 text-right">
             <button
               onClick={() => setSelectedService(null)}
               className="absolute top-5 left-5 p-2 rounded-full glass-panel hover:bg-white/10 text-gray-300 hover:text-white"
@@ -161,12 +163,12 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
 
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded-2xl glass-panel-orange text-[#e85432]">
+                <div className="p-3 rounded-2xl glass-panel-orange text-[var(--accent-coral)]">
                   {React.createElement(getIcon(selectedService.iconName), { className: 'w-7 h-7' })}
                 </div>
                 <div>
                   <h3 className="text-2xl font-black text-white">{selectedService.title}</h3>
-                  <p className="text-xs text-[#ff7a59] font-bold">منصة ابتكار - حلول إعلامية وإبداعية</p>
+                  <p className="text-xs text-[var(--accent-coral)] font-bold">منصة ابتكار - حلول إعلامية وإبداعية</p>
                 </div>
               </div>
 
@@ -178,7 +180,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
                 <h4 className="text-sm font-black text-white mb-3">مخرجات الخدمة والتسليمات:</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {selectedService.deliverables.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-xs text-gray-200 p-2.5 rounded-xl glass-panel">
+                    <div key={idx} className="flex items-center gap-2 text-xs text-gray-200 p-2.5 rounded-xl glass-panel border border-[var(--card-border)]">
                       <Check className="w-4 h-4 text-emerald-400 shrink-0" />
                       <span>{item}</span>
                     </div>
@@ -186,8 +188,8 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#e85432]/10 border border-[#e85432]/30">
-                <h4 className="text-xs font-bold text-[#ff7a59] mb-1">النتيجة والأثر المتوقع:</h4>
+              <div className="p-4 rounded-2xl bg-[var(--accent-coral)]/10 border border-[var(--accent-coral)]/30">
+                <h4 className="text-xs font-bold text-[var(--accent-coral)] mb-1">النتيجة والأثر المتوقع:</h4>
                 <p className="text-xs text-white font-semibold">{selectedService.sampleOutcome}</p>
               </div>
 
@@ -204,7 +206,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
                     setSelectedService(null);
                     onOpenOrderModal(id);
                   }}
-                  className="px-6 py-2.5 rounded-full bg-[#e85432] text-white font-bold text-xs shadow-lg shadow-[#e85432]/30 flex items-center gap-2 hover:scale-105 transition-transform"
+                  className="px-6 py-2.5 rounded-full bg-[var(--accent-coral)] text-white font-bold text-xs shadow-lg shadow-[var(--accent-coral)]/30 flex items-center gap-2 hover:scale-105 transition-transform"
                 >
                   <Send className="w-4 h-4" />
                   <span>طلب هذه الخدمة الآن</span>

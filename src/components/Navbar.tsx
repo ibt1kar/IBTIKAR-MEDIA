@@ -95,13 +95,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <Logo
               size="md"
-              imgClassName="h-11 sm:h-14 max-w-[140px]"
-              secondPartClassName="h-11 sm:h-14 max-w-[220px]"
+              imgClassName="h-7.5 sm:h-9 max-w-[100px]"
+              secondPartClassName="h-7.5 sm:h-9 max-w-[160px]"
             />
           </button>
 
           {/* Desktop Links */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 glass-panel rounded-full px-4 py-1.5 border border-white/10">
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 glass-panel rounded-full px-4 py-1.5 border border-[var(--card-border)]">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -111,8 +111,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleNavClick(item.id)}
                   className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
                     isActive
-                      ? 'bg-[#e85432] text-white shadow-lg shadow-[#e85432]/30 scale-105'
-                      : 'text-gray-200 hover:text-white hover:bg-white/10'
+                      ? 'bg-[var(--accent-coral)] text-white shadow-lg shadow-[var(--accent-coral)]/35 scale-105'
+                      : 'text-[var(--text-muted)] hover:text-white hover:bg-white/10'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -128,18 +128,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             {!user ? (
               <button
                 onClick={openAuthModal}
-                className="px-4 py-2.5 rounded-full glass-panel hover:bg-white/10 text-white font-bold text-xs border border-white/20 hover:border-[#e85432]/60 transition-all flex items-center gap-2 cursor-pointer shadow-md hover:scale-105"
+                className="px-4 py-2.5 rounded-full glass-panel hover:bg-white/10 text-white font-bold text-xs border border-[var(--card-border)] hover:border-[var(--accent-coral)]/60 transition-all flex items-center gap-2 cursor-pointer shadow-md hover:scale-105"
               >
-                <LogIn className="w-4 h-4 text-[#ff7a59]" />
+                <LogIn className="w-4 h-4 text-[var(--accent-coral)]" />
                 <span>تسجيل الدخول</span>
               </button>
             ) : (
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-full glass-panel hover:bg-white/10 border border-white/20 text-white text-xs font-bold transition-all cursor-pointer shadow-md hover:border-[#e85432]/50"
+                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-full glass-panel hover:bg-white/10 border border-[var(--card-border)] text-white text-xs font-bold transition-all cursor-pointer shadow-md hover:border-[var(--accent-coral)]/50"
                 >
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#e85432] to-[#ff7a59] text-white flex items-center justify-center text-xs font-black shadow">
+                  <div className="w-7 h-7 rounded-full bg-[var(--accent-coral)] text-white flex items-center justify-center text-xs font-black shadow">
                     {(userProfile?.name || user.displayName || 'ع').trim().charAt(0)}
                   </div>
                   <span className="max-w-[110px] truncate text-white">
@@ -150,13 +150,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 {/* User Dropdown Menu */}
                 {userDropdownOpen && (
-                  <div className="absolute left-0 mt-2 w-56 rounded-2xl bg-[#140844] border border-white/15 p-2 shadow-2xl backdrop-blur-xl animate-fade-in z-50 text-right">
+                  <div className="absolute left-0 mt-2 w-56 rounded-2xl glass-dropdown glass-panel p-2 shadow-2xl z-50 text-right">
                     <div className="p-3 border-b border-white/10 mb-1">
                       <div className="flex items-center gap-1.5 text-xs font-bold text-white truncate">
                         <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                         <span className="truncate">{userProfile?.name || user.displayName || 'عميل ابتكار'}</span>
                       </div>
-                      <div className="text-[11px] text-gray-400 truncate mt-0.5" dir="ltr">
+                      <div className="text-[11px] text-[var(--text-muted)] truncate mt-0.5" dir="ltr">
                         {userProfile?.email || user.email || 'حساب مفعل'}
                       </div>
                     </div>
@@ -168,7 +168,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-gray-200 hover:text-white hover:bg-white/10 transition-colors text-right cursor-pointer"
                     >
-                      <UserIcon className="w-4 h-4 text-[#ff7a59]" />
+                      <UserIcon className="w-4 h-4 text-[var(--accent-coral)]" />
                       <span>الملف الشخصي (حسابي)</span>
                     </button>
 
@@ -190,7 +190,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Order CTA Button */}
             <button
               onClick={() => onOpenOrderModal()}
-              className="relative group overflow-hidden px-6 py-2.5 rounded-full bg-gradient-to-r from-[#e85432] to-[#ff7a59] text-white font-bold text-sm shadow-xl shadow-[#e85432]/25 hover:shadow-[#e85432]/40 hover:scale-105 transition-all duration-300 flex items-center gap-2 cursor-pointer"
+              className="relative group overflow-hidden px-6 py-2.5 rounded-full bg-[var(--accent-coral)] text-white font-bold text-sm shadow-xl shadow-[var(--accent-coral)]/30 hover:scale-105 transition-all duration-300 flex items-center gap-2 cursor-pointer"
             >
               <span className="relative z-10 flex items-center gap-2">
                 <Sparkles className="w-4 h-4 animate-spin-slow" />
@@ -205,15 +205,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             {!user ? (
               <button
                 onClick={openAuthModal}
-                className="px-3 py-1.5 rounded-full glass-panel text-white text-xs font-bold sm:hidden flex items-center gap-1 border border-white/20"
+                className="px-3 py-1.5 rounded-full glass-panel text-white text-xs font-bold sm:hidden flex items-center gap-1 border border-[var(--card-border)]"
               >
-                <LogIn className="w-3.5 h-3.5 text-[#ff7a59]" />
+                <LogIn className="w-3.5 h-3.5 text-[var(--accent-coral)]" />
                 <span>دخول</span>
               </button>
             ) : (
               <button
                 onClick={openAccountModal}
-                className="w-8 h-8 rounded-full bg-gradient-to-br from-[#e85432] to-[#ff7a59] text-white sm:hidden flex items-center justify-center text-xs font-black shadow border border-white/20"
+                className="w-8 h-8 rounded-full bg-[var(--accent-coral)] text-white sm:hidden flex items-center justify-center text-xs font-black shadow border border-[var(--card-border)]"
                 title="حسابي"
               >
                 {(userProfile?.name || user.displayName || 'ع').trim().charAt(0)}
@@ -222,7 +222,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => onOpenOrderModal()}
-              className="px-3.5 py-1.5 rounded-full bg-[#e85432] text-white text-xs font-bold sm:hidden flex items-center gap-1 shadow-md shadow-[#e85432]/30"
+              className="px-3.5 py-1.5 rounded-full bg-[var(--accent-coral)] text-white text-xs font-bold sm:hidden flex items-center gap-1 shadow-md shadow-[var(--accent-coral)]/30"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>طلب خدمة</span>
@@ -241,20 +241,20 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Navigation overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden flex flex-col justify-between glass-nav bg-[#140844]/95 pt-24 pb-20 px-6 backdrop-blur-2xl animate-fade-in overflow-y-auto">
+        <div className="fixed inset-0 z-40 lg:hidden flex flex-col justify-between glass-nav bg-[var(--card-bg)] pt-24 pb-20 px-6 backdrop-blur-2xl animate-fade-in overflow-y-auto">
           <div className="space-y-4">
             {/* User Account Mobile Card */}
             {user ? (
-              <div className="p-4 rounded-2xl bg-white/5 border border-white/15 space-y-3">
+              <div className="p-4 rounded-2xl bg-white/5 border border-[var(--card-border)] space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#e85432] to-[#ff7a59] text-white flex items-center justify-center text-sm font-black shadow">
+                  <div className="w-10 h-10 rounded-full bg-[var(--accent-coral)] text-white flex items-center justify-center text-sm font-black shadow">
                     {(userProfile?.name || user.displayName || 'ع').trim().charAt(0)}
                   </div>
                   <div className="flex-1 truncate">
                     <div className="text-sm font-bold text-white truncate">
                       {userProfile?.name || user.displayName || 'عميل ابتكار'}
                     </div>
-                    <div className="text-xs text-gray-400 font-mono truncate" dir="ltr">
+                    <div className="text-xs text-[var(--text-muted)] font-mono truncate" dir="ltr">
                       {userProfile?.email || user.email || 'حساب مفعل'}
                     </div>
                   </div>
@@ -268,7 +268,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className="py-2 px-3 rounded-xl bg-white/10 text-white text-xs font-bold flex items-center justify-center gap-1.5"
                   >
-                    <UserIcon className="w-3.5 h-3.5 text-[#ff7a59]" />
+                    <UserIcon className="w-3.5 h-3.5 text-[var(--accent-coral)]" />
                     <span>حسابي</span>
                   </button>
 
@@ -290,14 +290,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setMobileMenuOpen(false);
                   openAuthModal();
                 }}
-                className="w-full py-3.5 rounded-2xl glass-panel text-white font-bold text-sm flex items-center justify-center gap-2 border border-[#e85432]/40 bg-[#e85432]/10"
+                className="w-full py-3.5 rounded-2xl glass-panel text-white font-bold text-sm flex items-center justify-center gap-2 border border-[var(--accent-coral)]/40 bg-[var(--accent-coral)]/10"
               >
-                <LogIn className="w-4 h-4 text-[#ff7a59]" />
+                <LogIn className="w-4 h-4 text-[var(--accent-coral)]" />
                 <span>تسجيل الدخول / إنشاء حساب</span>
               </button>
             )}
 
-            <div className="text-xs font-bold text-[#e85432] uppercase tracking-wider mb-2">
+            <div className="text-xs font-bold text-[var(--accent-coral)] uppercase tracking-wider mb-2">
               التنقل المباشر
             </div>
             {navItems.map((item) => {
@@ -309,12 +309,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleNavClick(item.id)}
                   className={`w-full flex items-center justify-between p-3.5 rounded-2xl transition-all duration-200 text-right ${
                     isActive
-                      ? 'bg-gradient-to-r from-[#e85432] to-[#ff7a59] text-white font-bold shadow-lg shadow-[#e85432]/30'
+                      ? 'bg-[var(--accent-coral)] text-white font-bold shadow-lg shadow-[var(--accent-coral)]/30'
                       : 'glass-panel text-gray-200 hover:bg-white/10'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-[#e85432]'}`} />
+                    <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-[var(--accent-coral)]'}`} />
                     <span className="text-base font-semibold">{item.label}</span>
                   </div>
                   <span className="text-xs opacity-60">←</span>
@@ -329,7 +329,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 onOpenOrderModal();
               }}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#e85432] to-[#ff7a59] text-white font-bold text-center flex items-center justify-center gap-2 shadow-xl shadow-[#e85432]/30"
+              className="w-full py-3.5 rounded-2xl bg-[var(--accent-coral)] text-white font-bold text-center flex items-center justify-center gap-2 shadow-xl shadow-[var(--accent-coral)]/30"
             >
               <Sparkles className="w-5 h-5" />
               <span>اطلب خدمتك الآن</span>
@@ -349,11 +349,11 @@ export const Navbar: React.FC<NavbarProps> = ({
       )}
 
       {/* Mobile Bottom Glass Quick Bar for fast navigation */}
-      <div className="lg:hidden fixed bottom-3 left-3 right-3 z-40 glass-panel rounded-full p-1 border border-white/15 shadow-2xl flex items-center justify-around">
+      <div className="lg:hidden fixed bottom-3 left-3 right-3 z-40 glass-panel rounded-full p-1 border border-[var(--card-border)] shadow-2xl flex items-center justify-around">
         <button
           onClick={() => handleNavClick('home')}
           className={`flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-full text-[11px] font-semibold ${
-            activeTab === 'home' ? 'text-[#e85432] bg-white/10' : 'text-gray-300'
+            activeTab === 'home' ? 'text-[var(--accent-coral)] bg-white/10' : 'text-[var(--text-muted)]'
           }`}
         >
           <Sparkles className="w-3.5 h-3.5" />
@@ -362,7 +362,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <button
           onClick={() => handleNavClick('services')}
           className={`flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-full text-[11px] font-semibold ${
-            activeTab === 'services' ? 'text-[#e85432] bg-white/10' : 'text-gray-300'
+            activeTab === 'services' ? 'text-[var(--accent-coral)] bg-white/10' : 'text-[var(--text-muted)]'
           }`}
         >
           <Grid className="w-3.5 h-3.5" />
@@ -371,7 +371,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <button
           onClick={() => handleNavClick('packages')}
           className={`flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-full text-[11px] font-semibold ${
-            activeTab === 'packages' ? 'text-[#e85432] bg-white/10' : 'text-gray-300'
+            activeTab === 'packages' ? 'text-[var(--accent-coral)] bg-white/10' : 'text-[var(--text-muted)]'
           }`}
         >
           <CreditCard className="w-3.5 h-3.5" />
@@ -380,7 +380,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <button
           onClick={() => handleNavClick('portfolio')}
           className={`flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-full text-[11px] font-semibold ${
-            activeTab === 'portfolio' ? 'text-[#e85432] bg-white/10' : 'text-gray-300'
+            activeTab === 'portfolio' ? 'text-[var(--accent-coral)] bg-white/10' : 'text-[var(--text-muted)]'
           }`}
         >
           <Briefcase className="w-3.5 h-3.5" />
@@ -388,7 +388,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
         <button
           onClick={() => onOpenOrderModal()}
-          className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#e85432] text-white shadow-md shadow-[#e85432]/30"
+          className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[var(--accent-coral)] text-white shadow-md shadow-[var(--accent-coral)]/30"
         >
           <Send className="w-3.5 h-3.5" />
           <span>اطلب</span>

@@ -118,7 +118,7 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto">
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto glass-panel rounded-3xl p-6 sm:p-8 border border-white/20 shadow-2xl my-auto text-right bg-[#140844]/95 custom-scrollbar">
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto glass-panel glass-modal rounded-3xl p-6 sm:p-8 shadow-2xl my-auto text-right custom-scrollbar">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -133,19 +133,19 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
               <CheckCircle2 className="w-10 h-10" />
             </div>
             <h3 className="text-2xl font-black text-white">تم تجهيز طلبك بنجاح!</h3>
-            <p className="text-gray-300 max-w-md mx-auto text-sm leading-relaxed">
+            <p className="text-[var(--text-muted)] max-w-md mx-auto text-sm leading-relaxed">
               جاري توجيهك إلى الواتساب المباشر لفريق منصة ابتكار لمتابعة طلبك وتنسيق بدء التنفيذ.
             </p>
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
                 onClick={() => setSubmitted(false)}
-                className="px-6 py-2.5 rounded-full glass-panel text-white text-sm font-semibold hover:bg-white/10"
+                className="px-6 py-2.5 rounded-full glass-panel text-white text-sm font-semibold hover:bg-white/10 border border-[var(--card-border)]"
               >
                 تعديل الطلب
               </button>
               <button
                 onClick={onClose}
-                className="px-6 py-2.5 rounded-full bg-[#e85432] text-white text-sm font-bold shadow-lg shadow-[#e85432]/30"
+                className="px-6 py-2.5 rounded-full bg-[var(--accent-coral)] hover:bg-[#f15e52] text-white text-sm font-bold shadow-lg shadow-[var(--accent-coral)]/30"
               >
                 إغلاق النافذة
               </button>
@@ -155,25 +155,25 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
           <div>
             {/* Header */}
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 rounded-2xl bg-[#e85432]/20 border border-[#e85432]/40 text-[#e85432]">
+              <div className="p-3 rounded-2xl bg-[var(--accent-coral)]/20 border border-[var(--accent-coral)]/40 text-[var(--accent-coral)]">
                 <Sparkles className="w-6 h-6" />
               </div>
               <div>
                 <h2 className="text-2xl font-black text-white">اطلب باقتك أو خدمتك من ابتكار</h2>
-                <p className="text-xs text-gray-300">
+                <p className="text-xs text-[var(--text-muted)]">
                   حلول تسويقية وتصميمية ممتازة تناسب أهداف براندك
                 </p>
               </div>
             </div>
 
             {/* Selector Tabs */}
-            <div className="grid grid-cols-3 gap-1.5 sm:gap-2 p-1.5 rounded-2xl glass-panel mb-6 border border-white/10">
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-2 p-1.5 rounded-2xl glass-panel mb-6 border border-[var(--card-border)]">
               <button
                 type="button"
                 onClick={() => setOrderType('package')}
                 className={`py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 ${
                   orderType === 'package'
-                    ? 'bg-[#e85432] text-white shadow-md shadow-[#e85432]/30'
+                    ? 'bg-[var(--accent-coral)] text-white shadow-md shadow-[var(--accent-coral)]/30'
                     : 'text-gray-300 hover:text-white'
                 }`}
               >
@@ -185,7 +185,7 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
                 onClick={() => setOrderType('service')}
                 className={`py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 ${
                   orderType === 'service'
-                    ? 'bg-[#e85432] text-white shadow-md shadow-[#e85432]/30'
+                    ? 'bg-[var(--accent-coral)] text-white shadow-md shadow-[var(--accent-coral)]/30'
                     : 'text-gray-300 hover:text-white'
                 }`}
               >
@@ -197,7 +197,7 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
                 onClick={() => setOrderType('custom')}
                 className={`py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 ${
                   orderType === 'custom'
-                    ? 'bg-[#e85432] text-white shadow-md shadow-[#e85432]/30'
+                    ? 'bg-[var(--accent-coral)] text-white shadow-md shadow-[var(--accent-coral)]/30'
                     : 'text-gray-300 hover:text-white'
                 }`}
               >
@@ -217,10 +217,10 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
                     <select
                       value={selectedPackageGroup}
                       onChange={(e) => handleGroupChange(e.target.value)}
-                      className="w-full glass-input rounded-2xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#e85432] bg-[#140844]"
+                      className="w-full glass-input rounded-2xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[var(--accent-coral)] bg-[var(--card-bg)] text-white"
                     >
                       {SERVICE_PACKAGES_DATA.map((group) => (
-                        <option key={group.id} value={group.id} className="bg-[#140844] text-white">
+                        <option key={group.id} value={group.id} className="bg-[var(--bg-mid)] text-white">
                           {group.serviceTitle}
                         </option>
                       ))}
@@ -234,10 +234,10 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
                     <select
                       value={selectedPackageId}
                       onChange={(e) => setSelectedPackageId(e.target.value)}
-                      className="w-full glass-input rounded-2xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#e85432] bg-[#140844]"
+                      className="w-full glass-input rounded-2xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[var(--accent-coral)] bg-[var(--card-bg)] text-white"
                     >
                       {currentGroup.packages.map((pkg) => (
-                        <option key={pkg.id} value={pkg.id} className="bg-[#140844] text-white">
+                        <option key={pkg.id} value={pkg.id} className="bg-[var(--bg-mid)] text-white">
                           {pkg.title} {pkg.isPopular ? '⭐ (الأكثر طلباً)' : ''}
                         </option>
                       ))}
@@ -245,15 +245,15 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
                   </div>
 
                   {currentPkg && (
-                    <div className="p-3.5 rounded-2xl glass-panel-orange border border-[#e85432]/30 text-xs text-gray-200 space-y-1.5">
-                      <div className="flex items-center justify-between text-[#ff7a59] font-bold">
+                    <div className="p-3.5 rounded-2xl glass-panel border border-[var(--card-border)] text-xs text-gray-200 space-y-1.5">
+                      <div className="flex items-center justify-between text-[var(--accent-coral)] font-bold">
                         <span>المخرجات: {currentPkg.deliverables}</span>
                         {currentPkg.platforms && (
-                          <span className="text-[11px] text-gray-300">المنصات: {currentPkg.platforms}</span>
+                          <span className="text-[11px] text-[var(--text-muted)]">المنصات: {currentPkg.platforms}</span>
                         )}
                       </div>
                       {currentPkg.suitableFor && (
-                        <p className="text-[11px] text-gray-300">🎯 {currentPkg.suitableFor}</p>
+                        <p className="text-[11px] text-[var(--text-muted)]">🎯 {currentPkg.suitableFor}</p>
                       )}
                     </div>
                   )}
@@ -269,16 +269,16 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
                   <select
                     value={selectedService}
                     onChange={(e) => setSelectedService(e.target.value)}
-                    className="w-full glass-input rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#e85432] bg-[#140844]"
+                    className="w-full glass-input rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-[var(--accent-coral)] bg-[var(--card-bg)] text-white"
                   >
                     {SERVICES_DATA.map((srv) => (
-                      <option key={srv.id} value={srv.id} className="bg-[#140844] text-white">
+                      <option key={srv.id} value={srv.id} className="bg-[var(--bg-mid)] text-white">
                         {srv.title} {srv.badge ? `(${srv.badge})` : ''}
                       </option>
                     ))}
                   </select>
                   {currentServiceObj && (
-                    <div className="mt-2 p-3 rounded-xl glass-panel-orange text-xs text-gray-200">
+                    <div className="mt-2 p-3 rounded-xl glass-panel text-xs text-gray-200 border border-[var(--card-border)]">
                       <strong>تفاصيل الخدمة:</strong> {currentServiceObj.shortDescription}
                     </div>
                   )}
@@ -286,7 +286,7 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
               )}
 
               {orderType === 'custom' && (
-                <div className="p-3.5 rounded-2xl glass-panel border border-[#e85432]/30 text-xs text-orange-200 leading-relaxed">
+                <div className="p-3.5 rounded-2xl glass-panel border border-[var(--card-border)] text-xs text-orange-200 leading-relaxed">
                   💡 <strong>ملاحظة:</strong> نتيح لك إمكانية طلب تصاميم منفردة وخاصة (بوست، بنر، فيديو ريلز، أو هوية مخصصة) وتحديد ميزانيتك ومخرجاتك بالضبط بحسب احتياج مشروعك.
                 </div>
               )}
@@ -351,7 +351,7 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#e85432] to-[#ff7a59] text-white font-bold text-sm shadow-xl shadow-[#e85432]/30 hover:scale-[1.01] transition-transform flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-4 px-6 rounded-2xl bg-[var(--accent-coral)] hover:bg-[#f15e52] text-white font-bold text-sm shadow-xl shadow-[var(--accent-coral)]/35 hover:scale-[1.01] transition-transform flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>إرسال الطلب عبر الواتساب المباشر</span>

@@ -12,6 +12,7 @@ import { FooterSection } from './components/FooterSection';
 import { ServiceOrderModal } from './components/ServiceOrderModal';
 import { AuthModal } from './components/AuthModal';
 import { AccountModal } from './components/AccountModal';
+import { AnimatedBackground } from './components/AnimatedBackground';
 import { AuthProvider } from './context/AuthContext';
 import { Sparkles, Send, Mail, CreditCard } from 'lucide-react';
 import { AGENCY_SOCIALS } from './data/mockData';
@@ -42,14 +43,9 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <div className="min-h-screen text-white font-['Thmanyah_Sans',sans-serif] selection:bg-[#F15230] selection:text-white relative overflow-x-hidden">
-        {/* Ambient background glow orbs */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="absolute -top-40 -right-40 w-96 h-96 sm:w-[500px] sm:h-[500px] bg-[#e85432]/20 rounded-full blur-[140px]"></div>
-          <div className="absolute top-1/3 -left-40 w-96 h-96 sm:w-[500px] sm:h-[500px] bg-[#270f6d]/40 rounded-full blur-[140px]"></div>
-          <div className="absolute -bottom-40 right-1/3 w-96 h-96 sm:w-[500px] sm:h-[500px] bg-[#e85432]/15 rounded-full blur-[150px]"></div>
-          <div className="absolute top-2/3 right-10 w-80 h-80 bg-[#140844]/60 rounded-full blur-[120px]"></div>
-        </div>
+      <div className="min-h-screen text-white font-['Thmanyah_Sans',sans-serif] selection:bg-[var(--accent-coral)] selection:text-white relative overflow-x-hidden">
+        {/* Animated Background & Grid Layer */}
+        <AnimatedBackground />
 
         {/* Navigation Bar */}
         <Navbar
@@ -118,12 +114,12 @@ export default function App() {
         {activeTab === 'contact' && (
           <div className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-12">
             <div className="text-center space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel-orange text-[#ff7a59] font-bold text-xs">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--card-border)] bg-[rgba(22,24,69,0.7)] text-[var(--accent-coral)] font-bold text-xs">
                 <Send className="w-3.5 h-3.5" />
                 <span>تواصل مباشر وطلب استشارة</span>
               </div>
               <h1 className="text-3xl sm:text-5xl font-black text-white">تواصل مع منصة ابتكار</h1>
-              <p className="text-gray-300 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+              <p className="text-[var(--text-muted)] text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
                 نحن هنا لمساعدتك في اختيار الخدمة أو الباقة المناسبة أو صياغة طلب مخصص يناسب أهداف براندك.
               </p>
             </div>
@@ -148,30 +144,30 @@ export default function App() {
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-white">محادثة واتساب مباشرة (0558875818)</h3>
-                      <p className="text-xs text-gray-300">رد سريع وتنسيق فوري للمتطلبات والعقود</p>
+                      <p className="text-xs text-[var(--text-muted)]">رد سريع وتنسيق فوري للمتطلبات والعقود</p>
                     </div>
                   </div>
                   <span className="text-xs font-bold text-emerald-400 group-hover:underline">تحدث معنا ←</span>
                 </a>
 
-                <div className="glass-panel p-6 rounded-3xl border border-white/10 space-y-3">
+                <div className="glass-panel p-6 rounded-3xl border border-[var(--card-border)] space-y-3">
                   <h4 className="text-sm font-bold text-white">معرف الحسابات الرسمية:</h4>
-                  <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between text-xs">
-                    <span className="text-gray-300 font-bold">المعرف الموحد بجميع المنصات (Snapchat / TikTok / Instagram):</span>
-                    <span className="font-mono text-[#ff7a59] font-bold dir-ltr">@ibt1kar</span>
+                  <div className="p-3 rounded-2xl bg-white/5 border border-[var(--card-border)] flex items-center justify-between text-xs">
+                    <span className="text-[var(--text-muted)] font-bold">المعرف الموحد بجميع المنصات (Snapchat / TikTok / Instagram):</span>
+                    <span className="font-mono text-[var(--accent-coral)] font-bold dir-ltr">@ibt1kar</span>
                   </div>
                 </div>
               </div>
 
               {/* Direct Instant Order Trigger Box */}
-              <div className="glass-panel p-8 rounded-3xl border border-[#e85432]/40 bg-[#140844]/90 space-y-6">
+              <div className="glass-panel p-8 rounded-3xl border border-[var(--card-border)] space-y-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-2xl bg-[#e85432]/20 text-[#e85432]">
+                  <div className="p-3 rounded-2xl bg-[var(--accent-coral)]/20 text-[var(--accent-coral)]">
                     <Sparkles className="w-6 h-6" />
                   </div>
                   <div>
                     <h3 className="text-xl font-black text-white">اطلب باقتك أو خدمتك الآن</h3>
-                    <p className="text-xs text-gray-300">اختر من بين باقاتنا وخدماتنا الإبداعية</p>
+                    <p className="text-xs text-[var(--text-muted)]">اختر من بين باقاتنا وخدماتنا الإبداعية</p>
                   </div>
                 </div>
 
@@ -181,7 +177,7 @@ export default function App() {
 
                 <button
                   onClick={() => handleOpenOrderModal()}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#e85432] to-[#ff7a59] text-white font-bold text-sm shadow-xl shadow-[#e85432]/30 hover:scale-[1.02] transition-transform cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full py-4 rounded-2xl bg-[var(--accent-coral)] hover:bg-[#f15e52] text-white font-bold text-sm shadow-xl shadow-[var(--accent-coral)]/30 hover:scale-[1.02] transition-transform cursor-pointer flex items-center justify-center gap-2"
                 >
                   <CreditCard className="w-4 h-4" />
                   <span>افتح نموذج الطلب المباشر</span>

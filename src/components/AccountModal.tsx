@@ -78,11 +78,11 @@ export const AccountModal: React.FC = () => {
       dir="rtl"
     >
       <div 
-        className="relative w-full max-w-md bg-[#12083b] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-black/80 overflow-hidden"
+        className="relative w-full max-w-md glass-panel glass-modal rounded-3xl p-6 sm:p-8 shadow-2xl shadow-black/80 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Accent Strip */}
-        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#e85432] via-[#ff7a59] to-[#e85432]"></div>
+        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[var(--accent-coral)] via-[var(--accent-indigo)] to-[var(--accent-coral)]"></div>
 
         {/* Close Button */}
         <button
@@ -96,21 +96,21 @@ export const AccountModal: React.FC = () => {
         {/* Header with Avatar and User Name */}
         <div className="text-center space-y-3 mb-6">
           <div className="relative inline-block">
-            <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-[#e85432] to-[#ff7a59] flex items-center justify-center text-white text-3xl font-black shadow-xl shadow-[#e85432]/40 border-2 border-white/20">
+            <div className="w-20 h-20 mx-auto rounded-full bg-[var(--accent-coral)] flex items-center justify-center text-white text-3xl font-black shadow-xl shadow-[var(--accent-coral)]/40 border-2 border-white/20">
               {initial}
             </div>
-            <div className="absolute bottom-0 left-0 p-1.5 rounded-full bg-emerald-500 text-white border-2 border-[#12083b] shadow">
+            <div className="absolute bottom-0 left-0 p-1.5 rounded-full bg-emerald-500 text-white border-2 border-[var(--bg-start)] shadow">
               <ShieldCheck className="w-3.5 h-3.5" />
             </div>
           </div>
 
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#e85432]/15 text-[#ff7a59] text-[11px] font-bold border border-[#e85432]/25 mb-1.5">
-              <Sparkles className="w-3 h-3" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[var(--accent-coral)]/15 text-[var(--accent-coral)] text-[11px] font-bold border border-[var(--card-border)] mb-1.5">
+              <Sparkles className="w-3.5 h-3.5" />
               <span>عميل معتمد لدى ابتكار</span>
             </div>
             <h2 className="text-xl font-black text-white">{currentDisplayName}</h2>
-            <p className="text-xs text-gray-400 font-mono mt-0.5">
+            <p className="text-xs text-[var(--text-muted)] font-mono mt-0.5">
               {userProfile?.phone || user.phoneNumber || userProfile?.email || user.email || 'حساب مفعل'}
             </p>
           </div>
@@ -132,11 +132,11 @@ export const AccountModal: React.FC = () => {
         )}
 
         {/* Account Details Box */}
-        <div className="space-y-3 p-4 rounded-2xl bg-white/5 border border-white/10 mb-6">
+        <div className="space-y-3 p-4 rounded-2xl bg-white/5 border border-[var(--card-border)] mb-6">
           {/* Editable Name Field */}
           <div className="flex items-center justify-between pb-3 border-b border-white/10">
             <div className="flex items-center gap-2 text-xs text-gray-400">
-              <User className="w-4 h-4 text-[#ff7a59]" />
+              <User className="w-4 h-4 text-[var(--accent-coral)]" />
               <span>الاسم في الحساب:</span>
             </div>
 
@@ -146,7 +146,7 @@ export const AccountModal: React.FC = () => {
                   type="text"
                   value={nameInput}
                   onChange={(e) => setNameInput(e.target.value)}
-                  className="px-2.5 py-1 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:outline-none focus:border-[#e85432] w-36"
+                  className="px-2.5 py-1 rounded-xl bg-white/10 border border-[var(--card-border)] text-white text-xs focus:outline-none focus:border-[var(--accent-coral)] w-36"
                   autoFocus
                 />
                 <button
@@ -176,7 +176,7 @@ export const AccountModal: React.FC = () => {
                     setNameInput(currentDisplayName);
                     setIsEditingName(true);
                   }}
-                  className="text-gray-400 hover:text-[#ff7a59] transition-colors p-1 cursor-pointer"
+                  className="text-gray-400 hover:text-[var(--accent-coral)] transition-colors p-1 cursor-pointer"
                   title="تعديل الاسم"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
@@ -188,7 +188,7 @@ export const AccountModal: React.FC = () => {
           {/* Contact Identifier */}
           <div className="flex items-center justify-between pb-3 border-b border-white/10 text-xs">
             <div className="flex items-center gap-2 text-gray-400">
-              <Mail className="w-4 h-4 text-[#ff7a59]" />
+              <Mail className="w-4 h-4 text-[var(--accent-coral)]" />
               <span>البريد الإلكتروني:</span>
             </div>
             <span className="font-bold text-white font-mono" dir="ltr">
@@ -199,7 +199,7 @@ export const AccountModal: React.FC = () => {
           {/* Auth Method */}
           <div className="flex items-center justify-between pb-3 border-b border-white/10 text-xs">
             <div className="flex items-center gap-2 text-gray-400">
-              <ShieldCheck className="w-4 h-4 text-[#ff7a59]" />
+              <ShieldCheck className="w-4 h-4 text-[var(--accent-coral)]" />
               <span>نوع المصادقة:</span>
             </div>
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[11px] border border-emerald-500/30">
@@ -210,10 +210,10 @@ export const AccountModal: React.FC = () => {
           {/* Join Date */}
           <div className="flex items-center justify-between text-xs">
             <div className="flex items-center gap-2 text-gray-400">
-              <Calendar className="w-4 h-4 text-[#ff7a59]" />
+              <Calendar className="w-4 h-4 text-[var(--accent-coral)]" />
               <span>تاريخ الانضمام:</span>
             </div>
-            <span className="text-gray-300 font-medium">{formattedDate}</span>
+            <span className="text-[var(--text-muted)] font-medium">{formattedDate}</span>
           </div>
         </div>
 

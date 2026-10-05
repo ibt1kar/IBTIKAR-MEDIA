@@ -18,9 +18,9 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ setActiveTab, onOp
   };
 
   return (
-    <footer className="relative bg-[#0d042d] border-t border-white/10 pt-16 pb-12 overflow-hidden text-right">
+    <footer className="relative bg-transparent border-t border-[var(--card-border)] pt-16 pb-12 overflow-hidden text-right">
       {/* Ambient background glow */}
-      <div className="absolute bottom-0 right-1/2 translate-x-1/2 w-[600px] h-[300px] bg-[#e85432]/10 rounded-full blur-[150px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-1/2 translate-x-1/2 w-[600px] h-[300px] bg-[var(--accent-coral)]/10 rounded-full blur-[150px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
@@ -30,17 +30,17 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ setActiveTab, onOp
           {/* Brand & Bio Column */}
           <div className="lg:col-span-5 space-y-5">
             <Logo size="lg" />
-            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed max-w-md">
+            <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed max-w-md">
               وكالة إعلامية وإبداعية متكاملة، تقدم حلولاً تسويقية واستراتيجية مبنية على عقود شهرية مستدامة لتطوير ونمو البراندات والمشاريع.
             </p>
-            <div className="p-4 rounded-2xl glass-panel-orange border border-[#e85432]/30 inline-block text-xs text-orange-200">
+            <div className="p-4 rounded-2xl glass-panel border border-[var(--card-border)] inline-block text-xs text-orange-200">
               ⚡ <strong>معرف الحسابات الموحد:</strong> <span className="font-mono text-white text-sm dir-ltr inline-block">@ibt1kar</span>
             </div>
           </div>
 
           {/* Social Channels Column - Official Real Logos */}
           <div className="lg:col-span-3 space-y-4">
-            <h4 className="text-sm font-black text-white uppercase tracking-wider text-[#ff7a59]">
+            <h4 className="text-sm font-black text-white uppercase tracking-wider text-[var(--accent-coral)]">
               حسابات التواصل الموحدة (@ibt1kar)
             </h4>
             <ul className="space-y-2.5 text-xs text-gray-300 font-bold">
@@ -123,7 +123,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ setActiveTab, onOp
 
           {/* Contact Direct */}
           <div className="lg:col-span-4 space-y-4">
-            <h4 className="text-sm font-black text-white uppercase tracking-wider text-[#ff7a59]">
+            <h4 className="text-sm font-black text-white uppercase tracking-wider text-[var(--accent-coral)]">
               التواصل المباشر والطلب
             </h4>
             <div className="space-y-3">
@@ -152,7 +152,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ setActiveTab, onOp
 
               <button
                 onClick={onOpenOrderModal}
-                className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#e85432] to-[#ff7a59] text-white font-bold text-xs shadow-xl shadow-[#e85432]/30 hover:scale-[1.02] transition-transform flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 px-6 rounded-2xl bg-[var(--accent-coral)] hover:bg-[#f15e52] text-white font-bold text-xs shadow-xl shadow-[var(--accent-coral)]/35 hover:scale-[1.02] transition-transform flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Sparkles className="w-4 h-4" />
                 <span>اطلب خدمتك أو استشارتك الآن</span>
@@ -163,7 +163,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ setActiveTab, onOp
         </div>
 
         {/* Bottom Rights & Scroll to top */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--text-muted)]">
           <p className="text-center sm:text-right">
             © {new Date().getFullYear()} <strong>منصة ابتكار - Ibtikar</strong>. جميع الحقوق محفوظة. وكالة إعلامية وإبداعية متكاملة.
           </p>
@@ -173,7 +173,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ setActiveTab, onOp
             className="flex items-center gap-2 px-4 py-2 rounded-full glass-panel hover:bg-white/10 text-gray-200 hover:text-white transition-colors cursor-pointer"
           >
             <span>العودة للأعلى</span>
-            <ArrowUp className="w-4 h-4 text-[#e85432]" />
+            <ArrowUp className="w-4 h-4 text-[var(--accent-coral)]" />
           </button>
         </div>
 
