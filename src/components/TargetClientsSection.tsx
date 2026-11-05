@@ -13,6 +13,16 @@ import {
   Award,
   ArrowLeft,
   CheckCircle2,
+  MoonStar,
+  Utensils,
+  Bus,
+  HardHat,
+  Truck,
+  Hotel,
+  Wrench,
+  UserCheck,
+  ConciergeBell,
+  Video,
 } from 'lucide-react';
 
 interface TargetClientsSectionProps {
@@ -42,6 +52,26 @@ export const TargetClientsSection: React.FC<TargetClientsSectionProps> = ({ onOp
         return Briefcase;
       case 'Award':
         return Award;
+      case 'MoonStar':
+        return MoonStar;
+      case 'Utensils':
+        return Utensils;
+      case 'Bus':
+        return Bus;
+      case 'HardHat':
+        return HardHat;
+      case 'Truck':
+        return Truck;
+      case 'Hotel':
+        return Hotel;
+      case 'Wrench':
+        return Wrench;
+      case 'UserCheck':
+        return UserCheck;
+      case 'ConciergeBell':
+        return ConciergeBell;
+      case 'Video':
+        return Video;
       default:
         return Sparkles;
     }
