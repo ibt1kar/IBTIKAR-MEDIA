@@ -128,7 +128,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ setActiveTab, onOp
             </h4>
             <div className="space-y-3">
               <a
-                href="https://wa.me/966558875818"
+                href="https://wa.me/966593363878"
                 target="_blank"
                 rel="noreferrer"
                 className="glass-panel p-4 rounded-2xl flex items-center gap-3 border border-emerald-500/30 hover:border-emerald-400 transition-colors group bg-emerald-950/20"
@@ -146,7 +146,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ setActiveTab, onOp
                 </div>
                 <div>
                   <span className="text-[11px] text-gray-300 block">واتساب المبيعات والاستشارات:</span>
-                  <span className="text-sm font-bold text-emerald-400 font-mono dir-ltr inline-block">0558875818</span>
+                  <span className="text-sm font-bold text-emerald-400 font-mono dir-ltr inline-block">0593363878</span>
                 </div>
               </a>
 

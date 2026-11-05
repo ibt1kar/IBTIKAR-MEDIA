@@ -143,6 +143,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <nav
             id="shortcuts-nav"
             className="shortcuts-nav glass-panel"
+            style={{ height: '87px', width: '369px' }}
             aria-label="شريط التنقل السريع"
           >
             {navItems.map((item) => {
@@ -388,13 +389,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <a
-              href="https://wa.me/966558875818"
+              href="https://wa.me/966593363878"
               target="_blank"
               rel="noreferrer"
               className="w-full py-3 rounded-2xl glass-panel text-emerald-400 font-bold text-center flex items-center justify-center gap-2 border border-emerald-500/30 text-sm"
             >
               <WhatsAppIcon className="w-4 h-4 text-[#25D366]" />
-              <span>واتساب المبيعات (0558875818)</span>
+              <span>واتساب المبيعات (0593363878)</span>
             </a>
           </div>
         </div>

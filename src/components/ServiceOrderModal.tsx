@@ -112,7 +112,7 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
 ${notes || 'لا يوجد ملاحظات إضافية'}`;
 
     const encodedMsg = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/966558875818?text=${encodedMsg}`;
+    const whatsappUrl = `https://wa.me/966593363878?text=${encodedMsg}`;
 
     setSubmitted(true);
     setTimeout(() => {

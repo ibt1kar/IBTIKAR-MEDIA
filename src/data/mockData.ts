@@ -871,6 +871,6 @@ export const AGENCY_SOCIALS = {
   snapchat: 'https://www.snapchat.com/add/ibt1kar',
   tiktok: 'https://www.tiktok.com/@ibt1kar',
   instagram: 'https://www.instagram.com/ibt1kar',
-  phone: '0558875818',
-  whatsapp: 'https://wa.me/966558875818?text='
+  phone: '0593363878',
+  whatsapp: 'https://wa.me/966593363878?text='
 };

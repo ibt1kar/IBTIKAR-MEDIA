@@ -570,6 +570,11 @@ a[class*="bg-[var(--accent-coral)]"]:hover {
   }
 }
 
+#shortcuts-nav {
+  height: 87px !important;
+  width: 369px !important;
+}
+
 /* Mobile & Tablet Layout: Fixed Bottom Navigation Bar (max-width: 1023px) */
 @media (max-width: 1023px) {
   .shortcuts-nav {

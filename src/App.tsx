@@ -128,7 +128,7 @@ export default function App() {
               {/* WhatsApp Quick Card */}
               <div className="space-y-4">
                 <a
-                  href="https://wa.me/966558875818"
+                  href="https://wa.me/966593363878"
                   target="_blank"
                   rel="noreferrer"
                   className="glass-panel p-6 rounded-3xl border border-emerald-500/30 flex items-center justify-between hover:scale-[1.02] transition-transform block group bg-emerald-950/20"
@@ -143,7 +143,7 @@ export default function App() {
                       />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-white">محادثة واتساب مباشرة (0558875818)</h3>
+                      <h3 className="text-lg font-bold text-white">محادثة واتساب مباشرة (0593363878)</h3>
                       <p className="text-xs text-[var(--text-muted)]">رد سريع وتنسيق فوري للمتطلبات والعقود</p>
                     </div>
                   </div>
@@ -190,7 +190,7 @@ export default function App() {
 
       {/* Floating WhatsApp Speed Button */}
       <a
-        href="https://wa.me/966558875818"
+        href="https://wa.me/966593363878"
         target="_blank"
         rel="noreferrer"
         className="floating-whatsapp fixed left-6 z-40 p-2 sm:p-2.5 rounded-full bg-[#25D366] text-white shadow-2xl shadow-emerald-500/40 hover:scale-110 transition-transform duration-300 flex items-center gap-2 group cursor-pointer border-2 border-white/20"

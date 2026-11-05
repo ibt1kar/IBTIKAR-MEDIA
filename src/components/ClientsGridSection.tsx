@@ -207,7 +207,7 @@ export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOr
               </button>
             )}
             <a
-              href="https://wa.me/966558875818"
+              href="https://wa.me/966593363878"
               target="_blank"
               rel="noreferrer"
               className="px-5 py-3 rounded-2xl glass-panel border border-[var(--card-border)] text-white font-bold text-sm hover:bg-white/10 transition-all"
