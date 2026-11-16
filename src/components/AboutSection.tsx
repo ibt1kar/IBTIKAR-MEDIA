@@ -1,6 +1,6 @@
 import React from 'react';
 import { Logo } from './Logo';
-import { ShieldCheck, Flame, Users, Sparkles, Target, Zap } from 'lucide-react';
+import { Sparkles, Target, Zap } from 'lucide-react';
 
 interface AboutSectionProps {
   onOpenOrderModal: () => void;
@@ -8,85 +8,90 @@ interface AboutSectionProps {
 
 export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenOrderModal }) => {
   return (
-    <section id="about" className="py-20 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          {/* Visual Glass Showcase Card */}
-          <div className="lg:col-span-5 relative">
-            <div className="glass-panel p-8 rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg)] shadow-2xl relative space-y-6">
-              <div className="flex items-center justify-center py-4 bg-white/5 rounded-2xl border border-[var(--card-border)]">
+    <section id="about" className="ib-sec">
+      <div className="ib-container">
+        <div className="ib-two">
+          {/* First Column (Start in RTL): Coral Glass Vision Card */}
+          <div className="ib-glass-coral rounded-[32px] p-[clamp(28px,4vw,44px)] flex flex-col justify-between gap-8 text-right">
+            <div className="space-y-6">
+              <div className="flex items-center justify-between gap-4">
                 <Logo size="lg" />
               </div>
 
-              <div className="space-y-3 text-right">
-                <h3 className="text-xl font-black text-white">رؤية منصة ابتكار</h3>
-                <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+              <div className="space-y-3 pt-2">
+                <span className="text-sm font-bold text-[#ffb3aa] block">رؤية منصة ابتكار</span>
+                <p
+                  className="font-bold text-white leading-[1.5]"
+                  style={{ fontSize: 'clamp(22px, 2.7vw, 34px)' }}
+                >
                   أن نكون الوكالة الإعلامية والإبداعية الأولى والشريك الاستراتيجي الأكثر موثوقية لتنمية العلامات التجارية والمؤسسات في المملكة والخليج.
                 </p>
               </div>
+            </div>
 
-              <div className="grid grid-cols-2 gap-3 pt-2">
-                <div className="glass-panel p-3 rounded-2xl text-center border border-[var(--card-border)]">
-                  <div className="text-xl font-black text-[var(--accent-coral)]">100%</div>
-                  <div className="text-[11px] text-[var(--text-muted)]">التزام وبناء مستدام</div>
-                </div>
-                <div className="glass-panel p-3 rounded-2xl text-center border border-[var(--card-border)]">
-                  <div className="text-xl font-black text-[var(--accent-coral)]">24/7</div>
-                  <div className="text-[11px] text-[var(--text-muted)]">متابعة وحلول مرنة</div>
-                </div>
+            {/* Existing 100% / 24/7 Stats (spacing & divider only, no inner boxes) */}
+            <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/15">
+              <div>
+                <div className="text-3xl sm:text-4xl font-black text-white" dir="ltr">100%</div>
+                <div className="text-xs sm:text-sm text-[#C9CBEA] mt-1">التزام وبناء مستدام</div>
+              </div>
+              <div>
+                <div className="text-3xl sm:text-4xl font-black text-[#ffb3aa]" dir="ltr">24/7</div>
+                <div className="text-xs sm:text-sm text-[#C9CBEA] mt-1">متابعة وحلول مرنة</div>
               </div>
             </div>
           </div>
 
-          {/* Text & Philosophy */}
-          <div className="lg:col-span-7 space-y-6 text-right">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--card-border)] bg-[rgba(22,24,69,0.7)] text-[var(--accent-coral)] font-bold text-xs">
-              <Flame className="w-3.5 h-3.5 text-[var(--accent-coral)]" />
-              <span>من نحن وماذا نقدّم؟</span>
+          {/* Second Column (End in RTL): Glass "من نحن" Card */}
+          <div className="ib-glass rounded-[32px] p-[clamp(28px,4vw,44px)] flex flex-col justify-between gap-6 text-right">
+            <div className="space-y-5">
+              <div className="ib-eyebrow ib-chip">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#EF4A3C]" />
+                <span>من نحن وماذا نقدّم؟</span>
+              </div>
+
+              <h2 className="ib-h2">
+                هويات تقود السوق.. وحلول إبداعية متكاملة
+              </h2>
+
+              <p className="text-sm sm:text-base text-[#C9CBEA] leading-[1.95]">
+                نحن في "ابتكار" شريكك الإبداعي الأول لتحويل الأفكار والبيانات إلى واجهة احترافية لا تُنافس. من تصميم الهويات البصرية المذهلة وصناعة المحتوى المؤثر، مروراً بإدارة منصات التواصل الاجتماعي باحترافية، وحتى العروض التقديمية والبروفايلات التي تخطف الأنظار؛ نمنحك كل ما تحتاجه ليبرز مشروعك بقوة وثبات بين المنافسين.
+              </p>
             </div>
 
-            <h2 className="text-3xl sm:text-5xl font-black text-white leading-tight">
-              هويات تقود السوق.. وحلول إبداعية متكاملة
-            </h2>
-
-            <p className="text-gray-200 text-sm sm:text-base leading-relaxed">
-              نحن في "ابتكار" شريكك الإبداعي الأول لتحويل الأفكار والبيانات إلى واجهة احترافية لا تُنافس. من تصميم الهويات البصرية المذهلة وصناعة المحتوى المؤثر، مروراً بإدارة منصات التواصل الاجتماعي باحترافية، وحتى العروض التقديمية والبروفايلات التي تخطف الأنظار؛ نمنحك كل ما تحتاجه ليبرز مشروعك بقوة وثبات بين المنافسين.
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="glass-panel p-4 rounded-2xl border border-[var(--card-border)] space-y-2">
-                <div className="flex items-center gap-2 text-[var(--accent-coral)] font-bold text-sm">
-                  <Zap className="w-4 h-4" />
+            {/* Two Features Side by Side as Plain Text Blocks Without Backgrounds */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-5 border-t border-white/10">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-[#ffb3aa] font-bold text-sm sm:text-base">
+                  <Zap className="w-4 h-4 text-[#EF4A3C] shrink-0" />
                   <span>عقود شهرية مستدامة</span>
                 </div>
-                <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#9A9CC8] leading-relaxed">
                   نعمل كفريق تسويق وتصميم داخلي مخصص لمشروعك يضمن لك الاستمرارية دون انقطاع.
                 </p>
               </div>
 
-              <div className="glass-panel p-4 rounded-2xl border border-[var(--card-border)] space-y-2">
-                <div className="flex items-center gap-2 text-[var(--accent-coral)] font-bold text-sm">
-                  <Target className="w-4 h-4" />
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-[#ffb3aa] font-bold text-sm sm:text-base">
+                  <Target className="w-4 h-4 text-[#EF4A3C] shrink-0" />
                   <span>حلول بصرية شامِلة</span>
                 </div>
-                <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#9A9CC8] leading-relaxed">
                   من الشعار، المحتوى، تصوير المنتجات، وحتى الحملات الممولة ونصوص المبيعات.
                 </p>
               </div>
             </div>
 
-            <div className="pt-4">
+            <div className="pt-2">
               <button
                 onClick={onOpenOrderModal}
-                className="py-3.5 px-8 rounded-full bg-[var(--accent-coral)] hover:bg-[#f15e52] text-white font-bold text-sm shadow-xl shadow-[var(--accent-coral)]/35 hover:scale-105 transition-all flex items-center gap-2 cursor-pointer"
+                className="ib-btn ib-btn-coral"
               >
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-4 h-4 shrink-0" />
                 <span>ابدأ رحلة النمو مع منصة ابتكار</span>
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </section>

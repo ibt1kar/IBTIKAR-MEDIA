@@ -7,7 +7,6 @@ import {
   Menu,
   X,
   Sparkles,
-  PhoneCall,
   Grid,
   CreditCard,
   Users,
@@ -71,11 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -92,7 +87,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'contact', label: 'تواصل معنا', icon: Send },
   ];
 
-  // Helper to place second word underneath if the label consists of multiple words
   const splitNavLabel = (label: string): { first: string; second?: string } => {
     const parts = label.trim().split(/\s+/);
     if (parts.length <= 1) {
@@ -112,24 +106,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-[var(--z-header)] transition-all duration-300 pointer-events-none lg:pointer-events-auto ${
-          scrolled ? 'lg:glass-nav lg:py-3 py-2' : 'bg-transparent lg:py-5 py-3'
-        }`}
-      >
-        {/* Mobile top-bar glass background (independent from header to avoid trapping fixed descendants) */}
+      <header className="fixed top-0 left-0 right-0 z-[var(--z-header)] pointer-events-none px-3 sm:px-6 lg:px-8 pt-3 lg:pt-[22px]">
         <div
-          className={`lg:hidden absolute inset-x-0 top-0 h-full pointer-events-none transition-all duration-300 ${
-            scrolled ? 'glass-nav' : 'bg-transparent'
+          className={`max-w-[1200px] mx-auto ib-glass rounded-full pointer-events-auto transition-all duration-300 px-3 sm:px-5 py-2 flex items-center justify-between gap-2 min-h-[60px] lg:min-h-[68px] ${
+            scrolled ? 'border-white/20 shadow-[0_20px_50px_rgba(2,2,20,0.65)]' : ''
           }`}
-          aria-hidden="true"
-        />
-
-        <div className="relative max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 flex items-center justify-between min-h-[var(--header-h)] pointer-events-auto">
-          {/* Brand Logo */}
+        >
+          {/* Brand Logo (Right / Start in RTL) */}
           <button
             onClick={() => handleNavClick('home')}
-            className="flex items-center group text-right focus:outline-none shrink-0"
+            className="flex items-center group text-right shrink-0 min-h-[44px] px-1 cursor-pointer"
             title="منصة ابتكار - الصفحة الرئيسية"
           >
             <Logo
@@ -139,11 +125,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             />
           </button>
 
-          {/* Shortcuts Navigation Bar: Desktop Header Center & Mobile Fixed Bottom Bar */}
+          {/* Shortcuts Navigation Bar: Centered inside floating pill on Desktop, Fixed Bottom Bar on <= 1023px */}
           <nav
             id="shortcuts-nav"
-            className="shortcuts-nav glass-panel"
-            style={{ height: '87px', width: '369px' }}
+            className="shortcuts-nav"
             aria-label="شريط التنقل السريع"
           >
             {navItems.map((item) => {
@@ -154,16 +139,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`shortcuts-item flex items-center transition-all duration-200 cursor-pointer ${
-                    isActive
-                      ? 'active text-white'
-                      : 'text-[var(--text-muted)] hover:text-white'
+                  className={`shortcuts-item flex items-center cursor-pointer ${
+                    isActive ? 'active' : ''
                   }`}
                   title={item.label}
                 >
-                  <div className="shortcuts-icon-wrap flex items-center justify-center">
+                  <span className="shortcuts-icon-wrap flex items-center justify-center">
                     <Icon className="shortcuts-icon" />
-                  </div>
+                  </span>
                   <span className="shortcuts-label">
                     <span className="shortcuts-label-first">{first}</span>
                     {second && <span className="shortcuts-label-second">{second}</span>}
@@ -173,33 +156,31 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Desktop Top Corner Action Buttons (1024px and above) */}
-          <div className="hidden lg:flex items-center gap-3 shrink-0">
-            {/* Visitor Authentication Button or User Menu */}
+          {/* Desktop Action Buttons (Left / End in RTL) */}
+          <div className="hidden lg:flex items-center gap-2.5 shrink-0">
             {!user ? (
               <button
                 onClick={openAuthModal}
-                className="px-4 py-2.5 rounded-full glass-panel hover:bg-white/10 text-white font-bold text-xs border border-[var(--card-border)] hover:border-[var(--accent-coral)]/60 transition-all flex items-center gap-2 cursor-pointer shadow-md hover:scale-105"
+                className="ib-chip min-h-[44px] px-4 py-2 rounded-full text-white font-bold text-xs hover:border-[#EF4A3C] transition-all flex items-center gap-2 cursor-pointer"
               >
-                <LogIn className="w-4 h-4 text-[var(--accent-coral)]" />
+                <LogIn className="w-4 h-4 text-[#EF4A3C]" />
                 <span>تسجيل الدخول</span>
               </button>
             ) : (
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-full glass-panel hover:bg-white/10 border border-[var(--card-border)] text-white text-xs font-bold transition-all cursor-pointer shadow-md hover:border-[var(--accent-coral)]/50"
+                  className="ib-chip min-h-[44px] flex items-center gap-2 px-3 py-1.5 rounded-full text-white text-xs font-bold transition-all cursor-pointer hover:border-[#EF4A3C]/60"
                 >
-                  <div className="w-7 h-7 rounded-full bg-[var(--accent-coral)] text-white flex items-center justify-center text-xs font-black shadow">
+                  <span className="w-7 h-7 rounded-full bg-[#EF4A3C] text-[#070718] flex items-center justify-center text-xs font-black">
                     {(userProfile?.name || user.displayName || 'ع').trim().charAt(0)}
-                  </div>
-                  <span className="max-w-[110px] truncate text-white">
+                  </span>
+                  <span className="max-w-[96px] truncate text-white">
                     {userProfile?.name || user.displayName || 'حسابي'}
                   </span>
-                  <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 text-[#C9CBEA] transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
-                {/* User Dropdown Menu */}
                 {userDropdownOpen && (
                   <div className="absolute left-0 mt-2 w-56 rounded-2xl glass-dropdown glass-panel p-2 shadow-2xl z-50 text-right">
                     <div className="p-3 border-b border-white/10 mb-1">
@@ -207,7 +188,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                         <span className="truncate">{userProfile?.name || user.displayName || 'عميل ابتكار'}</span>
                       </div>
-                      <div className="text-[11px] text-[var(--text-muted)] truncate mt-0.5" dir="ltr">
+                      <div className="text-[11px] text-[#9A9CC8] truncate mt-0.5" dir="ltr">
                         {userProfile?.email || user.email || 'حساب مفعل'}
                       </div>
                     </div>
@@ -217,9 +198,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         setUserDropdownOpen(false);
                         openAccountModal();
                       }}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-gray-200 hover:text-white hover:bg-white/10 transition-colors text-right cursor-pointer"
+                      className="w-full min-h-[44px] flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[#C9CBEA] hover:text-white hover:bg-white/10 transition-colors text-right cursor-pointer"
                     >
-                      <UserIcon className="w-4 h-4 text-[var(--accent-coral)]" />
+                      <UserIcon className="w-4 h-4 text-[#EF4A3C]" />
                       <span>الملف الشخصي (حسابي)</span>
                     </button>
 
@@ -228,7 +209,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         setUserDropdownOpen(false);
                         logout();
                       }}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-red-300 hover:text-red-200 hover:bg-red-500/15 transition-colors text-right cursor-pointer mt-1"
+                      className="w-full min-h-[44px] flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-red-300 hover:text-red-200 hover:bg-red-500/15 transition-colors text-right cursor-pointer mt-1"
                     >
                       <LogOut className="w-4 h-4 text-red-400" />
                       <span>تسجيل الخروج</span>
@@ -238,44 +219,41 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             )}
 
-            {/* Order CTA Button */}
             <button
               onClick={() => onOpenOrderModal()}
-              className="relative group overflow-hidden px-6 py-2.5 rounded-full bg-[var(--accent-coral)] text-white font-bold text-sm shadow-xl shadow-[var(--accent-coral)]/30 hover:scale-105 transition-all duration-300 flex items-center gap-2 cursor-pointer"
+              className="ib-btn ib-btn-coral !min-h-[44px] !py-2.5 !px-5 !text-sm whitespace-nowrap"
             >
-              <span className="relative z-10 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 animate-spin-slow" />
-                <span>اطلب خدمتك</span>
-              </span>
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+              <Sparkles className="w-4 h-4 shrink-0" />
+              <span>اطلب خدمتك</span>
             </button>
           </div>
 
-          {/* Mobile Header Row (max-width: 1023px): logo, "دخول", "طلب خدمة", hamburger */}
-          <div className="flex lg:hidden items-center gap-1 sm:gap-2 shrink-0">
+          {/* Mobile Header Row (max-width: 1023px) */}
+          <div className="flex lg:hidden items-center gap-1.5 shrink-0">
             {!user ? (
               <button
                 onClick={openAuthModal}
-                className="min-h-[44px] px-2.5 sm:px-3 py-1.5 rounded-full glass-panel text-white text-xs font-bold flex items-center gap-1 border border-[var(--card-border)] hover:border-[var(--accent-coral)]/60 cursor-pointer transition-all shrink-0"
+                className="ib-chip min-h-[44px] px-3 py-1.5 rounded-full text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shrink-0"
               >
-                <LogIn className="w-3.5 h-3.5 text-[var(--accent-coral)] shrink-0" />
+                <LogIn className="w-3.5 h-3.5 text-[#EF4A3C] shrink-0" />
                 <span>دخول</span>
               </button>
             ) : (
               <button
                 onClick={openAccountModal}
-                className="min-h-[44px] min-w-[44px] p-1.5 rounded-full glass-panel flex items-center justify-center gap-1 border border-[var(--card-border)] text-white text-xs font-bold cursor-pointer shrink-0"
+                className="ib-chip min-h-[44px] min-w-[44px] p-1.5 rounded-full flex items-center justify-center text-white text-xs font-bold cursor-pointer shrink-0"
                 title="حسابي"
+                aria-label="حسابي"
               >
-                <div className="w-7 h-7 rounded-full bg-[var(--accent-coral)] text-white flex items-center justify-center text-xs font-black shadow">
+                <span className="w-7 h-7 rounded-full bg-[#EF4A3C] text-[#070718] flex items-center justify-center text-xs font-black">
                   {(userProfile?.name || user.displayName || 'ع').trim().charAt(0)}
-                </div>
+                </span>
               </button>
             )}
 
             <button
               onClick={() => onOpenOrderModal()}
-              className="min-h-[44px] px-2.5 sm:px-3.5 py-1.5 rounded-full bg-[var(--accent-coral)] text-white text-xs font-bold flex items-center gap-1 shadow-md shadow-[var(--accent-coral)]/30 hover:scale-105 transition-all cursor-pointer whitespace-nowrap shrink-0"
+              className="ib-btn ib-btn-coral !min-h-[44px] !py-1.5 !px-3.5 !text-xs whitespace-nowrap shrink-0"
             >
               <Sparkles className="w-3.5 h-3.5 shrink-0" />
               <span>طلب خدمة</span>
@@ -283,10 +261,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="min-h-[44px] min-w-[44px] p-2 sm:p-2.5 rounded-2xl glass-panel text-white hover:bg-white/10 transition-colors focus:outline-none flex items-center justify-center cursor-pointer shrink-0"
+              className="ib-chip min-h-[44px] min-w-[44px] p-2 rounded-full text-white hover:border-[#EF4A3C] transition-colors flex items-center justify-center cursor-pointer shrink-0"
               aria-label="القائمة"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -294,20 +272,19 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Navigation overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[var(--z-drawer)] lg:hidden flex flex-col justify-between glass-nav bg-[var(--card-bg)] pt-24 pb-20 px-6 backdrop-blur-2xl animate-fade-in overflow-y-auto">
-          <div className="space-y-4">
-            {/* User Account Mobile Card */}
+        <div className="fixed inset-0 z-[var(--z-drawer)] lg:hidden flex flex-col justify-between bg-[#070718]/95 backdrop-blur-2xl pt-24 pb-24 px-6 overflow-y-auto">
+          <div className="space-y-3">
             {user ? (
-              <div className="p-4 rounded-2xl bg-white/5 border border-[var(--card-border)] space-y-3">
+              <div className="ib-glass p-4 rounded-3xl space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[var(--accent-coral)] text-white flex items-center justify-center text-sm font-black shadow">
+                  <div className="w-10 h-10 rounded-full bg-[#EF4A3C] text-[#070718] flex items-center justify-center text-sm font-black">
                     {(userProfile?.name || user.displayName || 'ع').trim().charAt(0)}
                   </div>
                   <div className="flex-1 truncate">
                     <div className="text-sm font-bold text-white truncate">
                       {userProfile?.name || user.displayName || 'عميل ابتكار'}
                     </div>
-                    <div className="text-xs text-[var(--text-muted)] font-mono truncate" dir="ltr">
+                    <div className="text-xs text-[#9A9CC8] font-mono truncate" dir="ltr">
                       {userProfile?.email || user.email || 'حساب مفعل'}
                     </div>
                   </div>
@@ -319,9 +296,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                       setMobileMenuOpen(false);
                       openAccountModal();
                     }}
-                    className="py-2 px-3 rounded-xl bg-white/10 text-white text-xs font-bold flex items-center justify-center gap-1.5"
+                    className="ib-chip min-h-[44px] py-2 px-3 rounded-full text-white text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    <UserIcon className="w-3.5 h-3.5 text-[var(--accent-coral)]" />
+                    <UserIcon className="w-3.5 h-3.5 text-[#EF4A3C]" />
                     <span>حسابي</span>
                   </button>
 
@@ -330,7 +307,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       setMobileMenuOpen(false);
                       logout();
                     }}
-                    className="py-2 px-3 rounded-xl bg-red-500/15 text-red-300 text-xs font-bold flex items-center justify-center gap-1.5"
+                    className="min-h-[44px] py-2 px-3 rounded-full bg-red-500/15 border border-red-400/30 text-red-300 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <LogOut className="w-3.5 h-3.5" />
                     <span>خروج</span>
@@ -343,37 +320,35 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setMobileMenuOpen(false);
                   openAuthModal();
                 }}
-                className="w-full py-3.5 rounded-2xl glass-panel text-white font-bold text-sm flex items-center justify-center gap-2 border border-[var(--accent-coral)]/40 bg-[var(--accent-coral)]/10"
+                className="w-full min-h-[48px] py-3.5 rounded-full ib-glass-coral text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer"
               >
-                <LogIn className="w-4 h-4 text-[var(--accent-coral)]" />
+                <LogIn className="w-4 h-4 text-[#ffb3aa]" />
                 <span>تسجيل الدخول / إنشاء حساب</span>
               </button>
             )}
 
-            <div className="text-xs font-bold text-[var(--accent-coral)] uppercase tracking-wider mb-2">
+            <div className="text-xs font-bold text-[#ffb3aa] uppercase tracking-wider pt-2">
               التنقل المباشر
             </div>
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`w-full flex items-center justify-between p-3.5 rounded-2xl transition-all duration-200 text-right ${
-                    isActive
-                      ? 'bg-[var(--accent-coral)] text-white font-bold shadow-lg shadow-[var(--accent-coral)]/30'
-                      : 'glass-panel text-gray-200 hover:bg-white/10'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-[var(--accent-coral)]'}`} />
-                    <span className="text-base font-semibold">{item.label}</span>
-                  </div>
-                  <span className="text-xs opacity-60">←</span>
-                </button>
-              );
-            })}
+            <div className="ib-glass rounded-3xl p-2 divide-y divide-white/10">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavClick(item.id)}
+                    className={`ib-row ${isActive ? 'is-active' : ''}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Icon className={`w-5 h-5 ${isActive ? 'text-[#EF4A3C]' : 'text-[#9A9CC8]'}`} />
+                      <span className="text-base font-semibold">{item.label}</span>
+                    </div>
+                    <span className="dot" />
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="pt-6 border-t border-white/10 mt-6 space-y-3">
@@ -382,7 +357,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 onOpenOrderModal();
               }}
-              className="w-full py-3.5 rounded-2xl bg-[var(--accent-coral)] text-white font-bold text-center flex items-center justify-center gap-2 shadow-xl shadow-[var(--accent-coral)]/30"
+              className="ib-btn ib-btn-coral w-full"
             >
               <Sparkles className="w-5 h-5" />
               <span>اطلب خدمتك الآن</span>
@@ -392,7 +367,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               href="https://wa.me/966593363878"
               target="_blank"
               rel="noreferrer"
-              className="w-full py-3 rounded-2xl glass-panel text-emerald-400 font-bold text-center flex items-center justify-center gap-2 border border-emerald-500/30 text-sm"
+              className="ib-btn ib-glass w-full text-emerald-300 text-sm"
             >
               <WhatsAppIcon className="w-4 h-4 text-[#25D366]" />
               <span>واتساب المبيعات (0593363878)</span>

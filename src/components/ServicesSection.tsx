@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SERVICES_DATA } from '../data/mockData';
 import { ServiceItem } from '../types';
+import { useModalEffects } from '../hooks/useModalEffects';
 import {
   Share2,
   Layout,
@@ -23,6 +24,8 @@ interface ServicesSectionProps {
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderModal }) => {
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
+
+  useModalEffects(!!selectedService, () => setSelectedService(null));
 
   const getIcon = (iconName: string) => {
     switch (iconName) {
@@ -49,78 +52,80 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
     }
   };
 
-  return (
-    <section id="services" className="py-20 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-1/2 left-0 w-80 h-80 rounded-full bg-[var(--accent-coral)]/15 blur-[100px] pointer-events-none"></div>
+  // Bento alternating spans: 7+5, 5+7, 6+6
+  const bentoSpans = ['ib-c7', 'ib-c5', 'ib-c5', 'ib-c7', 'ib-c6', 'ib-c6'];
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Title */}
-        <div className="text-center space-y-4 mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--card-border)] bg-[rgba(22,24,69,0.7)] backdrop-blur-md text-[var(--accent-coral)] font-bold text-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-coral)]"></span>
-            <Sparkles className="w-3.5 h-3.5" />
+  return (
+    <section id="services" className="ib-sec">
+      <div className="ib-container">
+        {/* Start-Aligned Section Header */}
+        <div className="space-y-4 mb-12 text-right">
+          <div className="ib-eyebrow ib-chip">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#EF4A3C]" />
             <span>خدماتنا الإبداعية المتكاملة</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-white leading-tight space-y-1 text-center">
-            <span className="block">حلول تسويقية وبصرية</span>
-            <span className="block">تحـوّل الرؤيـــــة إلى واقع</span>
+          <h2 className="ib-h2">
+            حلول تسويقية وبصرية تحـوّل الرؤيـــــة إلى واقع
           </h2>
-          <p className="text-[var(--text-muted)] text-sm sm:text-base leading-relaxed">
+          <p className="ib-sub">
             نقدم مجموعة متكاملة من الخدمات الإعلامية والتصميمية بأعلى معايير الجودة لتنمية براندك وتثبيت حضورك الرقمي.
           </p>
         </div>
 
-        {/* Services Grid (6 services) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {SERVICES_DATA.map((service) => {
+        {/* 12-Column Bento Grid */}
+        <div className="ib-bento">
+          {SERVICES_DATA.map((service, idx) => {
             const IconComponent = getIcon(service.iconName);
+            const spanClass = bentoSpans[idx % bentoSpans.length];
+            const indexNumber = (idx + 1).toString().padStart(2, '0');
+
             return (
               <div
                 key={service.id}
-                className="glass-panel glass-panel-hover p-6 sm:p-8 rounded-3xl border border-[var(--card-border)] flex flex-col justify-between relative group"
+                className={`${spanClass} ib-glass ib-lift rounded-[30px] p-[clamp(26px,3vw,40px)] min-h-[300px] flex flex-col justify-between group`}
               >
-                <div className="space-y-4">
-                  {/* Top Row: Icon + Badge */}
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="w-14 h-14 rounded-2xl glass-panel-orange flex items-center justify-center text-[var(--accent-coral)] group-hover:scale-110 group-hover:bg-[var(--accent-coral)] group-hover:text-white transition-all duration-300 shadow-lg shadow-[var(--accent-coral)]/20 shrink-0">
-                      <IconComponent className="w-7 h-7" />
-                    </div>
-
-                    {service.badge && (
-                      <span className="px-3 py-1 rounded-full bg-[rgba(22,24,69,0.7)] border border-[var(--card-border)] text-[var(--accent-coral)] font-bold text-[11px] text-center leading-normal inline-flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-coral)]"></span>
-                        <span>{service.badge}</span>
-                      </span>
-                    )}
+                <div className="flex flex-col flex-1 space-y-4">
+                  {/* Small stroke icon + index number */}
+                  <div className="flex items-center justify-between gap-3">
+                    <IconComponent className="w-6 h-6 text-[#EF4A3C] stroke-[1.75]" />
+                    <span className="text-sm font-mono font-bold text-[#9A9CC8]" dir="ltr">
+                      {indexNumber}
+                    </span>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-xl font-bold text-white group-hover:text-[var(--accent-coral)] transition-colors pt-1">
+                  {/* Coral tag */}
+                  {service.badge && (
+                    <div className="text-xs font-bold text-[#ffb3aa]">
+                      {service.badge}
+                    </div>
+                  )}
+
+                  {/* Title (24-30px) */}
+                  <h3 className="text-[24px] sm:text-[28px] font-bold text-white leading-[1.3]">
                     {service.title}
                   </h3>
 
-                  {/* Short Description */}
-                  <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
+                  {/* Description (grows) */}
+                  <p className="text-[15px] sm:text-base text-[#C9CBEA] leading-[1.9] flex-1">
                     {service.shortDescription}
                   </p>
                 </div>
 
                 {/* Bottom Actions */}
-                <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between gap-3">
+                <div className="pt-6 mt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
                   <button
                     onClick={() => setSelectedService(service)}
-                    className="text-xs font-bold text-[var(--text-muted)] hover:text-white flex items-center gap-1 hover:underline cursor-pointer"
+                    className="min-h-[44px] text-sm font-semibold text-[#9A9CC8] hover:text-white transition-colors cursor-pointer"
                   >
-                    <span>التفاصيل والمخرجات</span>
+                    التفاصيل والمخرجات
                   </button>
 
                   <button
                     onClick={() => onOpenOrderModal(service.id)}
-                    className="px-4 py-2 rounded-full bg-[var(--accent-coral)] hover:bg-[#f15e52] text-white text-xs font-bold shadow-md shadow-[var(--accent-coral)]/30 hover:scale-105 transition-all flex items-center gap-1 cursor-pointer"
+                    className="min-h-[44px] inline-flex items-center gap-2 text-sm sm:text-base font-bold text-[#EF4A3C] hover:text-[#ff6252] transition-colors cursor-pointer"
                   >
                     <span>اطلب الخدمة</span>
-                    <ArrowLeft className="w-3.5 h-3.5" />
+                    <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
                   </button>
                 </div>
               </div>
@@ -128,75 +133,80 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
           })}
         </div>
 
-        {/* Notice Banner - "إمكانية طلب تصاميم منفردة وخاصة بحسب الاحتياج" */}
-        <div className="mt-12 glass-panel p-6 rounded-3xl border border-[var(--card-border)] text-center flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
-          <div className="flex items-center gap-3 text-right">
-            <div className="p-3 rounded-2xl bg-[var(--accent-coral)]/20 text-[var(--accent-coral)]">
-              <Sparkles className="w-6 h-6" />
-            </div>
-            <div>
-              <h4 className="text-lg font-black text-white">ترغب في تصميم منفرد أو حزمة خاصة؟</h4>
-              <p className="text-xs text-[var(--text-muted)]">
-                إمكانية طلب تصاميم منفردة وخاصة ومخصصة بالكامل بحسب الاحتياج الفريد لمشروعك.
-              </p>
-            </div>
+        {/* Full-Width Coral Banner */}
+        <div className="mt-6 ib-glass-coral rounded-[30px] p-[clamp(24px,3.5vw,40px)] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2 text-right">
+            <h4 className="text-xl sm:text-2xl font-bold text-white">
+              ترغب في تصميم منفرد أو حزمة خاصة؟
+            </h4>
+            <p className="text-sm sm:text-base text-[#C9CBEA] leading-relaxed">
+              إمكانية طلب تصاميم منفردة وخاصة ومخصصة بالكامل بحسب الاحتياج الفريد لمشروعك.
+            </p>
           </div>
           <button
             onClick={() => onOpenOrderModal()}
-            className="px-6 py-3 rounded-full bg-[var(--accent-coral)] text-white font-bold text-xs sm:text-sm shadow-lg shadow-[var(--accent-coral)]/30 shrink-0 hover:scale-105 transition-transform cursor-pointer"
+            className="ib-btn ib-btn-coral shrink-0"
           >
-            تخصيص طلبك الآن
+            <span>تخصيص طلبك الآن</span>
+            <ArrowLeft className="w-4 h-4" />
           </button>
         </div>
       </div>
 
       {/* Detail Modal for Selected Service */}
       {selectedService && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto">
-          <div className="relative w-full max-w-2xl glass-panel glass-modal rounded-3xl p-6 sm:p-8 shadow-2xl my-8 text-right">
+        <div
+          className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto"
+          onClick={() => setSelectedService(null)}
+        >
+          <div
+            className="relative w-full max-w-2xl glass-panel glass-modal rounded-3xl p-6 sm:p-8 shadow-2xl my-8 text-right"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={() => setSelectedService(null)}
-              className="absolute top-5 left-5 p-2 rounded-full glass-panel hover:bg-white/10 text-gray-300 hover:text-white"
+              aria-label="إغلاق"
+              className="absolute top-5 left-5 min-w-[44px] min-h-[44px] p-2 rounded-full ib-chip hover:border-[#EF4A3C] text-gray-300 hover:text-white flex items-center justify-center cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-2xl glass-panel-orange text-[var(--accent-coral)]">
+              <div className="flex items-center gap-3 pl-12">
+                <div className="p-3 rounded-2xl text-[#EF4A3C]">
                   {React.createElement(getIcon(selectedService.iconName), { className: 'w-7 h-7' })}
                 </div>
                 <div>
                   <h3 className="text-2xl font-black text-white">{selectedService.title}</h3>
-                  <p className="text-xs text-[var(--accent-coral)] font-bold">منصة ابتكار - حلول إعلامية وإبداعية</p>
+                  <p className="text-xs text-[#ffb3aa] font-bold">منصة ابتكار - حلول إعلامية وإبداعية</p>
                 </div>
               </div>
 
-              <p className="text-sm text-gray-200 leading-relaxed glass-panel p-4 rounded-2xl">
+              <p className="text-sm sm:text-base text-[#C9CBEA] leading-[1.9]">
                 {selectedService.fullDescription}
               </p>
 
-              <div>
+              <div className="pt-4 border-t border-white/10">
                 <h4 className="text-sm font-black text-white mb-3">مخرجات الخدمة والتسليمات:</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {selectedService.deliverables.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-xs text-gray-200 p-2.5 rounded-xl glass-panel border border-[var(--card-border)]">
-                      <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-[#C9CBEA]">
+                      <Check className="w-4 h-4 text-[#EF4A3C] shrink-0 mt-0.5" />
                       <span>{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[var(--accent-coral)]/10 border border-[var(--accent-coral)]/30">
-                <h4 className="text-xs font-bold text-[var(--accent-coral)] mb-1">النتيجة والأثر المتوقع:</h4>
-                <p className="text-xs text-white font-semibold">{selectedService.sampleOutcome}</p>
+              <div className="pt-4 border-t border-white/10">
+                <h4 className="text-xs font-bold text-[#ffb3aa] mb-1">النتيجة والأثر المتوقع:</h4>
+                <p className="text-sm text-white font-semibold">{selectedService.sampleOutcome}</p>
               </div>
 
               <div className="flex items-center justify-between pt-4 border-t border-white/10">
                 <button
                   onClick={() => setSelectedService(null)}
-                  className="px-5 py-2.5 rounded-full glass-panel text-xs text-gray-300 font-semibold hover:bg-white/10"
+                  className="ib-btn ib-chip !min-h-[44px] !py-2 !px-5 !text-xs text-gray-200"
                 >
                   إغلاق
                 </button>
@@ -206,7 +216,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenOrderMod
                     setSelectedService(null);
                     onOpenOrderModal(id);
                   }}
-                  className="px-6 py-2.5 rounded-full bg-[var(--accent-coral)] text-white font-bold text-xs shadow-lg shadow-[var(--accent-coral)]/30 flex items-center gap-2 hover:scale-105 transition-transform"
+                  className="ib-btn ib-btn-coral !min-h-[44px] !py-2.5 !px-6 !text-xs"
                 >
                   <Send className="w-4 h-4" />
                   <span>طلب هذه الخدمة الآن</span>

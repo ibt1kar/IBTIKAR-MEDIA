@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TARGET_CLIENTS_DATA } from '../data/mockData';
+import { TARGET_CLIENTS_DATA, AGENCY_SOCIALS } from '../data/mockData';
 import { TargetClient } from '../types';
 import {
   Building2,
@@ -11,7 +11,6 @@ import {
   Home,
   Briefcase,
   Award,
-  ArrowLeft,
   CheckCircle2,
   MoonStar,
   Utensils,
@@ -30,7 +29,7 @@ interface TargetClientsSectionProps {
 }
 
 export const TargetClientsSection: React.FC<TargetClientsSectionProps> = ({ onOpenOrderModal }) => {
-  const [activeClient, setActiveClient] = useState<TargetClient | null>(TARGET_CLIENTS_DATA[0]);
+  const [activeClient, setActiveClient] = useState<TargetClient>(TARGET_CLIENTS_DATA[0]);
 
   const getIcon = (iconName: string) => {
     switch (iconName) {
@@ -77,120 +76,133 @@ export const TargetClientsSection: React.FC<TargetClientsSectionProps> = ({ onOp
     }
   };
 
-  return (
-    <section id="targets" className="py-20 relative overflow-hidden bg-transparent border-y border-[var(--card-border)]/20">
-      {/* Glow Orbs */}
-      <div className="absolute top-1/3 right-0 w-96 h-96 bg-[var(--accent-coral)]/10 rounded-full blur-[120px] pointer-events-none"></div>
+  const ActiveIcon = getIcon(activeClient.iconName);
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Title */}
-        <div className="text-center space-y-4 mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--card-border)] bg-[rgba(22,24,69,0.7)] backdrop-blur-md text-[var(--accent-coral)] font-bold text-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-coral)]"></span>
-            <Award className="w-3.5 h-3.5" />
+  return (
+    <section id="targets" className="ib-sec">
+      <div className="ib-container">
+        {/* Start-Aligned Section Header */}
+        <div className="space-y-4 mb-12 text-right">
+          <div className="ib-eyebrow ib-chip">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#EF4A3C]" />
             <span>شركاء النجاح والقطاعات المستهدفة</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-white leading-tight space-y-1">
-            <span className="block">حلول تسويقية مخصصة</span>
-            <span className="block">لــكــــل قطــــــاع تجــــــاري</span>
+          <h2 className="ib-h2">
+            حلول تسويقية مخصصة لــكــــل قطــــــاع تجــــــاري
           </h2>
-          <p className="text-[var(--text-muted)] text-sm sm:text-base leading-relaxed">
+          <p className="ib-sub">
             نصمم الاستراتيجية التي تناسب طبيعة جمهورك ونشاطك التجاري لتحقيق أقصى درجات النمو والانتشار.
           </p>
         </div>
 
-        {/* Grid Cards for All 9 Categories */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {TARGET_CLIENTS_DATA.map((client) => {
-            const IconComponent = getIcon(client.iconName);
-            const isSelected = activeClient?.id === client.id;
-            return (
-              <div
-                key={client.id}
-                onClick={() => setActiveClient(client)}
-                className={`glass-panel p-6 rounded-3xl cursor-pointer transition-all duration-300 border relative group ${
-                  isSelected
-                    ? 'border-[var(--accent-coral)] bg-white/10 shadow-2xl shadow-[var(--accent-coral)]/20 scale-[1.02]'
-                    : 'border-[var(--card-border)] hover:border-white/20 hover:bg-white/5'
-                }`}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div
-                    className={`p-3.5 rounded-2xl transition-colors ${
-                      isSelected
-                        ? 'bg-[var(--accent-coral)] text-white shadow-lg shadow-[var(--accent-coral)]/40'
-                        : 'glass-panel-orange text-[var(--accent-coral)] group-hover:bg-[var(--accent-coral)] group-hover:text-white'
-                    }`}
+        {/* Master-Detail Split Layout (4fr / 8fr) */}
+        <div className="ib-split">
+          {/* Right Panel (Start in RTL): Scrollable list of ALL sectors */}
+          <div className="ib-glass rounded-[30px] p-3">
+            <div className="ib-scroll-y max-h-[560px] divide-y divide-white/5 pl-1">
+              {TARGET_CLIENTS_DATA.map((client) => {
+                const IconComponent = getIcon(client.iconName);
+                const isSelected = activeClient.id === client.id;
+                return (
+                  <button
+                    key={client.id}
+                    type="button"
+                    onClick={() => setActiveClient(client)}
+                    className={`ib-row ${isSelected ? 'is-active' : ''}`}
                   >
-                    <IconComponent className="w-6 h-6" />
-                  </div>
-                  <span className="text-[11px] font-bold text-[var(--accent-coral)] px-2.5 py-1 rounded-full glass-panel border border-[var(--card-border)]">
-                    حلول مخصصة
-                  </span>
-                </div>
+                    <span className="flex items-center gap-3 min-w-0">
+                      <IconComponent
+                        className={`w-4 h-4 shrink-0 ${
+                          isSelected ? 'text-[#EF4A3C]' : 'text-[#9A9CC8]'
+                        }`}
+                      />
+                      <span className="truncate">{client.title}</span>
+                    </span>
+                    <span className="dot" />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-                <h3 className="text-xl font-bold text-white mb-2">{client.title}</h3>
-                <p className="text-xs text-[var(--text-muted)] leading-relaxed mb-4">
-                  {client.description}
-                </p>
-
-                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[var(--accent-coral)]">
-                  <span>عرض استراتيجية القطاع</span>
-                  <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Selected Sector Strategy Showcase Box */}
-        {activeClient && (
-          <div className="mt-12 glass-panel p-8 rounded-3xl border border-[var(--card-border)] shadow-2xl animate-fade-in relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-2 h-full bg-[var(--accent-coral)]"></div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-8 space-y-4">
-                <div className="inline-flex items-center gap-2 text-xs font-bold text-[var(--accent-coral)] px-3 py-1 rounded-full glass-panel-orange border border-[var(--card-border)]">
+          {/* Left Panel (End in RTL): Sector Strategy Detail Glass Card */}
+          <div className="ib-glass rounded-[32px] p-[clamp(28px,4vw,48px)] flex flex-col justify-between gap-8 text-right">
+            <div className="space-y-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#ffb3aa]">
+                  <ActiveIcon className="w-5 h-5 text-[#EF4A3C]" />
                   <span>خطة العمل المقترحة لقطاع:</span>
-                  <strong>{activeClient.title}</strong>
+                  <strong className="text-white">{activeClient.title}</strong>
                 </div>
-
-                <h3 className="text-2xl font-black text-white">
-                  كيف ننمي نشاطك في {activeClient.title}؟
-                </h3>
-
-                <p className="text-sm text-gray-200 leading-relaxed">
-                  <strong>المنهجية:</strong> {activeClient.growthStrategy}
-                </p>
-
-                <div>
-                  <h4 className="text-xs font-bold text-[var(--text-muted)] mb-2">أبرز الخدمات الموصى بها لهذا القطاع:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {activeClient.topServices.map((srv, idx) => (
-                      <span key={idx} className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-panel text-xs text-white border border-[var(--card-border)]">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[var(--accent-coral)]" />
-                        <span>{srv}</span>
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                <span className="text-xs font-semibold text-[#9A9CC8]">حلول مخصصة</span>
               </div>
 
-              <div className="lg:col-span-4 flex flex-col items-center justify-center p-6 glass-panel rounded-2xl border border-[var(--card-border)] text-center gap-4">
-                <p className="text-xs text-[var(--text-muted)]">
-                  هل تمتلك براند أو مشروع في مجال <strong>{activeClient.title}</strong>؟
+              <h3
+                className="font-bold text-white leading-[1.2]"
+                style={{ fontSize: 'clamp(28px, 3.2vw, 46px)' }}
+              >
+                {activeClient.title}
+              </h3>
+
+              <p className="text-base sm:text-lg text-[#C9CBEA] leading-[1.9]">
+                {activeClient.description}
+              </p>
+
+              <div className="pt-6 border-t border-white/10 space-y-3">
+                <h4 className="text-lg sm:text-xl font-bold text-white">
+                  كيف ننمي نشاطك في {activeClient.title}؟
+                </h4>
+                <p className="text-sm sm:text-base text-[#C9CBEA] leading-[1.9]">
+                  <strong className="text-[#ffb3aa]">المنهجية:</strong> {activeClient.growthStrategy}
                 </p>
+              </div>
+
+              <div className="pt-2 space-y-3">
+                <h4 className="text-xs sm:text-sm font-bold text-[#9A9CC8]">
+                  أبرز الخدمات الموصى بها لهذا القطاع:
+                </h4>
+                <div className="flex flex-wrap gap-2.5">
+                  {activeClient.topServices.map((srv, idx) => (
+                    <span
+                      key={idx}
+                      className="ib-chip inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold text-[#ffb3aa]"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#EF4A3C] shrink-0" />
+                      <span>{srv}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Prompt & 2 Action Buttons */}
+            <div className="pt-6 border-t border-white/10 space-y-4">
+              <p className="text-xs sm:text-sm text-[#9A9CC8]">
+                هل تمتلك براند أو مشروع في مجال <strong className="text-white">{activeClient.title}</strong>؟
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
                 <button
                   onClick={onOpenOrderModal}
-                  className="w-full py-3.5 px-6 rounded-full bg-[var(--accent-coral)] hover:bg-[#f15e52] text-white font-bold text-xs shadow-xl shadow-[var(--accent-coral)]/30 hover:scale-105 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="ib-btn ib-btn-coral"
                 >
-                  <Sparkles className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4 shrink-0" />
                   <span>احصل على استشارة وباقة مخصصة</span>
                 </button>
+
+                <a
+                  href={`https://wa.me/966593363878?text=${encodeURIComponent(
+                    `مرحباً ابتكار، أرغب باستشارة مخصصة لقطاع: ${activeClient.title}`
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="ib-btn ib-glass text-white hover:border-[#EF4A3C]"
+                >
+                  <span>استشارة مباشرة ({AGENCY_SOCIALS.phone})</span>
+                </a>
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );

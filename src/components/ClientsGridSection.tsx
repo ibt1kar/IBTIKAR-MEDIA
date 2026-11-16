@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Award, Handshake, CheckCircle2, Sparkles, Star, Building2, Eye, Search } from 'lucide-react';
+import { useModalEffects } from '../hooks/useModalEffects';
+import { Award, CheckCircle2, Star, Building2, Search, X } from 'lucide-react';
 
 interface ClientsGridSectionProps {
   onOpenOrderModal?: () => void;
@@ -21,119 +22,130 @@ export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOr
   const [selectedLogo, setSelectedLogo] = useState<typeof allLogos[0] | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
+  useModalEffects(!!selectedLogo, () => setSelectedLogo(null));
+
   const filteredLogos = searchTerm.trim()
     ? allLogos.filter((logo) => logo.id.toString().includes(searchTerm.trim()))
     : allLogos;
 
   return (
-    <section id="clients" className="py-20 md:py-28 relative overflow-hidden bg-transparent">
-      {/* Ambient background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[550px] bg-[var(--accent-coral)]/10 blur-[180px] pointer-events-none -z-10"></div>
-      <div className="absolute top-1/3 right-10 w-96 h-96 bg-[var(--accent-indigo)]/20 blur-[150px] pointer-events-none -z-10"></div>
-      <div className="absolute bottom-10 left-10 w-96 h-96 bg-[var(--accent-coral)]/15 blur-[140px] pointer-events-none -z-10"></div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center space-y-4 max-w-3xl mx-auto mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--card-border)] bg-[rgba(22,24,69,0.7)] text-[var(--accent-coral)] font-bold text-xs sm:text-sm shadow-md">
-            <Handshake className="w-4 h-4 text-[var(--accent-coral)]" />
-            <span>شبكة شركاء النجاح الموثوقة</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-5xl font-black text-white leading-tight">
-            نعـــتـز بثقـــة <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-coral)] via-[var(--accent-coral)] to-[var(--accent-indigo)]">شركــاء النجــاح</span>
-          </h2>
-
-          <p className="text-[var(--text-muted)] text-sm sm:text-base md:text-lg leading-relaxed">
-            فخورون بالتعاون والشراكة مع أكثر من 25 جهة وعلامة تجارية رائدة ومشاريع نوعية، حيث شاركناهم رحلة صناعة وتطوير الهوية وإدارة الحضور الرقمي وتحقيق أرقام قياسية.
-          </p>
-
-          {/* Quick Metrics Bar */}
-          <div className="pt-3 flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-xs sm:text-sm font-bold text-gray-200">
-            <div className="flex items-center gap-2 glass-panel px-4 py-2 rounded-full border border-[var(--card-border)] shadow-sm">
-              <CheckCircle2 className="w-4 h-4 text-[var(--accent-coral)]" />
-              <span>25 شريك نجاح وعلامة تجارية</span>
-            </div>
-            <div className="flex items-center gap-2 glass-panel px-4 py-2 rounded-full border border-[var(--card-border)] shadow-sm">
-              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-              <span>نسبة رضا وتجديد عقود 98%</span>
-            </div>
-            <div className="flex items-center gap-2 glass-panel px-4 py-2 rounded-full border border-[var(--card-border)] shadow-sm">
-              <Award className="w-4 h-4 text-[var(--accent-coral)]" />
-              <span>قطاعات حكومية، تجارية، وإبداعية</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Search & Grid Header */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
-          <div className="flex items-center gap-3">
-            <span className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-[var(--accent-coral)]" />
-              <span>جميع شعارات الشركاء</span>
-            </span>
-            <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-[var(--accent-coral)]/20 text-[var(--accent-coral)] border border-[var(--card-border)]">
-              {filteredLogos.length} شعار
-            </span>
-          </div>
-
-          {/* Quick Search */}
-          <div className="relative w-full sm:w-64">
-            <input
-              type="text"
-              placeholder="بحث برقم الشريك (1 - 25)..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-white/5 border border-[var(--card-border)] rounded-2xl px-4 py-2.5 pl-10 text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:border-[var(--accent-coral)] transition-colors"
-            />
-            <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
-        </div>
-
-        {/* The Grid of 25 Logos (1 to 25) - Enlarged Display */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-7">
-          {filteredLogos.map((client) => (
-            <div
-              key={client.id}
-              onClick={() => setSelectedLogo(client)}
-              className="group relative glass-panel rounded-3xl p-5 sm:p-7 flex flex-col items-center justify-between border border-[var(--card-border)] hover:border-[var(--accent-coral)] hover:bg-white/[0.14] transition-all duration-300 hover:shadow-[0_16px_36px_rgba(239,74,60,0.3)] hover:-translate-y-2 min-h-[200px] sm:min-h-[240px] md:min-h-[260px] cursor-pointer"
-            >
-              {/* Subtle background glow on hover */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[var(--accent-coral)]/0 via-[var(--accent-coral)]/5 to-[var(--accent-coral)]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-
-              {/* Logo Image Container - Enlarged */}
-              <div className="w-full flex-1 min-h-[130px] sm:min-h-[160px] md:min-h-[180px] flex items-center justify-center relative z-10 p-2 sm:p-4">
-                <img
-                  src={client.src}
-                  alt={client.alt}
-                  className="w-full h-full max-h-[140px] sm:max-h-[170px] md:max-h-[190px] object-contain filter contrast-105 brightness-105 group-hover:scale-110 transition-transform duration-300 drop-shadow-lg"
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    (e.target as HTMLElement).style.display = 'none';
-                  }}
-                />
+    <section id="clients" className="ib-sec">
+      <div className="ib-container">
+        {/* Single Large Glass Panel (radius 36px), 2 columns */}
+        <div className="ib-glass rounded-[36px] p-[clamp(24px,4vw,52px)]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+            {/* Side 1: Text + Existing Stats + Search */}
+            <div className="lg:col-span-5 space-y-6 text-right">
+              <div className="ib-eyebrow ib-chip">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#EF4A3C]" />
+                <span>شبكة شركاء النجاح الموثوقة</span>
               </div>
 
-              {/* Partner Number Tag */}
-              <div className="w-full flex items-center justify-between mt-3 pt-3 border-t border-white/10 relative z-10">
-                <span className="text-xs sm:text-sm font-mono font-bold text-white/50 group-hover:text-[var(--accent-coral)] transition-colors">
-                  #{client.id.toString().padStart(2, '0')}
-                </span>
-                <span className="text-xs text-[var(--text-muted)] group-hover:text-white flex items-center gap-1.5 opacity-80 sm:opacity-0 group-hover:opacity-100 transition-opacity font-medium">
-                  <Eye className="w-3.5 h-3.5 text-[var(--accent-coral)]" />
-                  <span>معاينة وتكبير</span>
-                </span>
+              <h2 className="ib-h2">
+                نعـــتـز بثقـــة <span className="text-[#EF4A3C]">شركــاء النجــاح</span>
+              </h2>
+
+              <p className="ib-sub">
+                فخورون بالتعاون والشراكة مع أكثر من 25 جهة وعلامة تجارية رائدة ومشاريع نوعية، حيث شاركناهم رحلة صناعة وتطوير الهوية وإدارة الحضور الرقمي وتحقيق أرقام قياسية.
+              </p>
+
+              {/* Existing Quick Metrics (spacing & hairline divider only, no inner boxes) */}
+              <div className="pt-5 border-t border-white/10 space-y-3 text-sm font-semibold text-[#C9CBEA]">
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="w-4 h-4 text-[#EF4A3C] shrink-0" />
+                  <span>25 شريك نجاح وعلامة تجارية</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Star className="w-4 h-4 text-[#EF4A3C] shrink-0" />
+                  <span>نسبة رضا وتجديد عقود 98%</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Award className="w-4 h-4 text-[#EF4A3C] shrink-0" />
+                  <span>قطاعات حكومية، تجارية، وإبداعية</span>
+                </div>
+              </div>
+
+              {/* Search & Count Header */}
+              <div className="pt-5 border-t border-white/10 space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-[#EF4A3C]" />
+                    <span>جميع شعارات الشركاء</span>
+                  </span>
+                  <span className="text-xs font-mono font-bold text-[#ffb3aa]">
+                    {filteredLogos.length} شعار
+                  </span>
+                </div>
+
+                <div className="relative w-full">
+                  <input
+                    type="text"
+                    placeholder="بحث برقم الشريك (1 - 25)..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    aria-label="بحث برقم الشريك"
+                    className="w-full glass-input min-h-[44px] px-4 py-2.5 pl-10 text-xs sm:text-sm text-white placeholder-[#9A9CC8]"
+                  />
+                  <Search className="w-4 h-4 text-[#9A9CC8] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                {onOpenOrderModal && (
+                  <button
+                    onClick={() => onOpenOrderModal()}
+                    className="ib-btn ib-btn-coral"
+                  >
+                    انضم لشركاء النجاح
+                  </button>
+                )}
+                <a
+                  href="https://wa.me/966593363878"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="ib-btn ib-glass text-white hover:border-[#EF4A3C]"
+                >
+                  استشارة مباشرة
+                </a>
               </div>
             </div>
-          ))}
+
+            {/* Side 2: 25 Partner Logos as Square Glass Chips (radius 20px) */}
+            <div className="lg:col-span-7">
+              <div className="ib-logos">
+                {filteredLogos.map((client) => (
+                  <button
+                    key={client.id}
+                    type="button"
+                    onClick={() => setSelectedLogo(client)}
+                    aria-label={`معاينة ${client.alt}`}
+                    className="ib-chip ib-lift aspect-square rounded-[20px] p-3 sm:p-4 flex items-center justify-center relative group cursor-pointer"
+                  >
+                    <img
+                      src={client.src}
+                      alt={client.alt}
+                      className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLElement).style.display = 'none';
+                      }}
+                    />
+                    <span className="absolute bottom-2 left-2.5 text-[10px] font-mono font-bold text-[#9A9CC8] group-hover:text-[#ffb3aa] transition-colors">
+                      #{client.id.toString().padStart(2, '0')}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Modal for viewing logo enlarged */}
         {selectedLogo !== null && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
+            className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
             onClick={() => setSelectedLogo(null)}
           >
             <div
@@ -142,41 +154,42 @@ export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOr
             >
               <button
                 onClick={() => setSelectedLogo(null)}
-                className="absolute top-4 left-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors font-bold text-lg"
+                aria-label="إغلاق"
+                className="ib-chip absolute top-4 left-4 min-w-[44px] min-h-[44px] rounded-full text-white flex items-center justify-center hover:border-[#EF4A3C] cursor-pointer"
               >
-                ✕
+                <X className="w-5 h-5" />
               </button>
 
-              <div className="space-y-1">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[var(--card-border)] bg-[rgba(22,24,69,0.7)] text-[var(--accent-coral)] font-bold text-xs">
-                  <Award className="w-3.5 h-3.5 text-[var(--accent-coral)]" />
+              <div className="space-y-2 pt-2">
+                <div className="inline-flex items-center gap-1.5 text-[#ffb3aa] font-bold text-xs">
+                  <Award className="w-4 h-4 text-[#EF4A3C]" />
                   <span>شريك نجاح #{selectedLogo.id.toString().padStart(2, '0')}</span>
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-white">شريك نجاح منصة ابتكار</h3>
               </div>
 
-              <div className="w-full h-56 sm:h-64 rounded-2xl bg-white/[0.08] border border-[var(--card-border)] p-6 flex items-center justify-center shadow-inner">
+              <div className="w-full h-56 sm:h-64 rounded-[20px] p-6 flex items-center justify-center">
                 <img
                   src={selectedLogo.src}
                   alt={selectedLogo.alt}
-                  className="max-h-full max-w-full object-contain filter contrast-105 brightness-105 drop-shadow-xl"
+                  className="max-h-full max-w-full object-contain"
                   referrerPolicy="no-referrer"
                 />
               </div>
 
-              <div className="flex items-center justify-center gap-3 pt-2">
+              <div className="flex flex-wrap items-center justify-center gap-3 pt-3 border-t border-white/10">
                 <button
                   onClick={() => {
                     setSelectedLogo(null);
                     if (onOpenOrderModal) onOpenOrderModal();
                   }}
-                  className="px-6 py-2.5 rounded-xl bg-[var(--accent-coral)] hover:bg-[#f15e52] text-white font-bold text-xs sm:text-sm hover:scale-105 transition-transform"
+                  className="ib-btn ib-btn-coral !min-h-[44px] !py-2.5 !px-6 !text-sm"
                 >
                   انضم لقائمة الشركاء
                 </button>
                 <button
                   onClick={() => setSelectedLogo(null)}
-                  className="px-5 py-2.5 rounded-xl glass-panel border border-[var(--card-border)] text-white font-bold text-xs sm:text-sm hover:bg-white/10 transition-colors"
+                  className="ib-btn ib-chip !min-h-[44px] !py-2.5 !px-5 !text-sm text-white"
                 >
                   إغلاق
                 </button>
@@ -184,41 +197,7 @@ export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOr
             </div>
           </div>
         )}
-
-        {/* Bottom CTA Card */}
-        <div className="mt-14 glass-panel p-6 sm:p-8 rounded-3xl border border-[var(--card-border)] text-center flex flex-col sm:flex-row items-center justify-between gap-6 max-w-4xl mx-auto bg-[var(--card-bg)] backdrop-blur-xl">
-          <div className="text-right space-y-1">
-            <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-[var(--accent-coral)]" />
-              <span>هل ترغب بأن تكون علامتك التجارية شريك نجاحنا القادم؟</span>
-            </h3>
-            <p className="text-xs sm:text-sm text-[var(--text-muted)]">
-              انضم إلى قائمة شركائنا المتميزين واحصل على باقة متكاملة لإدارة ونمو هويتك الرقمية.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3 shrink-0">
-            {onOpenOrderModal && (
-              <button
-                onClick={() => onOpenOrderModal()}
-                className="px-6 py-3 rounded-2xl bg-[var(--accent-coral)] hover:bg-[#f15e52] text-white font-bold text-sm shadow-lg shadow-[var(--accent-coral)]/30 hover:scale-105 transition-all"
-              >
-                انضم لشركاء النجاح
-              </button>
-            )}
-            <a
-              href="https://wa.me/966593363878"
-              target="_blank"
-              rel="noreferrer"
-              className="px-5 py-3 rounded-2xl glass-panel border border-[var(--card-border)] text-white font-bold text-sm hover:bg-white/10 transition-all"
-            >
-              استشارة مباشرة
-            </a>
-          </div>
-        </div>
-
       </div>
     </section>
   );
 };
-

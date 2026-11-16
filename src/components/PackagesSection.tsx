@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
 import { SERVICE_PACKAGES_DATA } from '../data/mockData';
-import { 
-  Sparkles, Check, ArrowLeft, Star, ShieldCheck, Flame, 
-  Share2, Layout, Palette, FileText, CheckCircle2, Layers,
-  ChevronRight, Laptop, Send, Award
+import {
+  Sparkles,
+  Check,
+  ArrowLeft,
+  Star,
+  ShieldCheck,
+  Share2,
+  Layout,
+  Palette,
+  FileText,
+  CheckCircle2,
+  Layers,
+  Laptop,
+  Send,
+  Award,
 } from 'lucide-react';
 
 interface PackagesSectionProps {
@@ -32,69 +43,65 @@ export const PackagesSection: React.FC<PackagesSectionProps> = ({ onOpenOrderMod
   };
 
   return (
-    <section id="packages" className="py-20 relative overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[var(--accent-coral)]/15 rounded-full blur-[140px] pointer-events-none"></div>
-      <div className="absolute bottom-10 left-1/4 w-96 h-96 bg-[var(--accent-indigo)]/20 rounded-full blur-[140px] pointer-events-none"></div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Title */}
-        <div className="text-center space-y-4 mb-12 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--card-border)] bg-[rgba(22,24,69,0.7)] backdrop-blur-md text-[var(--accent-coral)] font-bold text-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-coral)]"></span>
-            <Flame className="w-3.5 h-3.5 text-[var(--accent-coral)]" />
+    <section id="packages" className="ib-sec">
+      <div className="ib-container">
+        {/* Start-Aligned Section Header */}
+        <div className="space-y-4 mb-10 text-right">
+          <div className="ib-eyebrow ib-chip">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#EF4A3C]" />
             <span>باقات وخطط تنفيذ متكاملة</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-white leading-tight space-y-1">
-            <span className="block">بـاقــــات الخدمــــات الإبداعــــية</span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-coral)] via-[var(--accent-coral)] to-[var(--accent-indigo)]">مصممة خصيصاً لنمو براندك</span>
+          <h2 className="ib-h2">
+            بـاقــــات الخدمــــات الإبداعــــية مصممة خصيصاً لنمو براندك
           </h2>
-          <p className="text-[var(--text-muted)] text-sm sm:text-base leading-relaxed">
+          <p className="ib-sub">
             اختر الخدمة المطلوبة واستعرض باقاتها المصنفة بدقة لتناسب حجم مشروعك، ميزانيتك، وتطلعاتك التسويقية.
           </p>
         </div>
 
-        {/* Service Category Selection Tabs */}
-        <div className="flex items-center justify-start sm:justify-center gap-2.5 overflow-x-auto pb-4 mb-10 no-scrollbar">
-          {SERVICE_PACKAGES_DATA.map((group, idx) => {
-            const IconComponent = getServiceIcon(group.iconName);
-            const isActive = idx === activeGroupIndex;
-            return (
-              <button
-                key={group.id}
-                onClick={() => setActiveGroupIndex(idx)}
-                className={`flex items-center gap-2.5 px-4 sm:px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-300 cursor-pointer ${
-                  isActive
-                    ? 'bg-[var(--accent-coral)] text-white shadow-lg shadow-[var(--accent-coral)]/30 scale-105'
-                    : 'glass-panel text-gray-300 hover:text-white hover:bg-white/10 border border-[var(--card-border)]'
-                }`}
-              >
-                <IconComponent className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[var(--accent-coral)]'}`} />
-                <span>{group.serviceTitle}</span>
-              </button>
-            );
-          })}
+        {/* Glass Segmented Control Tabs */}
+        <div className="mb-10">
+          <div className="ib-glass rounded-[28px] p-2 inline-flex flex-wrap items-center gap-2 max-w-full">
+            {SERVICE_PACKAGES_DATA.map((group, idx) => {
+              const IconComponent = getServiceIcon(group.iconName);
+              const isActive = idx === activeGroupIndex;
+              return (
+                <button
+                  key={group.id}
+                  onClick={() => setActiveGroupIndex(idx)}
+                  className={`ib-pill inline-flex items-center gap-2 whitespace-nowrap border ${
+                    isActive
+                      ? 'is-active'
+                      : 'border-transparent hover:text-white'
+                  }`}
+                >
+                  <IconComponent className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#070718]' : 'text-[#EF4A3C]'}`} />
+                  <span>{group.serviceTitle}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Selected Service Header Card */}
-        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-[var(--card-border)] mb-10 relative overflow-hidden">
+        <div className="ib-glass rounded-[30px] p-[clamp(24px,3.5vw,40px)] mb-12">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <span className="p-3 rounded-2xl bg-[var(--accent-coral)]/20 text-[var(--accent-coral)] inline-block">
+            <div className="space-y-2 text-right">
+              <div className="flex items-start gap-3">
+                <span className="text-[#EF4A3C] mt-1 shrink-0">
                   {React.createElement(getServiceIcon(activeGroup.iconName), { className: 'w-6 h-6' })}
                 </span>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-xl sm:text-2xl font-black text-white">{activeGroup.serviceTitle}</h3>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white">{activeGroup.serviceTitle}</h3>
                     {activeGroup.badge && (
-                      <span className="px-3 py-0.5 rounded-full border border-[var(--card-border)] bg-[rgba(22,24,69,0.7)] text-[var(--accent-coral)] text-[11px] font-bold">
+                      <span className="text-xs font-bold text-[#ffb3aa]">
                         {activeGroup.badge}
                       </span>
                     )}
                   </div>
                   {activeGroup.description && (
-                    <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1 max-w-2xl leading-relaxed">
+                    <p className="text-sm sm:text-base text-[#C9CBEA] mt-1.5 max-w-2xl leading-relaxed">
                       {activeGroup.description}
                     </p>
                   )}
@@ -104,32 +111,27 @@ export const PackagesSection: React.FC<PackagesSectionProps> = ({ onOpenOrderMod
 
             <button
               onClick={() => onOpenOrderModal(activeGroup.serviceId, undefined, activeGroup.id)}
-              className="px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-[var(--card-border)] text-xs sm:text-sm font-bold flex items-center gap-2 transition-all shrink-0 cursor-pointer self-stretch sm:self-auto justify-center"
+              className="ib-btn ib-chip text-white hover:border-[#EF4A3C] shrink-0 self-stretch md:self-auto"
             >
               <span>طلب مخصص لهذه الخدمة</span>
-              <Send className="w-4 h-4 text-[var(--accent-coral)]" />
+              <Send className="w-4 h-4 text-[#EF4A3C]" />
             </button>
           </div>
 
-          {/* Core Services Pillars (e.g. for Social Management) */}
+          {/* Core Services Pillars (spacing & font-weight only, no inner cards) */}
           {activeGroup.coreServices && (
             <div className="mt-8 pt-6 border-t border-white/10">
-              <h4 className="text-sm font-black text-[var(--accent-coral)] mb-4 flex items-center gap-2">
-                <Award className="w-4 h-4" />
+              <h4 className="text-sm font-bold text-[#ffb3aa] mb-5 flex items-center gap-2">
+                <Award className="w-4 h-4 text-[#EF4A3C]" />
                 <span>الخدمات والركائز الأساسية المشمولة في المنظومة:</span>
               </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {activeGroup.coreServices.map((core, cIdx) => (
-                  <div
-                    key={cIdx}
-                    className="p-4 rounded-2xl bg-white/5 border border-[var(--card-border)] hover:border-[var(--accent-coral)]/40 transition-colors"
-                  >
-                    <div className="flex items-start gap-2.5">
-                      <div className="w-2 h-2 rounded-full bg-[var(--accent-coral)] mt-1.5 shrink-0" />
-                      <div>
-                        <h5 className="text-xs font-bold text-white mb-1">{core.title}</h5>
-                        <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">{core.description}</p>
-                      </div>
+                  <div key={cIdx} className="flex items-start gap-2.5 text-right">
+                    <span className="w-2 h-2 rounded-full bg-[#EF4A3C] mt-2 shrink-0" />
+                    <div>
+                      <h5 className="text-sm font-bold text-white mb-1">{core.title}</h5>
+                      <p className="text-xs text-[#9A9CC8] leading-relaxed">{core.description}</p>
                     </div>
                   </div>
                 ))}
@@ -137,21 +139,18 @@ export const PackagesSection: React.FC<PackagesSectionProps> = ({ onOpenOrderMod
             </div>
           )}
 
-          {/* Fixed Features Banner (e.g. for Creators & Influencers) */}
+          {/* Fixed Features Banner (spacing & font-weight only, no inner cards) */}
           {activeGroup.fixedFeatures && (
             <div className="mt-8 pt-6 border-t border-white/10">
-              <h4 className="text-sm font-black text-[var(--accent-coral)] mb-4 flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4" />
+              <h4 className="text-sm font-bold text-[#ffb3aa] mb-5 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-[#EF4A3C]" />
                 <span>مميزات ومواصفات ثابتة مشمولة في جميع الباقات:</span>
               </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 {activeGroup.fixedFeatures.map((feat, fIdx) => (
-                  <div
-                    key={fIdx}
-                    className="p-3.5 rounded-2xl bg-white/5 border border-[var(--card-border)] flex items-start gap-2.5 text-xs text-gray-200"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-[var(--accent-coral)] shrink-0 mt-0.5" />
-                    <span className="leading-snug">{feat}</span>
+                  <div key={fIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#C9CBEA]">
+                    <CheckCircle2 className="w-4 h-4 text-[#EF4A3C] shrink-0 mt-1" />
+                    <span className="leading-relaxed">{feat}</span>
                   </div>
                 ))}
               </div>
@@ -159,133 +158,130 @@ export const PackagesSection: React.FC<PackagesSectionProps> = ({ onOpenOrderMod
           )}
         </div>
 
-        {/* Packages Grid for Current Group */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-stretch">
+        {/* Packages Grid */}
+        <div className="ib-pk-grid pt-4">
           {activeGroup.packages.map((pkg) => {
             const isPopular = pkg.isPopular;
             return (
               <div
                 key={pkg.id}
-                className={`glass-panel p-6 sm:p-7 rounded-3xl border flex flex-col justify-between relative transition-all duration-300 ${
-                  isPopular
-                    ? 'border-[var(--accent-coral)] bg-gradient-to-b from-[var(--accent-coral)]/15 via-[rgba(30,25,80,0.85)] to-[var(--card-bg)] shadow-2xl shadow-[var(--accent-coral)]/25 md:-translate-y-2'
-                    : 'border-[var(--card-border)] hover:border-white/30 hover:bg-white/5'
-                }`}
+                className={`${
+                  isPopular ? 'ib-glass-coral ib-pk-feat' : 'ib-glass'
+                } ib-lift rounded-[30px] p-[clamp(26px,3vw,36px)] flex flex-col relative`}
               >
                 {/* Popular Badge */}
                 {isPopular && (
-                  <div className="absolute -top-3.5 left-1/2 transform -translate-x-1/2 px-4 py-1 rounded-full bg-[var(--accent-coral)] text-white font-black text-[11px] shadow-lg shadow-[var(--accent-coral)]/40 whitespace-nowrap flex items-center gap-1">
-                    <Star className="w-3 h-3 fill-white" />
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#EF4A3C] text-[#070718] font-extrabold text-xs shadow-lg whitespace-nowrap inline-flex items-center gap-1.5">
+                    <Star className="w-3.5 h-3.5 fill-[#070718]" />
                     <span>الباقة الأكثر طلباً</span>
                   </div>
                 )}
 
-                <div className="space-y-5">
-                  {/* Package Title & Suitable Target */}
-                  <div>
-                    <h3 className="text-xl font-black text-white mb-2">{pkg.title}</h3>
+                <div className="flex flex-col flex-1 space-y-5 text-right">
+                  {/* Title & Fit Text */}
+                  <div className="space-y-2">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white">{pkg.title}</h3>
                     {pkg.suitableFor && (
-                      <div className="p-2.5 rounded-xl bg-white/5 border border-[var(--card-border)] text-[11px] text-[var(--accent-coral)] font-medium leading-relaxed">
-                        🎯 {pkg.suitableFor}
-                      </div>
+                      <p className="text-xs sm:text-sm text-[#C9CBEA] leading-relaxed">
+                        {pkg.suitableFor}
+                      </p>
                     )}
                   </div>
 
-                  {/* Main Deliverable / Capacity Highlight */}
-                  <div className="p-3.5 rounded-2xl glass-panel-orange border border-[var(--accent-coral)]/30">
-                    <div className="text-[11px] font-bold text-gray-300 mb-1">المخرجات وحجم العمل:</div>
-                    <div className="text-sm font-black text-white leading-snug">{pkg.deliverables}</div>
+                  {/* Bold Scope / Deliverable Highlight */}
+                  <div className="pt-4 border-t border-white/10 space-y-2">
+                    <div className="text-xs font-bold text-[#ffb3aa]">المخرجات وحجم العمل:</div>
+                    <div className="text-base font-extrabold text-white leading-snug">{pkg.deliverables}</div>
                     {(pkg.dailyPublishing || pkg.monthlyTotal) && (
-                      <div className="mt-2 pt-2 border-t border-white/10 flex items-center justify-between text-xs text-orange-200">
-                        {pkg.dailyPublishing && <span>اليومي: <strong>{pkg.dailyPublishing}</strong></span>}
-                        {pkg.monthlyTotal && <span>الشهري: <strong>{pkg.monthlyTotal}</strong></span>}
+                      <div className="pt-1 flex flex-wrap items-center gap-4 text-xs text-[#C9CBEA]">
+                        {pkg.dailyPublishing && (
+                          <span>اليومي: <strong className="text-white">{pkg.dailyPublishing}</strong></span>
+                        )}
+                        {pkg.monthlyTotal && (
+                          <span>الشهري: <strong className="text-white">{pkg.monthlyTotal}</strong></span>
+                        )}
                       </div>
                     )}
                   </div>
 
-                  {/* Platforms Managed (if applicable) */}
+                  {/* Platforms Managed */}
                   {pkg.platforms && (
-                    <div className="flex items-center gap-2 text-xs text-gray-200 bg-white/5 p-2.5 rounded-xl border border-[var(--card-border)]">
-                      <Laptop className="w-4 h-4 text-[var(--accent-coral)] shrink-0" />
-                      <span><strong>المنصات المدارة:</strong> {pkg.platforms}</span>
+                    <div className="flex items-start gap-2 text-xs sm:text-sm text-[#C9CBEA]">
+                      <Laptop className="w-4 h-4 text-[#EF4A3C] shrink-0 mt-0.5" />
+                      <span><strong className="text-white">المنصات المدارة:</strong> {pkg.platforms}</span>
                     </div>
                   )}
 
-                  {/* Technical Deliverables / Logo details */}
+                  {/* Optional Scope Details (separated by typography & spacing only) */}
                   {pkg.technicalDeliverables && (
-                    <div className="space-y-1.5 text-xs text-[var(--text-muted)] bg-white/5 p-3 rounded-xl border border-[var(--card-border)]">
-                      <span className="font-bold text-[var(--accent-coral)] block">المخرجات الفنية:</span>
-                      <p className="leading-relaxed text-[11px]">{pkg.technicalDeliverables}</p>
+                    <div className="space-y-1 text-xs sm:text-sm text-[#C9CBEA]">
+                      <span className="font-bold text-[#ffb3aa] block">المخرجات الفنية:</span>
+                      <p className="leading-relaxed text-[#9A9CC8]">{pkg.technicalDeliverables}</p>
                     </div>
                   )}
 
-                  {/* Stationery / Prints */}
                   {pkg.stationeryDeliverables && (
-                    <div className="space-y-1.5 text-xs text-[var(--text-muted)] bg-white/5 p-3 rounded-xl border border-[var(--card-border)]">
-                      <span className="font-bold text-[var(--accent-coral)] block">المطبوعات والقرطاسية:</span>
-                      <p className="leading-relaxed text-[11px]">{pkg.stationeryDeliverables}</p>
+                    <div className="space-y-1 text-xs sm:text-sm text-[#C9CBEA]">
+                      <span className="font-bold text-[#ffb3aa] block">المطبوعات والقرطاسية:</span>
+                      <p className="leading-relaxed text-[#9A9CC8]">{pkg.stationeryDeliverables}</p>
                     </div>
                   )}
 
-                  {/* Digital Presence */}
                   {pkg.digitalPresence && (
-                    <div className="space-y-1.5 text-xs text-[var(--text-muted)] bg-white/5 p-3 rounded-xl border border-[var(--card-border)]">
-                      <span className="font-bold text-[var(--accent-coral)] block">التواجد الرقمي:</span>
-                      <p className="leading-relaxed text-[11px]">{pkg.digitalPresence}</p>
+                    <div className="space-y-1 text-xs sm:text-sm text-[#C9CBEA]">
+                      <span className="font-bold text-[#ffb3aa] block">التواجد الرقمي:</span>
+                      <p className="leading-relaxed text-[#9A9CC8]">{pkg.digitalPresence}</p>
                     </div>
                   )}
 
-                  {/* Brand Guidelines */}
                   {pkg.brandGuidelines && (
-                    <div className="space-y-1.5 text-xs text-[var(--text-muted)] bg-white/5 p-3 rounded-xl border border-[var(--card-border)]">
-                      <span className="font-bold text-[var(--accent-coral)] block">دليل الاستخدام (Brand Guidelines):</span>
-                      <p className="leading-relaxed text-[11px]">{pkg.brandGuidelines}</p>
+                    <div className="space-y-1 text-xs sm:text-sm text-[#C9CBEA]">
+                      <span className="font-bold text-[#ffb3aa] block">دليل الاستخدام (Brand Guidelines):</span>
+                      <p className="leading-relaxed text-[#9A9CC8]">{pkg.brandGuidelines}</p>
                     </div>
                   )}
 
-                  {/* File Delivery details */}
                   {pkg.fileDelivery && (
-                    <div className="text-xs text-[var(--text-muted)] bg-white/5 p-3 rounded-xl border border-[var(--card-border)]">
-                      <span className="font-bold text-[var(--accent-coral)] block mb-1">تسليم الملفات:</span>
-                      <p className="leading-relaxed text-[11px]">{pkg.fileDelivery}</p>
+                    <div className="space-y-1 text-xs sm:text-sm text-[#C9CBEA]">
+                      <span className="font-bold text-[#ffb3aa] block">تسليم الملفات:</span>
+                      <p className="leading-relaxed text-[#9A9CC8]">{pkg.fileDelivery}</p>
                     </div>
                   )}
 
-                  {/* Services Included Checklist */}
+                  {/* Check-list (grows to align buttons across cards) */}
                   {pkg.servicesIncluded && (
-                    <div className="space-y-2 pt-1">
-                      <span className="text-[11px] font-bold text-[var(--text-muted)] block">الخدمات المشمولة بالباقة:</span>
+                    <div className="space-y-2.5 pt-4 border-t border-white/10 flex-1">
+                      <span className="text-xs font-bold text-[#9A9CC8] block">الخدمات المشمولة بالباقة:</span>
                       {pkg.servicesIncluded.map((srv, idx) => (
-                        <div key={idx} className="flex items-start gap-2 text-xs text-gray-200">
-                          <Check className="w-3.5 h-3.5 text-[var(--accent-coral)] shrink-0 mt-0.5" />
-                          <span className="leading-tight">{srv}</span>
+                        <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#C9CBEA]">
+                          <Check className="w-4 h-4 text-[#EF4A3C] shrink-0 mt-0.5" />
+                          <span className="leading-relaxed">{srv}</span>
                         </div>
                       ))}
                     </div>
                   )}
 
-                  {/* Features List */}
                   {pkg.features && (
-                    <div className="space-y-2 pt-1">
-                      <span className="text-[11px] font-bold text-[var(--text-muted)] block">المميزات وخيارات التسليم:</span>
+                    <div className="space-y-2.5 pt-4 border-t border-white/10 flex-1">
+                      <span className="text-xs font-bold text-[#9A9CC8] block">المميزات وخيارات التسليم:</span>
                       {pkg.features.map((feat, idx) => (
-                        <div key={idx} className="flex items-start gap-2 text-xs text-gray-200">
-                          <Check className="w-3.5 h-3.5 text-[var(--accent-coral)] shrink-0 mt-0.5" />
-                          <span className="leading-tight">{feat}</span>
+                        <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#C9CBEA]">
+                          <Check className="w-4 h-4 text-[#EF4A3C] shrink-0 mt-0.5" />
+                          <span className="leading-relaxed">{feat}</span>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
 
-                {/* Bottom CTA */}
+                {/* Full-Width CTA pinned at bottom */}
                 <div className="pt-6 mt-6 border-t border-white/10">
                   <button
                     onClick={() => onOpenOrderModal(activeGroup.serviceId, pkg.id, activeGroup.id)}
-                    className={`w-full py-3.5 rounded-2xl font-bold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
+                    className={`ib-btn w-full ${
                       isPopular
-                        ? 'bg-[var(--accent-coral)] text-white shadow-lg shadow-[var(--accent-coral)]/30 hover:scale-105'
-                        : 'glass-panel text-white hover:bg-white/10 border border-[var(--card-border)]'
+                        ? 'ib-btn-coral'
+                        : 'ib-glass text-white hover:border-[#EF4A3C]'
                     }`}
                   >
                     <span>اختر هذه الباقة وابدأ الآن</span>
@@ -297,30 +293,28 @@ export const PackagesSection: React.FC<PackagesSectionProps> = ({ onOpenOrderMod
           })}
         </div>
 
-        {/* Notice Banner Ribbon for Custom / Single Design Request */}
-        <div className="mt-14 glass-panel p-5 sm:p-6 rounded-3xl border border-[var(--card-border)] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
-          <div className="flex items-center gap-3 text-right">
-            <span className="p-3 rounded-2xl bg-[var(--accent-coral)]/20 text-[var(--accent-coral)] shrink-0">
-              <Star className="w-6 h-6 fill-[var(--accent-coral)]" />
-            </span>
-            <div>
-              <h4 className="text-base font-black text-white">هل تبحث عن تصميم منفرد أو طلب خاص بحسب الاحتياج؟</h4>
-              <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                يمكنك طلب تصميم منفرد (صورة، بنر، فيديو ريلز، أو هوية مخصصة) دون الالتزام بباقة كاملة.
-              </p>
-            </div>
+        {/* Custom / Single Design Banner */}
+        <div className="mt-10 ib-glass-coral rounded-[30px] p-[clamp(24px,3.5vw,38px)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div className="space-y-1.5 text-right">
+            <h4 className="text-lg sm:text-xl font-bold text-white">
+              هل تبحث عن تصميم منفرد أو طلب خاص بحسب الاحتياج؟
+            </h4>
+            <p className="text-xs sm:text-sm text-[#C9CBEA]">
+              يمكنك طلب تصميم منفرد (صورة، بنر، فيديو ريلز، أو هوية مخصصة) دون الالتزام بباقة كاملة.
+            </p>
           </div>
           <button
             onClick={() => onOpenOrderModal(undefined, undefined, undefined)}
-            className="px-6 py-3 rounded-full bg-[var(--accent-coral)] text-xs sm:text-sm font-bold text-white shadow-lg shadow-[var(--accent-coral)]/30 hover:scale-105 transition-transform shrink-0 cursor-pointer"
+            className="ib-btn ib-btn-coral shrink-0"
           >
-            اطلب تصميماً مخصصاً
+            <span>اطلب تصميماً مخصصاً</span>
+            <ArrowLeft className="w-4 h-4" />
           </button>
         </div>
 
         {/* Bottom Security Note */}
-        <div className="mt-10 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
+        <div className="mt-8 text-center text-xs sm:text-sm text-[#9A9CC8] flex items-center justify-center gap-2">
+          <ShieldCheck className="w-4 h-4 text-[#EF4A3C]" />
           <span>مرونة تامة في التعديلات، التزام بالمواعيد، ومتابعة مباشرة عبر مدير حساب مخصص</span>
         </div>
       </div>
