@@ -551,11 +551,11 @@ export const AuthModal: React.FC = () => {
       {/* Terms & Privacy Quick Modal */}
       {legalModal && (
         <div 
-          className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+          className="fixed inset-0 z-[var(--z-toast)] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
           onClick={() => setLegalModal(null)}
         >
           <div 
-            className="w-full max-w-lg bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl p-6 space-y-4 shadow-2xl backdrop-blur-xl"
+            className="w-full max-w-lg glass-panel glass-modal rounded-3xl p-6 space-y-4 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
@@ -564,7 +564,8 @@ export const AuthModal: React.FC = () => {
               </h3>
               <button 
                 onClick={() => setLegalModal(null)}
-                className="p-1.5 rounded-full hover:bg-white/10 text-gray-400 hover:text-white"
+                aria-label="إغلاق"
+                className="min-w-[44px] min-h-[44px] p-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -589,7 +590,7 @@ export const AuthModal: React.FC = () => {
             <div className="pt-2 text-left">
               <button
                 onClick={() => setLegalModal(null)}
-                className="px-5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs"
+                className="min-h-[44px] px-5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs cursor-pointer"
               >
                 إغلاق
               </button>

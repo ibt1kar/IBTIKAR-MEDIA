@@ -3,6 +3,7 @@ import { PageTab } from '../types';
 import { Logo } from './Logo';
 import { WhatsAppIcon } from './SocialIcons';
 import { useAuth } from '../context/AuthContext';
+import { useModalEffects } from '../hooks/useModalEffects';
 import {
   Menu,
   X,
@@ -37,6 +38,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useModalEffects(mobileMenuOpen, () => setMobileMenuOpen(false));
 
   // Close user dropdown when clicking outside
   useEffect(() => {
@@ -115,13 +118,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Brand Logo (Right / Start in RTL) */}
           <button
             onClick={() => handleNavClick('home')}
-            className="flex items-center group text-right shrink-0 min-h-[44px] px-1 cursor-pointer"
+            className="flex items-center group text-right shrink min-w-0 min-h-[44px] px-0.5 sm:px-1 cursor-pointer"
             title="منصة ابتكار - الصفحة الرئيسية"
           >
             <Logo
               size="md"
-              imgClassName="h-7 sm:h-8 max-w-[80px] sm:max-w-[100px]"
-              secondPartClassName="h-7 sm:h-8 max-w-[125px] sm:max-w-[160px]"
+              className="!gap-1.5 sm:!gap-2.5"
+              imgClassName="h-6 sm:h-7 lg:h-8 max-w-[44px] sm:max-w-[76px] lg:max-w-[92px]"
+              secondPartClassName="h-6 sm:h-7 lg:h-8 max-w-[76px] sm:max-w-[120px] lg:max-w-[144px]"
             />
           </button>
 
@@ -229,11 +233,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Mobile Header Row (max-width: 1023px) */}
-          <div className="flex lg:hidden items-center gap-1.5 shrink-0">
+          <div className="flex lg:hidden items-center gap-1 sm:gap-1.5 shrink-0">
             {!user ? (
               <button
                 onClick={openAuthModal}
-                className="ib-chip min-h-[44px] px-3 py-1.5 rounded-full text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shrink-0"
+                className="ib-chip min-h-[44px] px-2.5 sm:px-3 py-1.5 rounded-full text-white text-[11px] sm:text-xs font-bold flex items-center gap-1 cursor-pointer shrink-0"
               >
                 <LogIn className="w-3.5 h-3.5 text-[#EF4A3C] shrink-0" />
                 <span>دخول</span>
@@ -253,7 +257,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => onOpenOrderModal()}
-              className="ib-btn ib-btn-coral !min-h-[44px] !py-1.5 !px-3.5 !text-xs whitespace-nowrap shrink-0"
+              className="ib-btn ib-btn-coral !min-h-[44px] !py-1.5 !px-2.5 sm:!px-3.5 !text-[11px] sm:!text-xs whitespace-nowrap shrink-0"
             >
               <Sparkles className="w-3.5 h-3.5 shrink-0" />
               <span>طلب خدمة</span>

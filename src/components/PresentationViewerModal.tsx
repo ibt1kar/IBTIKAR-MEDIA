@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PortfolioItem } from '../types';
+import { useModalEffects } from '../hooks/useModalEffects';
 import { 
   X, 
   Sparkles, 
@@ -41,6 +42,9 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
   const itemTypeSingular = isInfographic ? 'تصميم إنفوجرافيك' : isCarousel ? 'شريحة كاروسيل' : isSocialMedia ? 'تصميم' : isBrandIdentity ? 'صفحة هوية' : 'شريحة';
   const itemTypePlural = isInfographic ? 'تصاميم إنفوجرافيك' : isCarousel ? 'شرائح كاروسيل' : isSocialMedia ? 'تصاميم' : isBrandIdentity ? 'صفحات هوية' : 'شرائح';
 
+  // Unified modal body scroll lock, mobile bottom bar hiding, and Escape key handling
+  useModalEffects(isOpen, onClose);
+
   // Reset state when project changes or modal opens
   useEffect(() => {
     if (isOpen) {
@@ -48,18 +52,6 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
       setCurrentSlideIndex(1);
     }
   }, [isOpen, project.id]);
-
-  // Lock body scroll when modal is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
 
   // Track scroll position to update current slide counter
   const handleScroll = () => {
@@ -100,26 +92,26 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl animate-fade-in text-right"
+      className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-black/90 backdrop-blur-xl animate-fade-in text-right"
       dir="rtl"
     >
       {/* Container wrapper */}
       <div 
         className={`relative flex flex-col glass-panel glass-modal overflow-hidden transition-all duration-300 ${
           isFullscreen 
-            ? 'w-full h-full rounded-none border-none' 
+            ? '!max-w-none !max-h-none w-full h-full !rounded-none border-none' 
             : 'w-[96vw] max-w-5xl h-[92vh] rounded-3xl shadow-2xl shadow-black/80'
         }`}
       >
         {/* Top Control Bar */}
-        <header className="sticky top-0 z-30 flex items-center justify-between px-3 sm:px-6 py-3.5 bg-[var(--card-bg)] backdrop-blur-2xl border-b border-[var(--card-border)] shrink-0">
+        <header className="sticky top-0 z-30 flex items-center justify-between px-3 sm:px-6 py-3 bg-[#0F1030]/95 backdrop-blur-2xl border-b border-[var(--card-border)] shrink-0">
           
           {/* Back Button & Project Title */}
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             {/* Main Back Button */}
             <button
               onClick={onClose}
-              className="px-3 sm:px-4 py-2 rounded-xl bg-white/10 hover:bg-[var(--accent-coral)] text-white text-xs font-bold border border-[var(--card-border)] transition-all flex items-center gap-1.5 shrink-0 cursor-pointer shadow-sm hover:scale-105"
+              className="min-h-[44px] px-3 sm:px-4 py-2 rounded-xl bg-white/10 hover:bg-[var(--accent-coral)] text-white text-xs font-bold border border-[var(--card-border)] transition-all flex items-center gap-1.5 shrink-0 cursor-pointer shadow-sm hover:scale-105"
               title="الرجوع لمعرض الأعمال"
             >
               <ArrowRight className="w-4 h-4" />
@@ -192,7 +184,8 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
             <button
               onClick={toggleFullscreen}
               title={isFullscreen ? "تصغير النافذة" : "ملء الشاشة"}
-              className="p-2 rounded-xl glass-panel hover:bg-white/10 text-gray-300 hover:text-white transition-colors cursor-pointer hidden sm:block border border-[var(--card-border)]"
+              aria-label={isFullscreen ? "تصغير النافذة" : "ملء الشاشة"}
+              className="min-w-[44px] min-h-[44px] p-2 rounded-xl ib-chip hover:bg-white/10 text-gray-300 hover:text-white transition-colors cursor-pointer hidden sm:flex items-center justify-center"
             >
               {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             </button>
@@ -201,7 +194,8 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
             <button
               onClick={onClose}
               title="إغلاق والرجوع"
-              className="p-2 rounded-xl bg-white/10 hover:bg-red-500/20 text-gray-300 hover:text-red-400 border border-[var(--card-border)] transition-colors cursor-pointer"
+              aria-label="إغلاق"
+              className="min-w-[44px] min-h-[44px] p-2 rounded-xl bg-white/10 hover:bg-red-500/20 text-gray-300 hover:text-red-400 border border-[var(--card-border)] transition-colors cursor-pointer flex items-center justify-center"
             >
               <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
@@ -210,7 +204,7 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
         </header>
 
         {/* Scroll Instruction Ribbon */}
-        <div className="bg-[var(--card-bg)] border-b border-[var(--card-border)] px-4 py-2 flex items-center justify-between text-[11px] sm:text-xs text-[var(--text-muted)] shrink-0">
+        <div className="bg-[#0F1030]/90 border-b border-[var(--card-border)] px-4 py-2 flex items-center justify-between text-[11px] sm:text-xs text-[var(--text-muted)] shrink-0">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span>تصفح {isInfographic ? 'ألبوم تصاميم الإنفوجرافيك والبيانات' : isSocialMedia ? 'معرض التصاميم' : isBrandIdentity ? 'ملف الهوية البصرية' : 'العرض التقديمي'} بالتمرير الرأسي المستمر من الأعلى إلى الأسفل</span>
@@ -265,10 +259,10 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
                   }`}
                   onError={(e) => {
                     handleImageLoad(idx);
-                    const encoded = encodeURI(slideUrl);
-                    if ((e.currentTarget as HTMLImageElement).src !== encoded) {
-                      (e.currentTarget as HTMLImageElement).src = encoded;
-                    }
+                    const img = e.currentTarget as HTMLImageElement;
+                    if (img.dataset.retried) return;
+                    img.dataset.retried = '1';
+                    img.src = encodeURI(slideUrl);
                   }}
                 />
               </div>
@@ -276,7 +270,7 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
           })}
 
           {/* End of Presentation Deck Showcase Card */}
-          <div className="mx-auto max-w-4xl glass-panel p-6 sm:p-10 rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg)] text-center space-y-6 my-10 shadow-2xl backdrop-blur-xl">
+          <div className="mx-auto max-w-4xl ib-glass p-6 sm:p-10 rounded-3xl text-center space-y-6 my-10 shadow-2xl">
             <div className="w-16 h-16 mx-auto rounded-3xl bg-[var(--accent-coral)] flex items-center justify-center text-white shadow-xl shadow-[var(--accent-coral)]/40">
               <CheckCircle className="w-8 h-8" />
             </div>
@@ -380,12 +374,12 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
         </div>
 
         {/* Floating Bottom Quick Navigator Bar */}
-        <footer className="px-4 py-2.5 bg-[var(--card-bg)] backdrop-blur-2xl border-t border-[var(--card-border)] flex items-center justify-between text-xs text-gray-300 shrink-0">
+        <footer className="px-4 py-2 bg-[#0F1030]/95 backdrop-blur-2xl border-t border-[var(--card-border)] flex items-center justify-between text-xs text-gray-300 shrink-0">
           <div className="flex items-center gap-2">
             {/* Back Button in Footer */}
             <button
               onClick={onClose}
-              className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-[var(--accent-coral)] text-white flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer border border-[var(--card-border)] hover:scale-105"
+              className="min-h-[44px] px-3 py-1.5 rounded-xl bg-white/10 hover:bg-[var(--accent-coral)] text-white flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer border border-[var(--card-border)]"
               title="الرجوع لمعرض الأعمال"
             >
               <ArrowRight className="w-3.5 h-3.5" />
@@ -404,8 +398,9 @@ export const PresentationViewerModal: React.FC<PresentationViewerModalProps> = (
           <div className="flex items-center gap-2">
             <button
               onClick={scrollToTop}
-              className="p-1.5 sm:px-3 sm:py-1 rounded-lg glass-panel hover:bg-white/10 text-gray-300 hover:text-white flex items-center gap-1 transition-colors cursor-pointer border border-[var(--card-border)]"
+              className="min-w-[44px] min-h-[44px] p-2 sm:px-3 sm:py-1 rounded-lg ib-chip hover:bg-white/10 text-gray-300 hover:text-white flex items-center justify-center gap-1 transition-colors cursor-pointer"
               title="العودة لأول شريحة"
+              aria-label="العودة لأول شريحة"
             >
               <ArrowUp className="w-3.5 h-3.5" />
               <span className="hidden sm:inline text-[11px] font-semibold">للأعلى</span>

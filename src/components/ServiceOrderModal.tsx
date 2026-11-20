@@ -42,9 +42,16 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
   const [businessType, setBusinessType] = useState('');
   const [notes, setNotes] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [whatsappUrl, setWhatsappUrl] = useState('');
 
   // Body scroll lock & Escape key
   useModalEffects(isOpen, onClose);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSubmitted(false);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (initialPackageGroupId || initialPackageId) {
@@ -102,25 +109,21 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
       detailsText = `طلب خاص / تصميم منفرد بحسب الاحتياج`;
     }
 
-    const message = `مرحباً منصة ابتكار Ibtikar 👋
+    const message = `مرحباً منصة ابتكار Ibtikar
 أود طلب تنفيذ:
-👤 الاسم: ${clientName || 'غير محدد'}
-🏢 نوع النشاط / البراند: ${businessType || 'غير محدد'}
-📱 رقم الجوال: ${phone || 'غير محدد'}
-📌 ${detailsText}
-📝 ملاحظات وتفاصيل إضافية:
+الاسم: ${clientName || 'غير محدد'}
+نوع النشاط / البراند: ${businessType || 'غير محدد'}
+رقم الجوال: ${phone || 'غير محدد'}
+التفاصيل: ${detailsText}
+ملاحظات وتفاصيل إضافية:
 ${notes || 'لا يوجد ملاحظات إضافية'}`;
 
     const encodedMsg = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/966593363878?text=${encodedMsg}`;
+    const url = `https://wa.me/966593363878?text=${encodedMsg}`;
 
+    setWhatsappUrl(url);
     setSubmitted(true);
-    setTimeout(() => {
-      window.open(whatsappUrl, '_blank');
-    }, 600);
   };
-
-  if (!isOpen) return null;
 
   return (
     <div 
@@ -141,26 +144,35 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
         </button>
 
         {submitted ? (
-          <div className="text-center py-10 space-y-4">
+          <div className="text-center py-8 space-y-5">
             <div className="w-16 h-16 mx-auto rounded-full bg-emerald-500/20 border border-emerald-500 text-emerald-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
               <CheckCircle2 className="w-10 h-10" />
             </div>
-            <h3 className="text-2xl font-black text-white">تم تجهيز طلبك بنجاح!</h3>
+            <h3 className="text-2xl font-black text-white">تم تجهيز طلبك بنجاح</h3>
             <p className="text-[var(--text-muted)] max-w-md mx-auto text-sm leading-relaxed">
-              جاري توجيهك إلى الواتساب المباشر لفريق منصة ابتكار لمتابعة طلبك وتنسيق بدء التنفيذ.
+              اضغط على الزر أدناه لفتح محادثة الواتساب المباشرة مع فريق منصة ابتكار وإرسال تفاصيل طلبك فوراً.
             </p>
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href={whatsappUrl || `${AGENCY_SOCIALS.whatsapp}`}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full sm:w-auto min-h-[44px] px-7 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold shadow-lg flex items-center justify-center gap-2 transition-colors"
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>فتح الواتساب وإرسال الطلب</span>
+              </a>
               <button
                 onClick={() => setSubmitted(false)}
-                className="px-6 py-2.5 rounded-full glass-panel text-white text-sm font-semibold hover:bg-white/10 border border-[var(--card-border)]"
+                className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-full glass-panel text-white text-sm font-semibold hover:bg-white/10 border border-[var(--card-border)] cursor-pointer"
               >
                 تعديل الطلب
               </button>
               <button
                 onClick={onClose}
-                className="px-6 py-2.5 rounded-full bg-[var(--accent-coral)] hover:bg-[#f15e52] text-white text-sm font-bold shadow-lg shadow-[var(--accent-coral)]/30"
+                className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-full bg-[var(--accent-coral)] hover:bg-[#f15e52] text-white text-sm font-bold shadow-lg shadow-[var(--accent-coral)]/30 cursor-pointer"
               >
-                إغلاق النافذة
+                إغلاق
               </button>
             </div>
           </div>
@@ -184,7 +196,7 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
               <button
                 type="button"
                 onClick={() => setOrderType('package')}
-                className={`py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 ${
+                className={`min-h-[44px] py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
                   orderType === 'package'
                     ? 'bg-[var(--accent-coral)] text-white shadow-md shadow-[var(--accent-coral)]/30'
                     : 'text-gray-300 hover:text-white'
@@ -196,7 +208,7 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
               <button
                 type="button"
                 onClick={() => setOrderType('service')}
-                className={`py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 ${
+                className={`min-h-[44px] py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
                   orderType === 'service'
                     ? 'bg-[var(--accent-coral)] text-white shadow-md shadow-[var(--accent-coral)]/30'
                     : 'text-gray-300 hover:text-white'
@@ -208,7 +220,7 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
               <button
                 type="button"
                 onClick={() => setOrderType('custom')}
-                className={`py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 ${
+                className={`min-h-[44px] py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
                   orderType === 'custom'
                     ? 'bg-[var(--accent-coral)] text-white shadow-md shadow-[var(--accent-coral)]/30'
                     : 'text-gray-300 hover:text-white'
@@ -230,7 +242,7 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
                     <select
                       value={selectedPackageGroup}
                       onChange={(e) => handleGroupChange(e.target.value)}
-                      className="w-full glass-input rounded-2xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[var(--accent-coral)] bg-[var(--card-bg)] text-white"
+                      className="w-full glass-input rounded-2xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[var(--accent-coral)] bg-[#161845] text-white"
                     >
                       {SERVICE_PACKAGES_DATA.map((group) => (
                         <option key={group.id} value={group.id} className="bg-[var(--bg-mid)] text-white">
@@ -247,11 +259,11 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
                     <select
                       value={selectedPackageId}
                       onChange={(e) => setSelectedPackageId(e.target.value)}
-                      className="w-full glass-input rounded-2xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[var(--accent-coral)] bg-[var(--card-bg)] text-white"
+                      className="w-full glass-input rounded-2xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[var(--accent-coral)] bg-[#161845] text-white"
                     >
                       {currentGroup.packages.map((pkg) => (
                         <option key={pkg.id} value={pkg.id} className="bg-[var(--bg-mid)] text-white">
-                          {pkg.title} {pkg.isPopular ? '⭐ (الأكثر طلباً)' : ''}
+                          {pkg.title} {pkg.isPopular ? '(الأكثر طلباً)' : ''}
                         </option>
                       ))}
                     </select>
@@ -266,7 +278,7 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
                         )}
                       </div>
                       {currentPkg.suitableFor && (
-                        <p className="text-[11px] text-[var(--text-muted)]">🎯 {currentPkg.suitableFor}</p>
+                        <p className="text-[11px] text-[var(--text-muted)]">{currentPkg.suitableFor}</p>
                       )}
                     </div>
                   )}
@@ -282,7 +294,7 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
                   <select
                     value={selectedService}
                     onChange={(e) => setSelectedService(e.target.value)}
-                    className="w-full glass-input rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-[var(--accent-coral)] bg-[var(--card-bg)] text-white"
+                    className="w-full glass-input rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-[var(--accent-coral)] bg-[#161845] text-white"
                   >
                     {SERVICES_DATA.map((srv) => (
                       <option key={srv.id} value={srv.id} className="bg-[var(--bg-mid)] text-white">
@@ -300,7 +312,7 @@ ${notes || 'لا يوجد ملاحظات إضافية'}`;
 
               {orderType === 'custom' && (
                 <div className="p-3.5 rounded-2xl glass-panel border border-[var(--card-border)] text-xs text-orange-200 leading-relaxed">
-                  💡 <strong>ملاحظة:</strong> نتيح لك إمكانية طلب تصاميم منفردة وخاصة (بوست، بنر، فيديو ريلز، أو هوية مخصصة) وتحديد ميزانيتك ومخرجاتك بالضبط بحسب احتياج مشروعك.
+                  <strong>ملاحظة:</strong> نتيح لك إمكانية طلب تصاميم منفردة وخاصة (بوست، بنر، فيديو ريلز، أو هوية مخصصة) وتحديد ميزانيتك ومخرجاتك بالضبط بحسب احتياج مشروعك.
                 </div>
               )}
 

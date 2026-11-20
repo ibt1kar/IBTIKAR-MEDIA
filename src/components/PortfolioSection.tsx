@@ -55,6 +55,8 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
           if (selectedFilter === 'تصاميم سوشال ميديا') {
             return (
               item.category === 'تصاميم سوشال ميديا' ||
+              item.category === 'نشر محتوى وتصاميم إعلانات' ||
+              item.category === 'محتوى رياضي وتغطيات' ||
               item.category === 'إنفوجرافيك' ||
               item.tags?.includes('تصاميم سوشال ميديا')
             );
@@ -170,7 +172,15 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
             return (
               <article
                 key={item.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => handleCardClick(item)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleCardClick(item);
+                  }
+                }}
                 className="ib-glass ib-lift p-3 rounded-[28px] flex flex-col h-full cursor-pointer group text-right"
               >
                 {/* Media Block: 16/10 aspect ratio, radius 20px */}
@@ -203,22 +213,25 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenOrderM
                         item.isPresentationDeck ? 'object-top' : ''
                       } group-hover:scale-105 transition-transform duration-500`}
                       onError={(e) => {
+                        const img = e.currentTarget as HTMLImageElement;
+                        if (img.dataset.retried) return;
+                        img.dataset.retried = '1';
                         if (item.isPresentationDeck) {
-                          (e.currentTarget as HTMLImageElement).src = encodeURI(item.image);
+                          img.src = encodeURI(item.image);
                         } else if (item.id === 'p1') {
-                          (e.currentTarget as HTMLImageElement).src = '/متجر الشاطئ-1.png';
+                          img.src = '/متجر الشاطئ-1.png';
                         } else if (item.id === 'p2') {
-                          (e.currentTarget as HTMLImageElement).src = '/روز باتشولي.jfif';
+                          img.src = '/روز باتشولي.jfif';
                         } else if (item.id === 'p3') {
-                          (e.currentTarget as HTMLImageElement).src = '/رسن الخيل.png';
+                          img.src = '/رسن الخيل.png';
                         } else if (item.id === 'p4') {
-                          (e.currentTarget as HTMLImageElement).src = '/ستوريات.png';
+                          img.src = '/ستوريات.png';
                         } else if (item.id === 'p6') {
-                          (e.currentTarget as HTMLImageElement).src = '/دعوات.png';
+                          img.src = '/دعوات.png';
                         } else if (item.id === 'p8') {
-                          (e.currentTarget as HTMLImageElement).src = '/بروفايل.png';
+                          img.src = '/بروفايل.png';
                         } else if (item.id === 'p10') {
-                          (e.currentTarget as HTMLImageElement).src = '/سوشال.png';
+                          img.src = '/سوشال.png';
                         }
                       }}
                     />

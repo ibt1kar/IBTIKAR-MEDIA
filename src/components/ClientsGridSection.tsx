@@ -111,33 +111,48 @@ export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOr
               </div>
             </div>
 
-            {/* Side 2: 25 Partner Logos as Square Glass Chips (radius 20px) */}
+            {/* Side 2: 25 Partner Logos on Transparent Tiles (no white/milky background) */}
             <div className="lg:col-span-7">
-              <div className="ib-logos">
-                {filteredLogos.map((client) => (
+              {filteredLogos.length > 0 ? (
+                <div className="ib-logos">
+                  {filteredLogos.map((client) => (
+                    <button
+                      key={client.id}
+                      type="button"
+                      onClick={() => setSelectedLogo(client)}
+                      aria-label={`معاينة ${client.alt}`}
+                      className="ib-lift aspect-square rounded-[20px] p-3 sm:p-4 flex items-center justify-center relative group cursor-pointer bg-transparent border border-transparent hover:border-[#EF4A3C]/50 hover:bg-white/[0.03] transition-colors"
+                    >
+                      <img
+                        src={client.src}
+                        alt={client.alt}
+                        className="w-full h-full object-contain bg-transparent transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                        referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLElement).style.display = 'none';
+                        }}
+                      />
+                      <span className="absolute bottom-2 left-2.5 text-[10px] font-mono font-bold text-[#9A9CC8] group-hover:text-[#ffb3aa] transition-colors">
+                        #{client.id.toString().padStart(2, '0')}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-[24px] border border-white/10 p-8 text-center space-y-3">
+                  <p className="text-sm font-semibold text-[#C9CBEA]">
+                    لا يوجد شريك مطابق للرقم "{searchTerm}"
+                  </p>
                   <button
-                    key={client.id}
                     type="button"
-                    onClick={() => setSelectedLogo(client)}
-                    aria-label={`معاينة ${client.alt}`}
-                    className="ib-chip ib-lift aspect-square rounded-[20px] p-3 sm:p-4 flex items-center justify-center relative group cursor-pointer"
+                    onClick={() => setSearchTerm('')}
+                    className="ib-btn ib-chip !min-h-[44px] !py-2 !px-5 !text-xs text-white"
                   >
-                    <img
-                      src={client.src}
-                      alt={client.alt}
-                      className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
-                      loading="lazy"
-                      referrerPolicy="no-referrer"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLElement).style.display = 'none';
-                      }}
-                    />
-                    <span className="absolute bottom-2 left-2.5 text-[10px] font-mono font-bold text-[#9A9CC8] group-hover:text-[#ffb3aa] transition-colors">
-                      #{client.id.toString().padStart(2, '0')}
-                    </span>
+                    عرض جميع الشركاء (25)
                   </button>
-                ))}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -168,11 +183,11 @@ export const ClientsGridSection: React.FC<ClientsGridSectionProps> = ({ onOpenOr
                 <h3 className="text-lg sm:text-xl font-bold text-white">شريك نجاح منصة ابتكار</h3>
               </div>
 
-              <div className="w-full h-56 sm:h-64 rounded-[20px] p-6 flex items-center justify-center">
+              <div className="w-full h-56 sm:h-64 rounded-[20px] p-6 flex items-center justify-center bg-transparent">
                 <img
                   src={selectedLogo.src}
                   alt={selectedLogo.alt}
-                  className="max-h-full max-w-full object-contain"
+                  className="max-h-full max-w-full object-contain bg-transparent"
                   referrerPolicy="no-referrer"
                 />
               </div>

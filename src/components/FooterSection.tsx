@@ -53,13 +53,13 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ setActiveTab, onOp
               <h4 className="text-sm font-bold text-[#ffb3aa]">
                 روابط سريعة ومنصاتنا
               </h4>
-              <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5 text-xs sm:text-sm text-[#C9CBEA]">
+              <ul className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs sm:text-sm text-[#C9CBEA]">
                 {quickLinks.map((lnk) => (
                   <li key={lnk.id}>
                     <button
                       type="button"
                       onClick={() => handleLinkClick(lnk.id)}
-                      className="hover:text-[#EF4A3C] transition-colors cursor-pointer text-right"
+                      className="py-1.5 inline-flex items-center hover:text-[#EF4A3C] transition-colors cursor-pointer text-right"
                     >
                       {lnk.label}
                     </button>

@@ -163,20 +163,6 @@ section, [id] {
   }
 }
 
-/* Fixed Grid Layer */
-.bg-grid-layer {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image: 
-    linear-gradient(to right, rgba(110, 110, 255, 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(110, 110, 255, 0.07) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 80%);
-  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 80%);
-}
-
 /* =========================================================================
    MODERN GLASSMORPHISM SURFACE
    Applies to every card, popup, modal, dropdown, and floating panel
@@ -282,6 +268,8 @@ section, [id] {
 .glass-modal .glass-panel,
 .glass-modal .pill-badge,
 .glass-dropdown .glass-panel,
+.ib-glass .ib-chip,
+.ib-glass-coral .ib-chip,
 [class*="backdrop-blur"] .glass-panel,
 [class*="backdrop-blur"] .pill-badge,
 [class*="backdrop-blur"] .glass-panel-orange {
@@ -404,23 +392,6 @@ a[class*="bg-[var(--accent-coral)]"]:hover {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-coral);
-}
-
-/* Marquee */
-@keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-marquee {
-  display: inline-flex;
-  width: max-content;
-  animation: marquee 30s linear infinite !important;
-  will-change: transform;
 }
 
 /* Modal Responsive Standards & Touch Optimization */
@@ -579,6 +550,30 @@ a[class*="bg-[var(--accent-coral)]"]:hover {
     font-size: 11px !important;
     font-weight: 600 !important;
     opacity: 0.9;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1239px) {
+  .shortcuts-nav {
+    gap: 1px !important;
+  }
+
+  .shortcuts-item {
+    padding: 5px 7px !important;
+    gap: 4px !important;
+  }
+
+  .shortcuts-icon {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  .shortcuts-label-first {
+    font-size: 11px !important;
+  }
+
+  .shortcuts-label-second {
+    font-size: 9.5px !important;
   }
 }
 
@@ -837,7 +832,7 @@ body:has(input:focus, textarea:focus, select:focus) .shortcuts-nav {
   .ib-hero,.ib-split,.ib-two{grid-template-columns:minmax(0,1fr)}
   .ib-works-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media (max-width:900px){.ib-bento>*{grid-column:span 12}.ib-navlinks{display:none!important}}
+@media (max-width:900px){.ib-bento>*{grid-column:span 12}}
 @media (max-width:700px){
   .ib-stats{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:28px}
   .ib-works-grid{grid-template-columns:minmax(0,1fr)}
